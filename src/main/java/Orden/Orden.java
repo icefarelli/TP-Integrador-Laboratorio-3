@@ -1,6 +1,7 @@
 package Orden;
 
 import Cliente.Cliente;
+import Empleado.Empleado;
 import Plato.Plato;
 import java.util.List;
 
@@ -9,19 +10,17 @@ public class Orden {
     private static int secOrden = 0;
     private Integer id;
     private Cliente cliente;
+    private Empleado empleado;
     private List<Plato> platoList;
 
-    public Orden(Cliente cliente) {
+    public Orden(Cliente cliente, Empleado empleado) {
         this.id = ++secOrden;
+        this.empleado = empleado;
         this.cliente = cliente;
     }
 
     public static int getSecOrden() {
         return secOrden;
-    }
-
-    public static void setSecOrden(int secOrden) {
-        Orden.secOrden = secOrden;
     }
 
     public Integer getId() {
@@ -38,6 +37,14 @@ public class Orden {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
     }
 
     public List<Plato> getPlatoList() {

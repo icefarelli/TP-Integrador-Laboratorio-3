@@ -14,4 +14,22 @@ public class Cliente extends Persona {
         this.idCliente = ++secCliente;
         this.telefono = telefono;
     }
+
+    public static int getSecCliente() {
+        return secCliente;
+    }
+
+
+    public Integer getIdCliente() {
+        return idCliente;
+    }
+
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
 }

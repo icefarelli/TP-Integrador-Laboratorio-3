@@ -12,4 +12,6 @@ public class Empleado extends Persona {
         this.idEmpleado = ++secEmpleado;
         this.puesto = puesto;
     }
+
+
 }
