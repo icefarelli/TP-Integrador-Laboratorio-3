@@ -38,7 +38,7 @@ public class EmpleadoControlador {
           Type type = new TypeToken<TreeSet<Empleado>>(){}.getType();
           empleadoRepositorio.listaEmpleados = gson.fromJson(reader,type);
           if(empleadoRepositorio.listaEmpleados == null){
-              empleadoRepositorio.listaEmpleados = new TreeMap<String, Empleado>();
+              empleadoRepositorio.listaEmpleados = new TreeMap<Integer, Empleado>();
           }
         } catch (IOException io) {
             System.out.println(io.getMessage());
@@ -53,21 +53,22 @@ public class EmpleadoControlador {
         pasarAarchivo();
     }
 
-    public void eliminarEmpleado() throws FileNotFoundException, ExcepcionDNIStringInvalido {
+    public void eliminarEmpleado() throws IOException, ExcepcionDNIStringInvalido {
         pasarAMemoria();
-        String clave = empleadoVista.pedirClave();
+        Integer clave = empleadoVista.pedirClave();
         Empleado empleado = empleadoRepositorio.buscarEmpleado(clave);
         if(empleado!=null){
             empleadoRepositorio.eliminar(empleado);
         } else {
             empleadoVista.mensajeErrorBusqueda();
         }
+        pasarAarchivo();
     }
 
-    public void modificarEmpleado() throws FileNotFoundException, ExcepcionDNIStringInvalido, ExcepcionNombreInvalido {
+    public void modificarEmpleado() throws IOException, ExcepcionDNIStringInvalido, ExcepcionNombreInvalido {
         pasarAMemoria();
         Empleado empleadoModificado;
-        String clave = empleadoVista.pedirClave();
+        Integer clave = empleadoVista.pedirClave();
         Empleado empleado = empleadoRepositorio.buscarEmpleado(clave);
         if(empleado!=null){
                 String modificacion = empleadoVista.pedirModificacion();
@@ -83,6 +84,7 @@ public class EmpleadoControlador {
         } else {
             empleadoVista.mensajeErrorBusqueda();
         }
+        pasarAarchivo();
     }
 
 }

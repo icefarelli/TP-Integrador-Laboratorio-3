@@ -9,19 +9,19 @@ import java.util.TreeSet;
 
 public class EmpleadoRepositorio implements IABM<Empleado> {
 
-    TreeMap<String,Empleado> listaEmpleados;
+    TreeMap<Integer,Empleado> listaEmpleados;
 
     public EmpleadoRepositorio() {
-        this.listaEmpleados = new TreeMap<String, Empleado>();
+        this.listaEmpleados = new TreeMap<Integer, Empleado>();
     }
 
-    public Map<String,Empleado> getListaEmpleados() {
+    public Map<Integer,Empleado> getListaEmpleados() {
         return listaEmpleados;
     }
 
     @Override
     public void agregar(Empleado empleado) {
-        this.listaEmpleados.put(empleado.getId(),empleado);
+        this.listaEmpleados.put(empleado.getIdEmpleado(),empleado);
     }
 
     @Override
@@ -35,10 +35,10 @@ public class EmpleadoRepositorio implements IABM<Empleado> {
 
     }
 
-    public Empleado buscarEmpleado(String clave){
+    public Empleado buscarEmpleado(Integer clave){
         Empleado empleado = null;
-        for (Map.Entry<String,Empleado> entry : listaEmpleados.entrySet()){
-            if(entry.getValue().getId().equals(clave)){
+        for (Map.Entry<Integer,Empleado> entry : listaEmpleados.entrySet()){
+            if(entry.getValue().getIdEmpleado() == clave){
                 empleado = entry.getValue();
             }
         }
