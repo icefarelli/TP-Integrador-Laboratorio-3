@@ -3,7 +3,9 @@ package Empleado;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionNombreInvalido;
 
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class EmpleadoVista {
 
@@ -65,15 +67,13 @@ public Empleado pedirUnEmpleado() throws ExcepcionNombreInvalido, ExcepcionDNISt
     return empleado;
 }
 
-public String pedirClave() throws ExcepcionDNIStringInvalido {
+public Integer pedirClave() throws ExcepcionDNIStringInvalido {
     Scanner scan = new Scanner(System.in);
-    System.out.println("Ingrese el DNI del empleado:");
-    String DNI = scan.nextLine();
+    System.out.println("Ingrese el ID del empleado:");
+    Integer id = scan.nextInt();
+    //CARGAR UNA EXCEPCION PARA VERIFICAR
 
-    if(DNI==null || !DNI.matches("\\d{8}")) {
-        throw new ExcepcionDNIStringInvalido("El DNI solo debe contener números y ser de 8 dígitos");
-    }
-    return DNI;
+    return id;
 }
 
 public String pedirModificacion() {
@@ -117,6 +117,25 @@ public String pedirNombreParaModificar() throws ExcepcionNombreInvalido {
 
 public void mensajeErrorBusqueda() {
     System.out.println("Empleado no encontrado");
+}
+
+public void mostrarEmpleado(Empleado e){
+    System.out.println("DNI: " + e.getId());
+    System.out.println("Nombre y Apellido: " + e.getNombre());
+    System.out.println("Id empleado: " + e.getIdEmpleado());
+    System.out.println("Puesto: " + e.getPuesto());
+}
+
+public void mostrarListaEmpleados(Map<Integer, Empleado> mapaEmpleados){
+    if (mapaEmpleados.isEmpty()){
+        System.out.println("lista de empleados vacia");
+    } else {
+        for (Map.Entry<Integer,Empleado> entry : mapaEmpleados.entrySet()){
+            Empleado empleado = entry.getValue();
+            System.out.println("-------------------------------------------------------");
+            mostrarEmpleado(empleado);
+        }
+    }
 }
 
 
