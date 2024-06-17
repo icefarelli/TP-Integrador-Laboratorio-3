@@ -11,7 +11,7 @@ public class Reserva {
     private Integer cantPersonas;
     private LocalDateTime fecha;
 
-    public Reserva(Cliente cliente,Integer cantPersonas, LocalDateTime fecha) {
+    public Reserva(Integer cantPersonas, LocalDateTime fecha) {
         this.id = ++secReserva;
         this.cliente = cliente;
         this.cantPersonas = cantPersonas;
@@ -24,6 +24,10 @@ public class Reserva {
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Cliente getCliente() {
