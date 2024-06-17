@@ -2,12 +2,12 @@ package Persona;
 
 public abstract class Persona {
     private String nombre;
-    private String id;
+    private String dni;
 
 
-    public Persona(String nombre, String id) {
+    public Persona(String nombre, String dni) {
         this.nombre = nombre;
-        this.id = id;
+        this.dni = dni;
     }
 
     public String getNombre() {
@@ -18,11 +18,17 @@ public abstract class Persona {
         this.nombre = nombre;
     }
 
-    public String getId() {
-        return id;
+    public String getDni() {
+        return dni;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setDni(String id) {
+        this.dni = dni;
+    }
+
+    @Override
+    public String toString() {
+        return "Nombre:" + nombre +
+                " - Dni:" + dni;
     }
 }
