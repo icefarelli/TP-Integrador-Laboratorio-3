@@ -2,6 +2,7 @@ package Reserva;
 
 import Excepciones.Reservas.ExcepcionReservaCamposVacios;
 import Excepciones.Reservas.ExcepcionReservaCaracterInvalido;
+import Excepciones.Reservas.ExcepcionReservaValorNegativo;
 
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -9,41 +10,50 @@ import java.util.Scanner;
 public class ReservaVista {
     public static Scanner scanner = new Scanner(System.in);
 
-    public Reserva crearReserva() throws ExcepcionReservaCaracterInvalido, ExcepcionReservaCamposVacios {
-                System.out.println("Ingrese Cantidad de personas: ");
-                Integer cantPersonas = scanner.nextInt();
+    public Reserva crearReserva() throws ExcepcionReservaCaracterInvalido, ExcepcionReservaCamposVacios, ExcepcionReservaValorNegativo {
+        System.out.println("Ingrese Cantidad de personas: ");
+        Integer cantPersonas = scanner.nextInt();
 
-                if (cantPersonas == null) {
-                    throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio.");
-                }
+        if (cantPersonas <= 0) {
+            throw new ExcepcionReservaValorNegativo("Error: el valor no puede ser negativo. Intente nuevamente.");
+        }
 
-                if(!esNumero(String.valueOf(cantPersonas))){
-                    throw new ExcepcionReservaCaracterInvalido("Error: la entrada no es un número válido. Intente nuevamente.");
-                }
+        if (cantPersonas == null) {
+            throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
+        }
+
+        if(!esNumero(String.valueOf(cantPersonas))){
+            throw new ExcepcionReservaCaracterInvalido("Error: la entrada no es un número válido. Intente nuevamente.");
+        }
 
         scanner.nextLine();
 
-                System.out.println("Ingrese fecha de la reserva (formato dd/MM/yyyy): ");
-                LocalDateTime fecha = LocalDateTime.parse(scanner.nextLine());
-                if(fecha == null){
-                    throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio.");
-                }
-                if(!esNumero(String.valueOf(fecha))){
-                    throw new ExcepcionReservaCaracterInvalido("Error: el formato de fecha no es válido. Debe ser dd/MM/yyyy.");
-                }
+        System.out.println("Ingrese fecha de la reserva (formato dd/MM/yyyy): ");
+        LocalDateTime fecha = LocalDateTime.parse(scanner.nextLine());
+        if(fecha == null){
+            throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
+        }
+        if(!esNumero(String.valueOf(fecha))){
+            throw new ExcepcionReservaCaracterInvalido("Error: el formato de fecha no es válido. Debe ser dd/MM/yyyy. Intente nuevamente.");
+        }
 
         return new Reserva(cantPersonas, fecha);
     }
 
-    public Reserva modificarReserva(Reserva reserva) throws ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido {
+    public Reserva modificarReserva(Reserva reserva) throws ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo {
         System.out.println("Modificar Reserva con ID: " + reserva.getId());
         System.out.println("¿Desea modificar la cantidad de personas? (si/no)");
         String opcion = scanner.nextLine();
 
         if (opcion.equalsIgnoreCase("si")) {
-            Integer cantPersonas = 0;
+            System.out.println("Ingrese Cantidad de personas: ");
+            Integer cantPersonas = scanner.nextInt();
+
+            if (cantPersonas <= 0) {
+                throw new ExcepcionReservaValorNegativo("Error: el valor no puede ser negativo. Intente nuevamente.");
+            }
             if (cantPersonas == null) {
-                throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio.");
+                throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
             }
 
             if(!esNumero(String.valueOf(cantPersonas))){
@@ -59,28 +69,30 @@ public class ReservaVista {
         if (opcion.equalsIgnoreCase("si")) {
             LocalDateTime fecha = LocalDateTime.parse(scanner.nextLine());
             if(fecha == null){
-                throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio.");
+                throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
             }
             if(!esNumero(String.valueOf(fecha))){
-                throw new ExcepcionReservaCaracterInvalido("Error: el formato de fecha no es válido. Debe ser dd/MM/yyyy.");
+                throw new ExcepcionReservaCaracterInvalido("Error: el formato de fecha no es válido. Debe ser dd/MM/yyyy. Intente nuevamente.");
             }
         }
 
         return reserva;
     }
 
-    public Integer buscarIdReserva(){
+    public Integer buscarIdReserva() throws ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo {
         Integer id = 0;
-        try {
-            System.out.println("Ingrese Id: ");
-            id = scanner.nextInt();
+        System.out.println("Ingrese Id: ");
+        id = scanner.nextInt();
 
-            if (id <= 0) {
-                System.out.println("Error: el ID debe ser un número mayor que 0.");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Error: la entrada no es un número válido. Intente nuevamente.");
-            scanner.nextLine();
+        if (id <= 0) {
+            throw new ExcepcionReservaValorNegativo("Error: el valor no puede ser un valor negativo. Intente nuevamente.");
+        }
+
+        if(id == null){
+            throw new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
+        }
+        if(!esNumero(String.valueOf(id))){
+            throw new ExcepcionReservaCaracterInvalido("Error: la entrada no es un número válido. Intente nuevamente. Intente nuevamente.");
         }
         scanner.nextLine();
 
