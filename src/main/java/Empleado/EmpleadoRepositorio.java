@@ -32,7 +32,6 @@ public class EmpleadoRepositorio implements IABM<Empleado> {
     @Override
     public void modificar(Empleado empleado) {
 
-
     }
 
     public Empleado buscarEmpleado(Integer clave){
