@@ -1,6 +1,6 @@
 package Reserva;
 
-import Excepciones.Reservas.ExcepcionReserva;
+import Excepciones.Reservas.ExcepcionReservaNoEncontrada;
 import Interfaces.IABM;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,10 +34,10 @@ public class ReservaRepositorio implements IABM<Reserva> {
         reservas.add(obj);
     }
 
-    public Reserva buscarReserva(Integer id) throws ExcepcionReserva {
+    public Reserva buscarReserva(Integer id) throws ExcepcionReservaNoEncontrada {
         Reserva reserva = reservas.get(id);
         if (reserva == null) {
-            throw new ExcepcionReserva("Reserva no encontrada.");
+            throw new ExcepcionReservaNoEncontrada("Reserva no encontrada.");
         }
         return reserva;
     }

@@ -1,8 +1,11 @@
 package Reserva;
 
-import Cliente.ClienteRepositorio;
-import Cliente.ClienteVista;
-import Excepciones.Reservas.ExcepcionReserva;
+import Cliente.model.entitie.Cliente;
+import Cliente.model.repository.ClienteRepositorio;
+import Cliente.view.ClienteVista;
+import Excepciones.Reservas.ExcepcionReservaCamposVacios;
+import Excepciones.Reservas.ExcepcionReservaCaracterInvalido;
+import Excepciones.Reservas.ExcepcionReservaNoEncontrada;
 
 import java.util.List;
 
@@ -19,9 +22,9 @@ public class ReservaControlador {
         this.clienteRepositorio = clienteRepositorio;
     }
 
-    /*public void agregarReserva(){
-        Integer id = clienteVista.buscarCliente();
-        Cliente clienteExistente = clienteRepositorio.buscarId(id);
+    public void agregarReserva() throws ExcepcionReservaCaracterInvalido, ExcepcionReservaCamposVacios {
+        Integer id = clienteVista.seleccId();
+        Cliente clienteExistente = clienteRepositorio.findCliente(id);
         Reserva reserva;
         if(clienteExistente != null){
             reserva = reservaVista.crearReserva();
@@ -33,10 +36,10 @@ public class ReservaControlador {
         }else {
         reservaVista.mensaje("El cliente no se encuentra registrado.");
         }
-    }*/
+    }
 
 
-    public void eliminarReserva() throws ExcepcionReserva {
+    public void eliminarReserva() throws ExcepcionReservaNoEncontrada {
         Integer id = reservaVista.buscarIdReserva();
         Reserva reserva = reservaRepositorio.buscarReserva(id);
         if(reserva != null) {
@@ -49,7 +52,7 @@ public class ReservaControlador {
 
     }
 
-    public void modificarReserva() throws ExcepcionReserva {
+    public void modificarReserva() throws ExcepcionReservaNoEncontrada, ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido {
         Integer id = reservaVista.buscarIdReserva();
         Reserva reservaExistente = reservaRepositorio.buscarReserva(id);
 
