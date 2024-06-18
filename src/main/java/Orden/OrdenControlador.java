@@ -1,6 +1,6 @@
 package Orden;
 
-import Cliente.ClienteRepositorio;
+import Cliente.model.repository.ClienteRepositorio;
 import Excepciones.ExcepcionOrdenNoEncontrada;
 import Plato.PlatoRepositorio;
 import Plato.PlatoVista;
