@@ -78,9 +78,24 @@ import java.util.Set;
 
     public void clienteToRemove ()  {
 
-            this.clienteControlador.removeCliente();
+            Cliente cliente= this.clienteControlador.removeCliente();
+            clienteSet.remove(cliente);
             this.Update();
+
     }
 
+    public void viewPhoneCliente ()
+    {
+
+        this.clienteControlador.consultCliente();
+
+    }
+
+    public void updateGestionCliente ()
+    {
+        viewAll();
+        this.clienteControlador.updateClientes();
+        this.Update();
+    }
 
     }

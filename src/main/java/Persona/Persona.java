@@ -1,8 +1,10 @@
 package Persona;
 
+import java.util.Objects;
+
 public abstract class Persona {
-    private String nombre;
-    private String id;
+    protected String nombre;
+    protected String id;
 
 
     public Persona(String nombre, String id) {
@@ -29,5 +31,18 @@ public abstract class Persona {
     public String toString() {
         return "Nombre:" + nombre +
                 " - Dni:" + id;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Persona persona = (Persona) object;
+        return Objects.equals(id, persona.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash( id);
     }
 }

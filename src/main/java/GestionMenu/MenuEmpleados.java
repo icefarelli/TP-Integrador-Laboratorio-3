@@ -14,6 +14,7 @@ public class MenuEmpleados {
     EmpleadoRepositorio empleadoRepositorio = new EmpleadoRepositorio();
     EmpleadoVista empleadoVista = new EmpleadoVista();
 
+
     EmpleadoControlador empleadoControlador = new EmpleadoControlador(empleadoVista,empleadoRepositorio);
 
     public void menuEmpleados() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException {

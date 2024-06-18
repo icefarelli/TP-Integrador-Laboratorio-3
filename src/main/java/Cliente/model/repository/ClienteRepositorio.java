@@ -3,14 +3,16 @@ package Cliente.model.repository;
 import Cliente.model.entitie.Cliente;
 import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
 
+import java.lang.reflect.Array;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ClienteRepositorio {
 
     private Set<Cliente> clienteSet = new HashSet<>();
 
-    public void addCliente(Cliente cliente)
+   public void addCliente(Cliente cliente)
     {
         clienteSet.add(cliente);
     }
@@ -43,4 +45,6 @@ public class ClienteRepositorio {
     {
         cliente.setTelefono(phone);
     }
+
+
 }

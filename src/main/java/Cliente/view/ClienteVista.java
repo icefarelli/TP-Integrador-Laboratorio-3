@@ -73,13 +73,36 @@ public class ClienteVista {
         return  phone;
     }
 
-    public Integer selecIdRemove ()
+    /*public Integer selecIdRemove () throws ExcepcionFormatoIncorrecto
     {
-        Scanner scanner= new Scanner(System.in);
-        System.out.println("Ingrese el id del cliente a eliminar");
-        Integer id = scanner.nextInt();
+
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Ingrese el id del cliente a eliminar");
+            Integer id = scanner.nextInt();
+            return id;
+
+    }*/
+    public Integer selecIdRemove() throws ExcepcionFormatoIncorrecto {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingrese el id del cliente a eliminar:");
+
+        String input = scanner.nextLine();
+        Integer id = parseInteger(input);
+
+        if (id == null) {
+            throw new ExcepcionFormatoIncorrecto("Entrada inválida. No es un número entero.");
+        }
         return id;
     }
+
+    private Integer parseInteger(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
     private boolean contieneNumeros(String str) {
         return str.matches(".*\\d.*");
     }
@@ -92,6 +115,25 @@ public class ClienteVista {
         System.out.println("----------- LISTA DE CLIENTES -----------");
         for (Cliente cliente : clienteSet) {
             System.out.println(cliente.toString());
+        }
+    }
+
+    public Integer consultarCliente ()
+    {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingrese id del cliente que quiere consultar");
+        Integer id = scanner.nextInt();
+
+        return id;
+    }
+
+    public void verIdAndName (Set<Cliente> clienteSet)
+    {
+        for (Cliente cliente: clienteSet)
+        {
+            System.out.println("ID: "+cliente.getIdCliente());
+            System.out.println("NOMBRE Y APELLIDO: "+cliente.getNombre());
+            System.out.println(" \n--------------------------------\n");
         }
     }
 

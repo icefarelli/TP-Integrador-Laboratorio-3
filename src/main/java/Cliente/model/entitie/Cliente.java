@@ -3,6 +3,8 @@ package Cliente.model.entitie;
 import Cliente.Excepciones.ExcepcionCamposVacios;
 import Persona.Persona;
 
+import java.util.Objects;
+
 public class Cliente extends Persona {
 
     private static int secCliente = 0;
@@ -45,4 +47,21 @@ public class Cliente extends Persona {
         return super.toString()+" - Id:" + idCliente +
                 " - Telefono:" + telefono ;
     }
+
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Cliente)) return false;
+        if (!super.equals(object)) return false;
+        Cliente cliente = (Cliente) object;
+
+
+        return  Objects.equals(cliente.id, cliente.id);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), telefono);
+    }
+}
