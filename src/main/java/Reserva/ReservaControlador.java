@@ -1,11 +1,13 @@
 package Reserva;
 
+import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
 import Cliente.model.entitie.Cliente;
 import Cliente.model.repository.ClienteRepositorio;
 import Cliente.view.ClienteVista;
 import Excepciones.Reservas.ExcepcionReservaCamposVacios;
 import Excepciones.Reservas.ExcepcionReservaCaracterInvalido;
 import Excepciones.Reservas.ExcepcionReservaNoEncontrada;
+import Excepciones.Reservas.ExcepcionReservaValorNegativo;
 
 import java.util.List;
 
@@ -22,9 +24,9 @@ public class ReservaControlador {
         this.clienteRepositorio = clienteRepositorio;
     }
 
-    public void agregarReserva() throws ExcepcionReservaCaracterInvalido, ExcepcionReservaCamposVacios {
+    public void agregarReserva() throws ExcepcionReservaCaracterInvalido, ExcepcionReservaCamposVacios, ExcepcionReservaValorNegativo, ExcepcionClienteNoEncontrado {
         Integer id = clienteVista.seleccId();
-        Cliente clienteExistente = clienteRepositorio.findCliente(id);
+        Cliente clienteExistente = clienteRepositorio.findCliente(id, clienteRepositorio.getClienteSet());
         Reserva reserva;
         if(clienteExistente != null){
             reserva = reservaVista.crearReserva();
@@ -38,8 +40,7 @@ public class ReservaControlador {
         }
     }
 
-
-    public void eliminarReserva() throws ExcepcionReservaNoEncontrada {
+    public void eliminarReserva() throws ExcepcionReservaNoEncontrada, ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo {
         Integer id = reservaVista.buscarIdReserva();
         Reserva reserva = reservaRepositorio.buscarReserva(id);
         if(reserva != null) {
@@ -52,7 +53,7 @@ public class ReservaControlador {
 
     }
 
-    public void modificarReserva() throws ExcepcionReservaNoEncontrada, ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido {
+    public void modificarReserva() throws ExcepcionReservaNoEncontrada, ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo {
         Integer id = reservaVista.buscarIdReserva();
         Reserva reservaExistente = reservaRepositorio.buscarReserva(id);
 
@@ -67,8 +68,7 @@ public class ReservaControlador {
         }
     }
 
-
-    public void todasLasReservas() {
+    public void mostrarTodasLasReservas() {
         List<Reserva> reservas = reservaRepositorio.todasLasReservas();
         for(Reserva reserva: reservas){
             reservaVista.mostrarReserva(reserva);
