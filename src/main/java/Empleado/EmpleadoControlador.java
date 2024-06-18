@@ -27,7 +27,7 @@ public class EmpleadoControlador {
 
     private static final String PATH ="src/main/resources/Empleados.json";
 
-    private void pasarAarchivo() throws IOException {
+    public void pasarAarchivo() throws IOException {
         try (Writer writer = new FileWriter(PATH)){
             gson.toJson(empleadoRepositorio.listaEmpleados,writer);
         } catch (IOException io){
@@ -35,7 +35,7 @@ public class EmpleadoControlador {
         }
     }
 
-    private void pasarAMemoria() throws FileNotFoundException {
+    public void pasarAMemoria() throws FileNotFoundException {
         try(Reader reader = new FileReader(PATH)) {
           Type type = new TypeToken<TreeMap<Integer,Empleado>>(){}.getType();
           empleadoRepositorio.listaEmpleados = gson.fromJson(reader,type);
