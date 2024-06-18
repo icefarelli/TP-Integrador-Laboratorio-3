@@ -41,6 +41,7 @@ public class PlatoVista {
     }
     //Actualizar un plato para el menu
 
+
     public Plato actualizarPlato(String tipo, String nombre) throws NumberFormatException {
 
         System.out.println("-¿Este plato tiene variedades? (s/n):");
@@ -125,16 +126,17 @@ public class PlatoVista {
         return scanner.nextLine();
     }
 
-    public double ingresePrecioDePlato(){
-        System.out.println(" Ingrese Valor en pesos (Formato X.XX): $");
-        return variedadController.checkPrecio(scanner.nextLine());
+//    public double ingresePrecioDePlato(){
+//        System.out.println(" Ingrese Valor en pesos (Formato X.XX): $");
+//        return variedadController.checkPrecio(scanner.nextLine());
+//
+//    }
 
-    }
     public int obtenerIndiceSeleccionado(List<Plato> platos) {
         System.out.println("Ingrese el índice del plato que desea seleccionar: ");
         int indiceSeleccionado = scanner.nextInt();
         scanner.nextLine();
-
+        indiceSeleccionado--;
         if (indiceSeleccionado < 0 || indiceSeleccionado >= platos.size()) {
             System.out.println("Índice inválido.");
             return -1;
@@ -142,6 +144,8 @@ public class PlatoVista {
 
         return indiceSeleccionado;
     }
-
+    public void mensajeBusquedaXTipo(){
+        System.out.println("---MOSTRAR MENU POR CATEGORIA---");
+    }
 
 }

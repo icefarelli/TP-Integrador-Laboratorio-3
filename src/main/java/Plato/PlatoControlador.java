@@ -1,18 +1,15 @@
 package Plato;
 import Plato.Excepciones.ExcepBusquedaSinResultados;
 import Plato.Excepciones.ExcepIngresoInvalido;
-import Plato.Variedad.VariedadController;
-import Plato.Variedad.VariedadRepositorio;
-import Plato.Variedad.VariedadVista;
+
+import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class PlatoControlador {
-    private static Scanner scanner = new Scanner(System.in);
+    private PlatoRepositorio platoRepositorio = new PlatoRepositorio();
+    private PlatoVista platoVista = new PlatoVista();
 
-    PlatoRepositorio platoRepositorio;
-    PlatoVista platoVista;
-    VariedadController variedadController = new VariedadController(new VariedadVista(), new VariedadRepositorio());
 
     public PlatoControlador(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
         this.platoRepositorio = platoRepositorio;
@@ -30,7 +27,7 @@ public class PlatoControlador {
     }
 
     //Eliminar Plato
-    public void eliminarPlatosDelSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista){
+    public void eliminarPlatosDelSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws ExcepIngresoInvalido {
         Plato buscado = platoRepositorio.buscarPlatoXnombre(platoVista.ingreseNombreDePlato());
         platoRepositorio.eliminar(buscado);
     }
@@ -41,48 +38,43 @@ public class PlatoControlador {
     }
 
     //Actualizar Platos y sus variantes
-    public void actualizarPlatoExistente(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws ExcepBusquedaSinResultados, ExcepIngresoInvalido {
+    public void actualizarPlatoExistente(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws ExcepIngresoInvalido, RuntimeException {
         String tipo = platoVista.menuTipoComida();
-        platoRepositorio.mostrarPlatillosXtipo(tipo);
+        platoRepositorio.mostrarPlatosXtipo(tipo);
+
         String nombre = platoVista.ingreseNombreDePlato();
         Plato buscado = platoRepositorio.buscarPlatoXnombre(nombre);
-        if(buscado!=null){
-            buscado = platoVista.actualizarPlato(tipo,nombre);
-            if(buscado!=null){
-                platoRepositorio.modificar(buscado);
-            }else {
+
+        if (buscado != null) {
+            Plato actualizado = platoVista.actualizarPlato(tipo, nombre);
+            if (actualizado != null) {
+                platoRepositorio.modificar(actualizado);
+            } else {
                 throw new ExcepIngresoInvalido("Carga de datos Invalida. \nIntente nuevamente.");
             }
-            platoRepositorio.modificar(buscado);
-        }else {
-            throw new ExcepBusquedaSinResultados("El plato no existe. \nIntente nuevamente.");
+        } else {
+            throw new ExcepIngresoInvalido("Error en la busqueda. \nIntente nuevamente.");
         }
     }
-    //Seleccion de Plato para Orden que devuelve el plato seleccionado
-    public static Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws ExcepIngresoInvalido {
 
-        List<Plato> listaP = platoRepositorio.enlistarXTipo(platoVista.menuTipoComida());
 
-        for (int i = 0; i < listaP.size(); i++) {
-            System.out.println(i + ": " + listaP.get(i).getNombre());
-        }
+    //Selección de Plato para Orden que devuelve el plato seleccionado
+    public static Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
+
+        String tipo = platoVista.menuTipoComida();
+        List<Plato> listaP = platoRepositorio.enlistarXTipo(tipo);
+
+        platoRepositorio.mostrarEnlistadosBonito(tipo);
 
         int indiceSeleccionado = platoVista.obtenerIndiceSeleccionado(listaP);
         if (indiceSeleccionado == -1) {
-            throw new ExcepIngresoInvalido("Seleccion invalida. \nIntente nuevamente.");
-
         }
         return listaP.get(indiceSeleccionado);
     }
 
-
-
-
-
-
-
-
-
+    public void mostrarPlatosXTipo (PlatoRepositorio platoRepositorio, PlatoVista platoVista){
+        platoRepositorio.mostrarEnlistadosBonito(platoVista.menuTipoComida());
+    }
 
 
 }

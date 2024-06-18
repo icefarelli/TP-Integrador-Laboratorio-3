@@ -2,6 +2,7 @@ package Plato;
 
 import Interfaces.IABM;
 import Plato.Excepciones.ExcepFileNF;
+import Plato.Excepciones.ExcepIngresoInvalido;
 import Plato.Variedad.Variedad;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -73,9 +74,9 @@ public class PlatoRepositorio implements IABM<Plato> {
         saveFilePlatos();
     }
 
-    public Plato buscarPlatoXnombre(String nombre){
-        for (Plato plato : platoSet){
-            if (plato.getNombre().equals(nombre)){
+    public Plato buscarPlatoXnombre(String nombre) {
+        for (Plato plato : platoSet) {
+            if (plato.getNombre().equals(nombre)) {
                 return plato;
             }
         }
@@ -100,6 +101,44 @@ public class PlatoRepositorio implements IABM<Plato> {
         return listaAuxiliar;
     }
 
+    public void mostrarEnlistadosBonito(String tipo){
+        List<String> nombre = new ArrayList<>();
+        List<Double> precio = new ArrayList<>();
+        for (Plato plato : platoSet) {
+            if (tipo.equals(plato.getTipo())) {
+                if (plato.getVariedades().isEmpty()) {
+                    nombre.add(plato.getNombre());
+                    precio.add(plato.getPrecio());
+                } else {
+                    for (Variedad variedad : plato.getVariedades()) {
+                        String nombreCompuesto = String.format(plato.getNombre() + " " + variedad.getNombre());
+                        nombre.add(nombreCompuesto);
+                        precio.add(variedad.getPrecio());
+                    }
+                }
+            }
+        }
+
+        int largoMaximoDelNombreDelPlato = 0;
+        for (String plato : nombre) {
+            if (plato.length() > largoMaximoDelNombreDelPlato) {
+                largoMaximoDelNombreDelPlato = plato.length();
+            }
+        }
+        int totalIndices = String.valueOf(nombre.size()).length();
+
+        // Imprimir el menú formateado
+        System.out.println("Menu de " + tipo);
+        System.out.println("========================================");
+        for (int i = 0; i < nombre.size(); i++) {
+            System.out.printf("% " + totalIndices + "d. %-" + largoMaximoDelNombreDelPlato + "s  $%.2f%n", i+1, nombre.get(i), precio.get(i));
+        }
+    }
+
+
+
+
+
 
     //Si el plato contiene variedades imprime las variedades, sino imprime los platos base con sus valores
     public void mostrarPlato(Plato plato){
@@ -113,7 +152,7 @@ public class PlatoRepositorio implements IABM<Plato> {
         }
     }
 
-    public void mostrarPlatillosXtipo(String tipo){
+    public void mostrarPlatosXtipo(String tipo){
         for (Plato plato : platoSet){
             if (plato.getTipo().equals(tipo)){
                 mostrarPlato(plato);

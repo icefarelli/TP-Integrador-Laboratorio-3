@@ -57,7 +57,7 @@ public class Plato {
 
     @Override
     public String toString() {
-        return "-" + nombre + "\n      $ " + precio + '\n';
+        return "-" + nombre + " -----------------------$ " + precio + '\n';
     }
 
     @Override
@@ -72,4 +72,6 @@ public class Plato {
     public int hashCode() {
         return Objects.hash(nombre, precio);
     }
+
+
 }
