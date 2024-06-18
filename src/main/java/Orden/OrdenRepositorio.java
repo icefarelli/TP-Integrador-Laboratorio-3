@@ -1,5 +1,6 @@
 package Orden;
 
+import Excepciones.ExcepcionNombreInvalido;
 import Excepciones.ExcepcionOrdenNoEncontrada;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -22,6 +23,9 @@ public class OrdenRepositorio {
     }
 
     public Orden obtenerOrden(Integer id) throws ExcepcionOrdenNoEncontrada {
+        if(ordenes.get(id)== null) {
+            throw new ExcepcionOrdenNoEncontrada("Orden no encontrada");
+        }
         return ordenes.get(id);
     }
 
