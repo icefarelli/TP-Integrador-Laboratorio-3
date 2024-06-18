@@ -1,6 +1,6 @@
 package Reserva;
 
-import Cliente.Cliente;
+import Cliente.model.entitie.Cliente;
 
 import java.time.LocalDateTime;
 

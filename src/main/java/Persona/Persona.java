@@ -24,5 +24,10 @@ public abstract class Persona {
 
     public void setId(String id) {
         this.id = id;
+}
+    @Override
+    public String toString() {
+        return "Nombre:" + nombre +
+                " - Dni:" + id;
     }
 }
