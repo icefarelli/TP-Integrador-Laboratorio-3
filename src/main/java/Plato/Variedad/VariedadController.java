@@ -1,36 +1,45 @@
 package Plato.Variedad;
 import Plato.Excepciones.ExcepIngresoInvalido;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VariedadController {
 
-    private VariedadVista variedadVista = new VariedadVista();
+    private VariedadVista vVista;
+    private VariedadRepositorio vRepositorio;
 
-    public Variedad cargaDeVaridedad() {
+    public VariedadController(VariedadVista vVista, VariedadRepositorio vRepositorio) {
+        this.vVista = vVista;
+        this.vRepositorio = vRepositorio;
+    }
 
-        Variedad variedad = variedadVista.cargarUnaVariedad();
-        try {
-            if (variedad != null) return variedad;
-            else throw new ExcepIngresoInvalido();
-        }catch (Exception e){
-            e.getMessage();
-        }
-        return null;
+    public List<Variedad> crearListaDeVariedades (VariedadVista vVista, VariedadRepositorio vRepositorio){
+        do {
+            Variedad variedad = vRepositorio.cargaDeVariedad(vVista.crearUnaVariedad());
+            if (variedad != null) {
+                vRepositorio.cargaListaVariedad(variedad);
+            } else {
+                vVista.mensajeCargaIncorrecta();
+            }
+        }while (vVista.agregarMas());
+        return vRepositorio.copiaListaVar();
+    }
+
+    public void limparListaVariedades (){
+        vRepositorio.limpiarLista();
+    }
+
+    public List<Variedad> copiaListaVar(){
+        return vRepositorio.copiaListaVar();
     }
 
     public double checkPrecio(String precio){
-        return variedadVista.checkDouble(precio);
+        return vVista.checkDouble(precio);
     }
-     public List<Variedad> cargaListaVariedad(){
-        List<Variedad> listaV = new ArrayList<>();
 
-
-
-
-        return listaV;
-     }
+    public double cargarPrecio(VariedadVista vVista){
+        return vVista.ingresarPrecio();
+    }
 
 
 

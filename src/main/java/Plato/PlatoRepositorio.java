@@ -1,11 +1,10 @@
 package Plato;
 
 import Interfaces.IABM;
+import Plato.Excepciones.ExcepFileNF;
 import Plato.Variedad.Variedad;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import javax.swing.plaf.metal.MetalBorders;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -29,7 +28,12 @@ public class PlatoRepositorio implements IABM<Plato> {
             platoSet = gson.fromJson(reader,setType);
             if (platoSet ==null) platoSet = new HashSet<>();
         }catch (FileNotFoundException fnf){
-            platoSet = new HashSet<>();
+            try {
+                throw new ExcepFileNF("El archivo " + FILE_COMIDAS + " no fue encontrado.");
+            } catch (ExcepFileNF ex) {
+                ex.printStackTrace();
+                platoSet = new HashSet<>();
+            }
         }catch (IOException ioe){
             ioe.printStackTrace();
         }

@@ -1,7 +1,9 @@
 package Plato.Excepciones;
 
-public class ExcepFileNF extends Exception{
-        public void ExcepFileNF(){
-        System.out.println("Archivo no encontrado.");
+import java.io.FileNotFoundException;
+
+public class ExcepFileNF extends FileNotFoundException {
+    public ExcepFileNF(String mensaje) {
+        super(mensaje);
     }
-    }
+}

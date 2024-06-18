@@ -1,7 +1,7 @@
 package Plato;
-import Plato.Excepciones.ExcepIngresoInvalido;
 import Plato.Variedad.Variedad;
 import Plato.Variedad.VariedadController;
+import Plato.Variedad.VariedadRepositorio;
 import Plato.Variedad.VariedadVista;
 
 import java.util.ArrayList;
@@ -11,13 +11,11 @@ import java.util.Scanner;
 public class PlatoVista {
 
     private static final Scanner scanner = new Scanner(System.in);
-    VariedadController variedadController = new VariedadController();
+    VariedadController variedadController = new VariedadController(new VariedadVista(), new VariedadRepositorio());
 
     //Crear un nuevo plato para el menu
 
     public Plato nuevoPlato() throws NumberFormatException {
-
-        System.out.println("-----CARGAR UN NUEVO PLATO DE COMIDA-----");
 
         System.out.println("-Tipo de Comida:");
         String tipo = menuTipoComida();
@@ -29,27 +27,37 @@ public class PlatoVista {
         boolean tieneVariedades = scanner.nextLine().trim().equalsIgnoreCase("s");
 
         if (tieneVariedades) {
-            List<Variedad> variedades = new ArrayList<>();
-
-            boolean agregarMas;
-            do {
-                Variedad variedad = variedadController.cargaDeVaridedad();
-                if(variedad!=null){
-                    variedades.add(variedad);
-                }else {
-                    System.out.println("No se realizo la carga correctamente.");
-                }
-                System.out.println("¿Desea agregar otra variedad? (s/n):");
-                agregarMas = scanner.nextLine().trim().equalsIgnoreCase("s");
-            } while (agregarMas);
-            return new Plato(tipo, nombre, variedades);
-        } else if(!tieneVariedades) {
-            System.out.println("-Valor en pesos (Formato X.XX): $");
-            double price = variedadController.checkPrecio(scanner.nextLine());
-
-            return new Plato(tipo, nombre, price);
+            List<Variedad> listaVariedad = variedadController.crearListaDeVariedades(new VariedadVista(),new VariedadRepositorio());
+            return new Plato(tipo,nombre,listaVariedad);
+        } else {
+            double price = variedadController.cargarPrecio(new VariedadVista());
+            if (price != 0.0) {
+                return new Plato(tipo, nombre, price);
+            } else {
+                System.out.println("El Plato no pudo ser creado.");
+                return null;
+            }
         }
-        return null;
+    }
+    //Actualizar un plato para el menu
+
+    public Plato actualizarPlato(String tipo, String nombre) throws NumberFormatException {
+
+        System.out.println("-¿Este plato tiene variedades? (s/n):");
+        boolean tieneVariedades = scanner.nextLine().trim().equalsIgnoreCase("s");
+
+        if (tieneVariedades) {
+            List<Variedad> listaVariedad = variedadController.crearListaDeVariedades(new VariedadVista(),new VariedadRepositorio());
+            return new Plato(tipo,nombre,listaVariedad);
+        } else {
+            double price = variedadController.cargarPrecio(new VariedadVista());
+            if (price != 0.0) {
+                return new Plato(tipo, nombre, price);
+            } else {
+                System.out.println("El Plato no pudo ser creado.");
+                return null;
+            }
+        }
     }
 
     // Seleccion de categoria por seleccion en menu. Devuelve el nombre en String para evitar errores de carga
@@ -107,10 +115,10 @@ public class PlatoVista {
     }
 
     // Método de búsqueda de platos por categoría devuelve todos los contenidos en una categoría específica.-
-    public String busquedaXCategoria(){
-        System.out.println("----BUSQUEDA DE PLATOS POR CATEGORIA---");
-        return this.menuTipoComida();
-    }
+//    public String busquedaXCategoria(){
+//        System.out.println("----BUSQUEDA DE PLATOS POR CATEGORIA---");
+//        return this.menuTipoComida();
+//    }
 
     public String ingreseNombreDePlato(){
         System.out.println("Ingrese nombre del Plato a seleccionar");
@@ -122,4 +130,18 @@ public class PlatoVista {
         return variedadController.checkPrecio(scanner.nextLine());
 
     }
+    public int obtenerIndiceSeleccionado(List<Plato> platos) {
+        System.out.println("Ingrese el índice del plato que desea seleccionar: ");
+        int indiceSeleccionado = scanner.nextInt();
+        scanner.nextLine();
+
+        if (indiceSeleccionado < 0 || indiceSeleccionado >= platos.size()) {
+            System.out.println("Índice inválido.");
+            return -1;
+        }
+
+        return indiceSeleccionado;
+    }
+
+
 }
