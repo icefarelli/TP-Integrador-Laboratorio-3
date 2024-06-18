@@ -1,6 +1,6 @@
 package Reserva;
 
-import Excepciones.ExcepcionReserva;
+import Excepciones.Reservas.ExcepcionReserva;
 import Interfaces.IABM;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

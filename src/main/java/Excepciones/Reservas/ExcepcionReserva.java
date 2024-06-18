@@ -1,4 +1,4 @@
-package Excepciones;
+package Excepciones.Reservas;
 
 public class ExcepcionReserva extends Exception{
     public ExcepcionReserva(String message){

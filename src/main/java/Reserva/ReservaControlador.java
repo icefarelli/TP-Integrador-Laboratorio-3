@@ -2,7 +2,7 @@ package Reserva;
 
 import Cliente.ClienteRepositorio;
 import Cliente.ClienteVista;
-import Excepciones.ExcepcionReserva;
+import Excepciones.Reservas.ExcepcionReserva;
 
 import java.util.List;
 
