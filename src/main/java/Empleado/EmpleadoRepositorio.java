@@ -26,7 +26,7 @@ public class EmpleadoRepositorio implements IABM<Empleado> {
 
     @Override
     public void eliminar(Empleado empleado) {
-        this.listaEmpleados.remove(empleado.getId());
+        this.listaEmpleados.remove(empleado.getIdEmpleado());
     }
 
     @Override
