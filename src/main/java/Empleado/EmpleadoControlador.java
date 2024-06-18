@@ -50,7 +50,9 @@ public class EmpleadoControlador {
 
     public void agregarEmpleado() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException {
         pasarAMemoria();
+        Integer clave = empleadoRepositorio.listaEmpleados.lastKey();
         Empleado empleado = empleadoVista.pedirUnEmpleado();
+        empleado.setIdEmpleado(clave+1);
         empleadoRepositorio.agregar(empleado);
         pasarAarchivo();
     }
