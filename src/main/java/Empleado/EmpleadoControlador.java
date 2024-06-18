@@ -7,6 +7,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.file.FileSystemLoopException;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -84,6 +86,13 @@ public class EmpleadoControlador {
         } else {
             empleadoVista.mensajeErrorBusqueda();
         }
+        pasarAarchivo();
+    }
+
+    public void mostrarListaEmpleados() throws IOException {
+        pasarAMemoria();
+        Map<Integer, Empleado> lista = empleadoRepositorio.getListaEmpleados();
+        empleadoVista.mostrarListaEmpleados(lista);
         pasarAarchivo();
     }
 
