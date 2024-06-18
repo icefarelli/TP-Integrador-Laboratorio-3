@@ -9,12 +9,11 @@ public class OrdenVista {
         System.out.println("ID: " + orden.getId());
         System.out.println("Cliente: " + orden.getCliente().getNombre());
         System.out.println("Empleado: " + orden.getEmpleado().getNombre());
-        System.out.println("Platillos:");
+        System.out.println("Platos:");
         for (Plato p : orden.getPlatoList()) {
             System.out.println("- " + p.getNombre() + ": $ " + p.getPrecio());
         }
     }
-
 
     public void mostrarMensaje(String mensaje) {
         System.out.println(mensaje);

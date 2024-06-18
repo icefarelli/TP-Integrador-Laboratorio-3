@@ -1,19 +1,19 @@
 package Orden;
 
-import Excepciones.ExcepcionNombreInvalido;
 import Excepciones.ExcepcionOrdenNoEncontrada;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class OrdenRepositorio {
-    private Map<Integer, Orden> ordenes = new HashMap<>();
+    private TreeMap<Integer, Orden> ordenes = new TreeMap<>();
+
+
     private static final String PATH_Ordenes = "src/main/resources/Ordenes.json";
     private Gson gson = new Gson();
 
@@ -51,6 +51,10 @@ public class OrdenRepositorio {
         } catch (IOException e) {
             e.getMessage();
         }
+    }
+
+    public TreeMap<Integer, Orden> obtenerMap(){
+        return ordenes;
     }
 
 }
