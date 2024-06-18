@@ -106,12 +106,9 @@ public class OrdenControlador {
             ordenRepositorio.cargarOrdenesDesdeArchivo();
 
             Scanner scan = new Scanner(System.in);
-            System.out.print("Ingrese el ID de la orden a modificar: ");
-            Integer idOrden = scan.nextInt();
-            scan.nextLine();  // Limpiar el buffer
 
+            Integer idOrden = ordenVista.pedirIdOrdenModificar();
             Orden orden = ordenRepositorio.obtenerOrden(idOrden);
-
             if (orden == null) {
                 ordenVista.mostrarMensaje("Orden no encontrada.");
                 return;
@@ -188,7 +185,37 @@ public class OrdenControlador {
         } catch (ExcepcionOrdenNoEncontrada e) {
             e.mensaje();
         }
-
     }
 
+    public void eliminarOrden() {
+        try {
+            ordenRepositorio.cargarOrdenesDesdeArchivo();
+
+            Scanner scan = new Scanner(System.in);
+            Integer idOrdenEliminar = ordenVista.pedirIdOrdenEliminar();  // Limpiar el buffer
+
+            Orden orden = ordenRepositorio.obtenerOrden(idOrdenEliminar);
+
+            if (orden == null) {
+                ordenVista.mostrarMensaje("Orden no encontrada.");
+                return;
+            }
+
+            // Confirmar la eliminación
+            System.out.println("¿Está seguro de que desea eliminar la siguiente orden?");
+            ordenVista.mostrarUnaOrden(orden);
+            System.out.print("Ingrese 's' para confirmar, cualquier otra tecla para cancelar: ");
+            String op = scan.nextLine();
+
+            if (op.equalsIgnoreCase("s")) {
+                ordenRepositorio.eliminarOrden(idOrdenEliminar);
+                ordenVista.mostrarMensaje("Orden eliminada exitosamente.");
+                ordenRepositorio.guardarOrdenesEnArchivo();
+            } else {
+                ordenVista.mostrarMensaje("Eliminación cancelada.");
+            }
+        } catch (ExcepcionOrdenNoEncontrada e) {
+            e.mensaje();
+        }
+    }
 }

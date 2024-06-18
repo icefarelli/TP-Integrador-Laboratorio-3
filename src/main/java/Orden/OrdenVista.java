@@ -18,4 +18,16 @@ public class OrdenVista {
     public void mostrarMensaje(String mensaje) {
         System.out.println(mensaje);
     }
+
+    public Integer pedirIdOrdenModificar(){
+        Scanner scan = new Scanner(System.in);
+        System.out.print("Ingrese el ID de la orden a modificar: ");
+        return scan.nextInt();
+    }
+
+    public Integer pedirIdOrdenEliminar(){
+        Scanner scan = new Scanner(System.in);
+        System.out.print("Ingrese el ID de la orden a eliminar: ");
+        return scan.nextInt();
+    }
 }
