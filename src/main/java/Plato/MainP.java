@@ -1,43 +1,35 @@
 package Plato;
 
+import GestionMenu.MenuPlato;
 import Plato.Excepciones.ExcepIngresoInvalido;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class MainP {
     public static void main(String[] args) {
-
-//        int opcion = 1;
-//        Scanner scanner = new Scanner(System.in);
-        //PlatoControlador platoControlador = new PlatoControlador(new PlatoRepositorio(),new PlatoVista());
-//
-//        while (opcion == 1){
-//            try {
-//                platoControlador.cargarPlatoEnSistema(new PlatoRepositorio(),new PlatoVista());
-//            } catch (ExcepIngresoInvalido e) {
-//                throw new RuntimeException(e);
-//            }
-//            System.out.println("Otro?");
-//            opcion = scanner.nextInt();
-//            scanner.nextLine();
-//        }
+        int opcion = -1;
 
 
         try {
-            PlatoMenu.mainMenu();
-        } catch (IOException | ExcepIngresoInvalido e) {
-            throw new RuntimeException(e);
+            MenuPlato.mainMenu();
+        } catch (IOException | ExcepIngresoInvalido ignored) {
+
         }
 
-//        Plato plato1;
-//        try {
-//            plato1 = PlatoControlador.seleccionPlatoParaOrden(new PlatoRepositorio(), new PlatoVista());
-//        } catch (ExcepIngresoInvalido e) {
-//            throw new RuntimeException(e);
-//        }
+//        PlatoRepositorio repositorio = new PlatoRepositorio();
+//        PlatoVista vista = new PlatoVista();
+//        PlatoControlador controlador = new PlatoControlador(repositorio,vista);
+//        repositorio.mostrarCartaDePlatosCompleta();
 //
-//        System.out.println(plato1);
+
+//
+//
+//        Plato plato = controlador.seleccionPlatoParaOrden(repositorio,vista);
+//
+//        System.out.println(plato);
+
+
+
 
     }
 }

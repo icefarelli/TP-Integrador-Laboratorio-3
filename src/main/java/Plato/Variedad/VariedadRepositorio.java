@@ -1,7 +1,6 @@
 package Plato.Variedad;
 
 import Plato.Excepciones.ExcepIngresoInvalido;
-import Plato.Plato;
 
 import java.util.ArrayList;
 import java.util.List;
