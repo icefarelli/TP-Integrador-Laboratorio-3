@@ -15,10 +15,6 @@ public class Cliente extends Persona implements Comparable<Cliente> {
 
     public Cliente(String nombre, String id, String telefono) throws ExcepcionCamposVacios {
         super(nombre, id);
-        if (nombre == null | nombre.isEmpty() || id.isEmpty() || id == null || telefono == null || telefono.isEmpty()) {
-            throw new ExcepcionCamposVacios("XXX ERROR: NO PUEDE HABER CAMPOS VACIOS XXX");
-        }
-
         this.idCliente = ++secCliente;
         this.telefono = telefono;
     }

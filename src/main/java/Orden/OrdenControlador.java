@@ -1,6 +1,7 @@
 package Orden;
 
 import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
+import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
 import Cliente.model.entitie.Cliente;
 import Cliente.model.repository.ClienteRepositorio;
 import Cliente.view.ClienteVista;
@@ -46,7 +47,7 @@ public class OrdenControlador {
         this.platoControlador = platoControlador;
     }
     //crearOrden requiere que previo a su llamado, se pasen a memoria todos los archivos.
-    public void crearOrden() throws ExcepcionClienteNoEncontrado, ExcepcionDNIStringInvalido {
+    public void crearOrden() throws ExcepcionClienteNoEncontrado, ExcepcionDNIStringInvalido, ExcepcionFormatoIncorrecto {
         ordenRepositorio.cargarOrdenesDesdeArchivo();
         Integer idOrden;
         if(ordenRepositorio.obtenerMap().isEmpty() || ordenRepositorio.obtenerMap() == null){

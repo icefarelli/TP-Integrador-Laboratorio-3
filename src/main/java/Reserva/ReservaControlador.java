@@ -1,6 +1,7 @@
 package Reserva;
 
 import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
+import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
 import Cliente.model.entitie.Cliente;
 import Cliente.model.repository.ClienteRepositorio;
 import Cliente.view.ClienteVista;
@@ -24,7 +25,7 @@ public class ReservaControlador {
         this.clienteRepositorio = clienteRepositorio;
     }
 
-    public void agregarReserva() throws ExcepcionReservaCaracterInvalido, ExcepcionReservaCamposVacios, ExcepcionReservaValorNegativo, ExcepcionClienteNoEncontrado {
+    public void agregarReserva() throws ExcepcionReservaCaracterInvalido, ExcepcionReservaCamposVacios, ExcepcionReservaValorNegativo, ExcepcionClienteNoEncontrado, ExcepcionFormatoIncorrecto {
         Integer id = clienteVista.seleccId();
         Cliente clienteExistente = clienteRepositorio.findCliente(id, clienteRepositorio.getClienteSet());
         Reserva reserva;
