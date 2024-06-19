@@ -1,6 +1,7 @@
 package GestionMenu;
 
 import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
+import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
 import Cliente.model.repository.ClienteRepositorio;
 import Cliente.view.ClienteVista;
 import Empleado.EmpleadoRepositorio;
@@ -29,7 +30,7 @@ public class MenuOrdenes {
     PlatoControlador platoControlador = new PlatoControlador(platoRepositorio, platoVista);
 
     OrdenControlador ordenControlador = new OrdenControlador(ordenRepositorio, ordenVista, empleadoRepositorio, empleadoVista,clienteRepositorio, clienteVista, platoRepositorio, platoVista, platoControlador);
-    public void menuOrdenes() throws ExcepcionDNIStringInvalido, ExcepcionClienteNoEncontrado, ExcepcionOrdenNoEncontrada {
+    public void menuOrdenes() throws ExcepcionDNIStringInvalido, ExcepcionClienteNoEncontrado, ExcepcionOrdenNoEncontrada, ExcepcionFormatoIncorrecto {
 
         Scanner scanner = new Scanner(System.in);
 

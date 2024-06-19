@@ -7,13 +7,14 @@ import Cliente.Excepciones.ExcepcionNombreNumerico;
 import Cliente.model.entitie.Cliente;
 
 import java.sql.SQLOutput;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
 public class ClienteVista {
 
-    public Cliente agregarVista() {
 
+    public Cliente agregarVista() {
         Scanner scann = new Scanner(System.in);
         System.out.println("Agregando cliente al sistema...");
         Cliente cliente = null;
@@ -22,30 +23,15 @@ public class ClienteVista {
             try {
                 System.out.println("Nombre y apellido: ");
                 String name = scann.nextLine();
-                if (name.isEmpty()) {
-                    throw new ExcepcionCamposVacios("El nombre y apellido no pueden estar vacíos.");
-                }
-                if (contieneNumeros(name)) {
-                    throw new ExcepcionNombreNumerico("El nombre no puede contener números.");
-                }
+                validarNombre(name);
 
                 System.out.println("Dni: ");
                 String dni = scann.nextLine();
-                if (dni.isEmpty()) {
-                    throw new ExcepcionCamposVacios("El DNI no puede estar vacío.");
-                }
-                if (!esNumero(dni)) {
-                    throw new ExcepcionFormatoIncorrecto("El DNI debe contener solo números.");
-                }
+                validarDni(dni);
 
                 System.out.println("Teléfono: ");
                 String phone = scann.nextLine();
-                if (phone.isEmpty()) {
-                    throw new ExcepcionCamposVacios("El teléfono no puede estar vacío.");
-                }
-                if (!esNumero(phone)) {
-                    throw new ExcepcionFormatoIncorrecto("El teléfono debe contener solo números.");
-                }
+                validarTelefono(phone);
 
                 cliente = new Cliente(name, dni, phone);
                 System.out.println("Cliente agregado exitosamente.");
@@ -59,12 +45,47 @@ public class ClienteVista {
         return cliente;
     }
 
-    public Integer seleccId ()
-    {
-        Scanner scanner= new Scanner(System.in);
-        System.out.println("Ingrese el id del cliente a modificar");
-        Integer id = scanner.nextInt();
+    private void validarNombre(String nombre) throws ExcepcionCamposVacios, ExcepcionNombreNumerico {
+        if (nombre == null || nombre.isEmpty()) {
+            throw new ExcepcionCamposVacios("El nombre y apellido no pueden estar vacíos.");
+        }
+        if (contieneNumeros(nombre)) {
+            throw new ExcepcionNombreNumerico("El nombre no puede contener números.");
+        }
+    }
 
+    private void validarDni(String dni) throws ExcepcionCamposVacios, ExcepcionFormatoIncorrecto {
+        if (dni == null || dni.isEmpty()) {
+            throw new ExcepcionCamposVacios("El DNI no puede estar vacío.");
+        }
+        if (!esNumero(dni)) {
+            throw new ExcepcionFormatoIncorrecto("El DNI debe contener solo números.");
+        }
+    }
+
+    private void validarTelefono(String telefono) throws ExcepcionCamposVacios, ExcepcionFormatoIncorrecto {
+        if (telefono == null || telefono.isEmpty()) {
+            throw new ExcepcionCamposVacios("El teléfono no puede estar vacío.");
+        }
+        if (!esNumero(telefono)) {
+            throw new ExcepcionFormatoIncorrecto("El teléfono debe contener solo números.");
+        }
+    }
+    public Integer seleccId() {
+        Scanner scanner = new Scanner(System.in);
+        Integer id = null;
+        boolean validInput = false;
+
+        while (!validInput) {
+            System.out.println("Ingrese el id del cliente a modificar");
+            try {
+                id = scanner.nextInt();
+                validInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Formato de id incorrecto. Por favor, ingrese un id válido.");
+                scanner.next(); // Limpiar el buffer del scanner
+            }
+        }
         return id;
     }
 
@@ -107,15 +128,18 @@ public class ClienteVista {
         return str.matches(".*\\d.*");
     }
 
-    private boolean esNumero(String str) {
+    public boolean esNumero(String str) {
         return str.matches("\\d+");
     }
 
     public void verTodosClientes(Set<Cliente> clienteSet) {
+        System.out.println("\n");
         System.out.println("----------- LISTA DE CLIENTES -----------");
         for (Cliente cliente : clienteSet) {
             System.out.println(cliente.toString());
         }
+        System.out.println("\n");
+
     }
 
     public Integer consultarCliente ()

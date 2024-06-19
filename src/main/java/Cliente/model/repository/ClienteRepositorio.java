@@ -1,5 +1,6 @@
 package Cliente.model.repository;
 
+import Cliente.Excepciones.ExcepcionListaVacia;
 import Cliente.model.entitie.Cliente;
 import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
 
@@ -46,4 +47,11 @@ public class ClienteRepositorio {
     }
 
 
+    public void listaVacia () throws ExcepcionListaVacia
+    {
+        if(clienteSet.isEmpty())
+        {
+            throw new ExcepcionListaVacia("No hay clientes cargados");
+        }
+    }
 }

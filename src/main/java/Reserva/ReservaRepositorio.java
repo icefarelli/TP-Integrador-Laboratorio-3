@@ -11,7 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,18 +42,18 @@ public class ReservaRepositorio implements IABM<Reserva> {
         }
     }
 
-    public Reserva buscarFecha(LocalDateTime fecha) throws ExcepcionReservaNoEncontrada {
+    public Reserva buscarFecha(LocalDate fecha) throws ExcepcionReservaNoEncontrada {
         for (Reserva reserva : reservas) {
             if (reserva.getFecha().equals(fecha)) {
                 return reserva;
             }else {
-              return null;
+                return null;
             }
         }
         throw new ExcepcionReservaNoEncontrada("Reserva no encontrada para la fecha: " + fecha);
     }
 
-    public Reserva buscarReserva(LocalDateTime fecha) throws ExcepcionReservaNoEncontrada {
+    public Reserva buscarReserva(LocalDate fecha) throws ExcepcionReservaNoEncontrada {
         Reserva reserva = null;
         for (Reserva reserva1 : reservas) {
             if (reserva.getFecha().equals(fecha)) {

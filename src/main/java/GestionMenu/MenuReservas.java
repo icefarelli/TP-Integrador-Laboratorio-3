@@ -33,7 +33,7 @@ public class MenuReservas {
             System.out.println("2. Eliminar Reserva.");
             System.out.println("3. Modificar Reserva.");
             System.out.println("4. Mostrar Todas Reservas.");
-            System.out.println("5. Salir.");
+            System.out.println("5. Volver.");
 
             System.out.println("Ingrese una opción");
             opcion = scanner.nextInt();
