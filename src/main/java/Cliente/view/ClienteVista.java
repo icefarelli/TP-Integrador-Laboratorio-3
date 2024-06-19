@@ -1,10 +1,12 @@
 package Cliente.view;
 
 import Cliente.Excepciones.ExcepcionCamposVacios;
+import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
 import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
 import Cliente.Excepciones.ExcepcionNombreNumerico;
 import Cliente.model.entitie.Cliente;
 
+import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -62,26 +64,24 @@ public class ClienteVista {
         Scanner scanner= new Scanner(System.in);
         System.out.println("Ingrese el id del cliente a modificar");
         Integer id = scanner.nextInt();
+
         return id;
     }
 
-    public String newPhone ()
+    public String newPhone () throws ExcepcionFormatoIncorrecto
     {
-        System.out.println("Ingres el nuevo numero del cliente: ");
+        System.out.println("Ingrese el nuevo numero del cliente: ");
         Scanner scanner = new Scanner(System.in);
         String phone = scanner.nextLine();
+
+        if (!esNumero(phone)) {
+            throw new ExcepcionFormatoIncorrecto("Formato de teléfono incorrecto. Por favor, ingrese un teléfono válido.");
+        }
         return  phone;
+
     }
 
-    /*public Integer selecIdRemove () throws ExcepcionFormatoIncorrecto
-    {
 
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Ingrese el id del cliente a eliminar");
-            Integer id = scanner.nextInt();
-            return id;
-
-    }*/
     public Integer selecIdRemove() throws ExcepcionFormatoIncorrecto {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese el id del cliente a eliminar:");
