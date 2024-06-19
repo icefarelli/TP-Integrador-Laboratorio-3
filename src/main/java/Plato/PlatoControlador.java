@@ -59,7 +59,7 @@ public class PlatoControlador {
 
 
     //Selección de Plato para Orden que devuelve el plato seleccionado
-    public static Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
+    public Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
 
         String tipo = platoVista.menuTipoComida();
         List<Plato> listaP = platoRepositorio.enlistarXTipo(tipo);
@@ -68,6 +68,8 @@ public class PlatoControlador {
 
         int indiceSeleccionado = platoVista.obtenerIndiceSeleccionado(listaP);
         if (indiceSeleccionado == -1) {
+            System.out.println("Selección cancelada.");
+            return null;
         }
         return listaP.get(indiceSeleccionado);
     }
