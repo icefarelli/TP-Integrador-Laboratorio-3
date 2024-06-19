@@ -219,8 +219,8 @@ public class PlatoVista {
         System.out.println("---MOSTRAR MENU POR CATEGORIA---");
     }
 
-    public void mensajeEliminacionCancelada(){
-        System.out.println("Eliminacion Cancelada");
+    public void mensajeEliminacionPlatoInexistente(){
+        System.out.println("El plato ingresado no existe en el sistema.");
     }
     public void mensajeCargaExitoFracaso(boolean confirmacion){
         if(confirmacion) System.out.println("Se completo exitosamente.");

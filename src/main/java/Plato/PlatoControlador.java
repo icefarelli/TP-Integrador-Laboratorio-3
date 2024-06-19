@@ -1,8 +1,6 @@
 package Plato;
-import Plato.Excepciones.ExcepBusquedaSinResultados;
 import Plato.Excepciones.ExcepIngresoInvalido;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +49,7 @@ public class PlatoControlador {
         try {
 
             buscado = platoRepositorio.buscarPlatoXnombre(platoVista.ingresarNombre());
+
             if( buscado!= null) {
                 boolean confirmEliminar = platoVista.metodoConfirmacion("¿Confirmar la eliminacion?");
                 if (confirmEliminar) {
@@ -59,6 +58,9 @@ public class PlatoControlador {
                 } else {
                     platoVista.mensajeEliminacionExitoFracaso(confirmEliminar);
                 }
+            }else {
+                platoVista.mensajeEliminacionPlatoInexistente();
+                platoVista.mensajeEliminacionExitoFracaso(false);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -72,7 +74,7 @@ public class PlatoControlador {
             List<Plato> listaP = platoRepositorio.enlistarXTipoSinVariedad(tipo);
             int indiceSeleccionado = 0;
             do {
-                platoRepositorio.mostrarEnlistadosBonito(tipo);
+                platoRepositorio.mostrarEnlistadoBonitoXtipoOld(tipo);
                 indiceSeleccionado = platoVista.obtenerIndiceSeleccionado(listaP);
                 if (indiceSeleccionado == -1) {
                     System.out.println("Selección cancelada.");
@@ -103,14 +105,8 @@ public class PlatoControlador {
         }
     }
 
-
-        //Aumentar precio de manera porcentual
-    public void aumentoPreciosPorcentualmente(PlatoRepositorio platoRepositorio, PlatoVista platoVista){
-        platoRepositorio.aumentoPorcentualPrecio(platoVista.ingresePorcentaje());
-    }
-
     //Actualizar Platos y sus variantes
-    public void actualizarPlatoExistente(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws ExcepIngresoInvalido, RuntimeException {
+    public void actualizarPlatoExistente(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
         String tipo = platoVista.menuTipoComida();
         platoRepositorio.mostrarPlatosXtipo(tipo);
 
@@ -122,13 +118,25 @@ public class PlatoControlador {
             if (actualizado != null) {
                 platoRepositorio.modificar(actualizado);
             } else {
-                throw new ExcepIngresoInvalido("Carga de datos Invalida. \nIntente nuevamente.");
+                try {
+                    throw new ExcepIngresoInvalido("Carga de datos Invalida. \nIntente nuevamente.");
+                } catch (ExcepIngresoInvalido e) {
+                    throw new RuntimeException(e);
+                }
             }
         } else {
-            throw new ExcepIngresoInvalido("Error en la busqueda. \nIntente nuevamente.");
+            try {
+                throw new ExcepIngresoInvalido("Error en la busqueda. \nIntente nuevamente.");
+            } catch (ExcepIngresoInvalido e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
+    //Aumentar precio de manera porcentual
+    public void aumentoPreciosPorcentualmente(PlatoRepositorio platoRepositorio, PlatoVista platoVista){
+        platoRepositorio.aumentoPorcentualPrecio(platoVista.ingresePorcentaje());
+    }
 
     //Selección de Plato para Orden que devuelve el plato seleccionado
     public Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
@@ -143,7 +151,7 @@ public class PlatoControlador {
 
         int indiceSeleccionado = 0;
         do {
-            platoRepositorio.mostrarEnlistadosBonito(tipo);
+            platoRepositorio.mostrarEnlistadoBonitoXtipoOld(tipo);
             indiceSeleccionado = platoVista.obtenerIndiceSeleccionado(listaP);
             if (indiceSeleccionado == -1) {
                 System.out.println("Selección cancelada.");
@@ -161,7 +169,7 @@ public class PlatoControlador {
 
     //Mostrar Platos por categoria
     public void mostrarPlatosXTipo (PlatoRepositorio platoRepositorio, PlatoVista platoVista){
-        platoRepositorio.mostrarEnlistadosBonito(platoVista.menuTipoComida());
+        platoRepositorio.mostrarEnlistadoBonitoXtipoOld(platoVista.menuTipoComida());
     }
 
 
