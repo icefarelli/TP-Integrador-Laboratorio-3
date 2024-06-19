@@ -46,10 +46,14 @@ public class OrdenRepositorio {
     }
     public void cargarOrdenesDesdeArchivo() {
         try (FileReader reader = new FileReader(PATH_Ordenes)) {
-            Type type = new TypeToken<Map<Integer, Orden>>() {}.getType();
+            Type type = new TypeToken<TreeMap<Integer, Orden>>() {}.getType();
             ordenes = gson.fromJson(reader, type);
+            if(ordenes == null){
+                ordenes = new TreeMap<>();
+            }
         } catch (IOException e) {
             e.getMessage();
+            ordenes = new TreeMap<>();
         }
     }
 
