@@ -67,12 +67,10 @@ public Empleado pedirUnEmpleado() throws ExcepcionNombreInvalido, ExcepcionDNISt
     return empleado;
 }
 
-public Integer pedirClave() throws ExcepcionDNIStringInvalido {
+public Integer pedirClave()  {
     Scanner scan = new Scanner(System.in);
     System.out.println("Ingrese el ID del empleado:");
     Integer id = scan.nextInt();
-    //CARGAR UNA EXCEPCION PARA VERIFICAR
-
     return id;
 }
 
