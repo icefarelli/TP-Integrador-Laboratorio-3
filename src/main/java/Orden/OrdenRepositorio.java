@@ -1,6 +1,7 @@
 package Orden;
 
 import Excepciones.ExcepcionOrdenNoEncontrada;
+import Plato.Plato;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.FileReader;
@@ -61,4 +62,12 @@ public class OrdenRepositorio {
         return ordenes;
     }
 
+    public double calcularTotalOrden(Integer id) throws ExcepcionOrdenNoEncontrada {
+        Orden orden = obtenerOrden(id);
+        double total = 0.0;
+        for (Plato plato : orden.getPlatoList()) {
+            total += plato.getPrecio();
+        }
+        return total;
+    }
 }
