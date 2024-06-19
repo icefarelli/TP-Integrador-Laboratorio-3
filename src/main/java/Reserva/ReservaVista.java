@@ -46,20 +46,20 @@ public class ReservaVista {
     public Integer modificarCantPersonas() throws ExcepcionReservaValorNegativo, ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido {
         Integer cantPersonas = 0;
 
-            System.out.println("Ingrese Cantidad de personas: ");
-            cantPersonas = scanner.nextInt();
+        System.out.println("Ingrese Cantidad de personas: ");
+        cantPersonas = scanner.nextInt();
 
-            if (cantPersonas <= 0) {
-                throw new ExcepcionReservaValorNegativo("Error: el valor no puede ser negativo. Intente nuevamente.");
-            }
-            if (cantPersonas == null) {
-                throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
-            }
+        if (cantPersonas <= 0) {
+            throw new ExcepcionReservaValorNegativo("Error: el valor no puede ser negativo. Intente nuevamente.");
+        }
+        if (cantPersonas == null) {
+            throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
+        }
 
-            if(!esNumero(String.valueOf(cantPersonas))){
-                throw new ExcepcionReservaCaracterInvalido("Error: la entrada no es un número válido. Intente nuevamente.");
-            }
-            scanner.nextLine();
+        if(!esNumero(String.valueOf(cantPersonas))){
+            throw new ExcepcionReservaCaracterInvalido("Error: la entrada no es un número válido. Intente nuevamente.");
+        }
+        scanner.nextLine();
         return cantPersonas;
     }
 
@@ -88,13 +88,13 @@ public class ReservaVista {
         LocalDateTime fecha = null;
         System.out.println("Ingrese la nueva fecha. ");
 
-             fecha = LocalDateTime.parse(scanner.nextLine());
-            if(fecha == null){
-                throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
-            }
-            if(!esNumero(String.valueOf(fecha))){
-                throw new ExcepcionReservaCaracterInvalido("Error: el formato de fecha no es válido. Debe ser dd/MM/yyyy. Intente nuevamente.");
-            }
+        fecha = LocalDateTime.parse(scanner.nextLine());
+        if(fecha == null){
+            throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
+        }
+        if(!esNumero(String.valueOf(fecha))){
+            throw new ExcepcionReservaCaracterInvalido("Error: el formato de fecha no es válido. Debe ser dd/MM/yyyy. Intente nuevamente.");
+        }
         return fecha;
     }
 

@@ -47,7 +47,7 @@ public class ReservaRepositorio implements IABM<Reserva> {
             if (reserva.getFecha().equals(fecha)) {
                 return reserva;
             }else {
-              return null;
+                return null;
             }
         }
         throw new ExcepcionReservaNoEncontrada("Reserva no encontrada para la fecha: " + fecha);
