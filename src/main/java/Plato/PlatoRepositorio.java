@@ -100,6 +100,15 @@ public class PlatoRepositorio implements IABM<Plato> {
         }
         return listaAuxiliar;
     }
+    public List<Plato> enlistarXTipoSinVariedad(String tipo) {
+        List<Plato> listaAuxiliar = new ArrayList<>();
+        for (Plato plato : platoSet) {
+            if (tipo.equals(plato.getTipo())) {
+                listaAuxiliar.add(plato);
+            }
+        }
+        return listaAuxiliar;
+    }
 
     public void mostrarEnlistadosBonito(String tipo){
         List<String> nombre = new ArrayList<>();

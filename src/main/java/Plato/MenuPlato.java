@@ -12,6 +12,7 @@ public class MenuPlato {
         PlatoRepositorio repositorio = new PlatoRepositorio();
         PlatoVista vista = new PlatoVista();
         PlatoControlador pControlador = new PlatoControlador(repositorio, vista);
+        MenuPlato mPlato = new MenuPlato();
 
         Scanner scanner = new Scanner(System.in);
         int opcion = 0;
@@ -37,7 +38,7 @@ public class MenuPlato {
                 pControlador.aumentoPreciosPorcentualmente(repositorio, vista);
                 break;
             case 4:
-                pControlador.eliminarPlatosDelSistema(repositorio, vista);
+                mPlato.menuEliminar(repositorio,vista,pControlador);
                 break;
             case 5:
                 pControlador.mostrarPlatosXTipo(repositorio, vista);
@@ -46,6 +47,27 @@ public class MenuPlato {
         }
 
 
+
+    }
+
+    public void menuEliminar(PlatoRepositorio pRepositorio, PlatoVista pVista, PlatoControlador pControlador){
+        Scanner scanner = new Scanner(System.in);
+        int opcion = 0;
+        Colores.printInColor("===============================",Colores.RED);
+        Colores.printInColor("==========MENU ELIMINAR==========",Colores.RED);
+        System.out.println(" 1. ELIMINAR INGRESANDO NOMBRE\n 2. ELIMINAR POR SELECCION\n 0. SALIR");
+        Colores.printInColor("-------------------------------",Colores.RED);
+        opcion = scanner.nextInt();
+        scanner.nextLine();
+        switch (opcion){
+            case 1:
+                pControlador.eliminarPlatosDelSistemaXNombre(pRepositorio,pVista);
+                break;
+            case 2:
+                pControlador.eliminarPlatosDelSistemaXSeleccion(pRepositorio,pVista);
+                break;
+            default:
+        }
 
     }
 

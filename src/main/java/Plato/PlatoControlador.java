@@ -3,6 +3,7 @@ import Plato.Excepciones.ExcepBusquedaSinResultados;
 import Plato.Excepciones.ExcepIngresoInvalido;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,18 +45,66 @@ public class PlatoControlador {
     }
 
     //Eliminar Plato
-    public void eliminarPlatosDelSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
-        Plato buscado = platoRepositorio.buscarPlatoXnombre(platoVista.ingresarNombre());
-        boolean confirmEliminar = platoVista.metodoConfirmacion("¿Confirmar la eliminacion?");
-        if (confirmEliminar){
-            platoRepositorio.eliminar(buscado);
-        }else {
-            platoVista.mensajeEliminacionCancelada();
-        }
+    public void eliminarPlatosDelSistemaXNombre(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
+        Plato buscado;
 
+        try {
+
+            buscado = platoRepositorio.buscarPlatoXnombre(platoVista.ingresarNombre());
+            if( buscado!= null) {
+                boolean confirmEliminar = platoVista.metodoConfirmacion("¿Confirmar la eliminacion?");
+                if (confirmEliminar) {
+                    platoRepositorio.eliminar(buscado);
+                    platoVista.mensajeEliminacionExitoFracaso(confirmEliminar);
+                } else {
+                    platoVista.mensajeEliminacionExitoFracaso(confirmEliminar);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
-    //Aumentar precio de manera porcentual
+    public void eliminarPlatosDelSistemaXSeleccion(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
+        try {
+            Plato buscado;
+            String tipo = platoVista.menuTipoComida();
+            List<Plato> listaP = platoRepositorio.enlistarXTipoSinVariedad(tipo);
+            int indiceSeleccionado = 0;
+            do {
+                platoRepositorio.mostrarEnlistadosBonito(tipo);
+                indiceSeleccionado = platoVista.obtenerIndiceSeleccionado(listaP);
+                if (indiceSeleccionado == -1) {
+                    System.out.println("Selección cancelada.");
+                    buscado = null;
+                } else if (indiceSeleccionado > listaP.size()) {
+                    try {
+                        throw new ExcepIngresoInvalido("Opcion Inexistente. Intente Nuevamente");
+                    } catch (ExcepIngresoInvalido e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    buscado = listaP.get(indiceSeleccionado);
+                }
+            }while (indiceSeleccionado > listaP.size());
+
+
+            if (buscado != null) {
+                boolean confirmEliminar = platoVista.metodoConfirmacion("¿Confirmar la eliminacion?");
+                if (confirmEliminar) {
+                    platoRepositorio.eliminar(buscado);
+                    platoVista.mensajeEliminacionExitoFracaso(confirmEliminar);
+                } else {
+                    platoVista.mensajeEliminacionExitoFracaso(confirmEliminar);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+        //Aumentar precio de manera porcentual
     public void aumentoPreciosPorcentualmente(PlatoRepositorio platoRepositorio, PlatoVista platoVista){
         platoRepositorio.aumentoPorcentualPrecio(platoVista.ingresePorcentaje());
     }
@@ -85,7 +134,13 @@ public class PlatoControlador {
     public Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
 
         String tipo = platoVista.menuTipoComida();
-        List<Plato> listaP = platoRepositorio.enlistarXTipo(tipo);
+        List<Plato> listaP = new ArrayList<>();
+        if(tipo !=null){
+            listaP = platoRepositorio.enlistarXTipo(tipo);
+        }else {
+            return null;
+        }
+
         int indiceSeleccionado = 0;
         do {
             platoRepositorio.mostrarEnlistadosBonito(tipo);

@@ -227,6 +227,10 @@ public class PlatoVista {
         else System.out.println("No se completo correctamente.");
     }
 
+    public void mensajeEliminacionExitoFracaso(boolean confirmacion){
+        if(confirmacion) System.out.println("Se elimino correctamente.");
+        else System.out.println("No se completo la eliminacion.");
+    }
 
 
 
