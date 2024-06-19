@@ -58,11 +58,9 @@ public class ReservaRepositorio implements IABM<Reserva> {
         for (Reserva reserva1 : reservas) {
             if (reserva.getFecha().equals(fecha)) {
                 return reserva1;
-            } else {
-                return reserva;
             }
-            throw new ExcepcionReservaNoEncontrada("Reserva no encontrada para la fecha: " + fecha);
         }
+        return reserva;
     }
 
     public void guardarReserva(){

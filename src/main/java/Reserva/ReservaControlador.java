@@ -31,10 +31,9 @@ public class ReservaControlador {
 
     public void agregarReserva() throws ExcepcionReservaCaracterInvalido, ExcepcionReservaCamposVacios, ExcepcionReservaValorNegativo, ExcepcionClienteNoEncontrado, ExcepcionReservaNoEncontrada {
         reservaRepositorio.cargarReserva();
-        //pedir fecha, buscarla y si no esta armo una nueva fecha y si esta accedo al arreglo
         Reserva reserva = reservaVista.pedirFecha();
-        LocalDateTime fecha = reservaRepositorio.buscarFecha(reserva.getFecha());
-        if(fecha == null){//si no tengo la fecha, hago todos de nuevo
+        LocalDateTime fecha = reservaRepositorio.buscarFecha(reserva.getFecha()).getFecha();
+        if(fecha == null){
             reserva = reservaVista.pedirFecha();
             Integer cantPersonas = reservaVista.pedirCantidadPersonas();
             Integer id = clienteVista.consultarCliente();

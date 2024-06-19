@@ -124,6 +124,21 @@ public class ReservaVista {
         }
     }
 
+    public void mostrarReservasDisponibles(List<Reserva> reservas) {
+        LocalDateTime hoy = LocalDateTime.now();
+
+        for (Reserva reserva : reservas) {
+            if (reserva.getMesasReservadas().isEmpty()) {
+                LocalDateTime fechaInicio = reserva.getFecha();
+                LocalDateTime fechaFin = fechaInicio.plusDays(15);
+
+                if (fechaInicio.isAfter(hoy) && fechaInicio.isBefore(fechaFin)) {
+                    System.out.println("Reservas disponibles desde " + fechaInicio + " hasta " + fechaFin + ": " + reserva);
+                }
+            }
+        }
+    }
+
     public void mensaje(String mensaje){
         System.out.println(mensaje);
     }
