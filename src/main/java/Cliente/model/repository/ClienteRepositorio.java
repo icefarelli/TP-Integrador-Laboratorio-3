@@ -4,13 +4,12 @@ import Cliente.model.entitie.Cliente;
 import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
 
 import java.lang.reflect.Array;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ClienteRepositorio {
 
     private Set<Cliente> clienteSet = new HashSet<>();
+
 
    public void addCliente(Cliente cliente)
     {
