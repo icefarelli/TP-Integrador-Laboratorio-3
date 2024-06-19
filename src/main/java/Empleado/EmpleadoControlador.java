@@ -27,7 +27,7 @@ public class EmpleadoControlador {
 
     private static final String PATH ="src/main/resources/Empleados.json";
 
-    private void pasarAarchivo() throws IOException {
+    public void pasarAarchivo() throws IOException {
         try (Writer writer = new FileWriter(PATH)){
             gson.toJson(empleadoRepositorio.listaEmpleados,writer);
         } catch (IOException io){
@@ -35,9 +35,9 @@ public class EmpleadoControlador {
         }
     }
 
-    private void pasarAMemoria() throws FileNotFoundException {
+    public void pasarAMemoria() throws FileNotFoundException {
         try(Reader reader = new FileReader(PATH)) {
-          Type type = new TypeToken<TreeSet<Empleado>>(){}.getType();
+          Type type = new TypeToken<TreeMap<Integer,Empleado>>(){}.getType();
           empleadoRepositorio.listaEmpleados = gson.fromJson(reader,type);
           if(empleadoRepositorio.listaEmpleados == null){
               empleadoRepositorio.listaEmpleados = new TreeMap<Integer, Empleado>();
@@ -50,8 +50,15 @@ public class EmpleadoControlador {
 
     public void agregarEmpleado() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException {
         pasarAMemoria();
+        Integer clave;
         Empleado empleado = empleadoVista.pedirUnEmpleado();
-        empleadoRepositorio.agregar(empleado);
+        if(!empleadoRepositorio.listaEmpleados.isEmpty()){
+            clave = empleadoRepositorio.listaEmpleados.lastKey();
+            empleado.setIdEmpleado(clave + 1);
+            empleadoRepositorio.agregar(empleado);
+        } else{
+            empleadoRepositorio.agregar(empleado);
+        }
         pasarAarchivo();
     }
 

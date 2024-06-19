@@ -50,7 +50,7 @@ public Empleado pedirUnEmpleado() throws ExcepcionNombreInvalido, ExcepcionDNISt
     System.out.println("Ingrese el nombre y apellido del empleado:");
     String nombre = scan.nextLine();
 
-    if (nombre==null || !nombre.matches("[a-zA-Z]+")){
+    if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z ]+")){
         throw new ExcepcionNombreInvalido("El nombre solo debe contener letras");
     }
     System.out.println("Ingrese el DNI del empleado:");
@@ -108,7 +108,7 @@ public String pedirNombreParaModificar() throws ExcepcionNombreInvalido {
     System.out.println("Ingrese el nombre y apellido del empleado:");
     String nombre = scan.nextLine();
 
-    if (nombre==null || !nombre.matches("[a-zA-Z]+")){
+    if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z ]+")){
         throw new ExcepcionNombreInvalido("El nombre solo debe contener letras");
     }
 

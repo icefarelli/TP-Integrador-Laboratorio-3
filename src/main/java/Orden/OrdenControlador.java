@@ -45,10 +45,15 @@ public class OrdenControlador {
         this.platoVista = platoVista;
         this.platoControlador = platoControlador;
     }
-
+    //crearOrden requiere que previo a su llamado, se pasen a memoria todos los archivos.
     public void crearOrden() throws ExcepcionClienteNoEncontrado, ExcepcionDNIStringInvalido {
         ordenRepositorio.cargarOrdenesDesdeArchivo();
-        Integer idOrden = ordenRepositorio.obtenerMap().lastKey();
+        Integer idOrden;
+        if(ordenRepositorio.obtenerMap().isEmpty() || ordenRepositorio.obtenerMap() == null){
+            idOrden = 0;
+        }else {
+            idOrden = ordenRepositorio.obtenerMap().lastKey();
+        }
 
         Set<Cliente> setClientes = clienteRepositorio.getClienteSet();
         Integer clienteId;
@@ -77,8 +82,7 @@ public class OrdenControlador {
         Scanner scan = new Scanner(System.in);
         String op = null;
         do {
-            //Plato p = platoControlador. -> agregar del controlador de plato que retorna un plato.
-            Plato p = null; // borrar al descomentar lo de arriba
+            Plato p = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista); //se arreglara cuando el metodo deje de ser static
             platos.add(p);
             System.out.println("Ingrese 's' si quiere agregar otro plato: ");
             op = scan.nextLine();
@@ -89,6 +93,7 @@ public class OrdenControlador {
         orden.setPlatoList(platos);
 
         ordenRepositorio.guardarOrden(orden);
+        ordenRepositorio.guardarOrdenesEnArchivo();
         ordenVista.mostrarMensaje("Orden creada exitosamente.");
     }
 
@@ -134,13 +139,13 @@ public class OrdenControlador {
                 switch (opcion) {
                     case 1:
                         // Agregar un plato
-                        //Plato nuevoPlato = platoControlador.seleccionarPlato(); // Método que selecciona y retorna un plato
-                        Plato nuevoPlato = null; //borrar al tener la funcion para agregar plato
+                        Plato nuevoPlato = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista); // Método que selecciona y retorna un plato
                         platos.add(nuevoPlato);
                         break;
                     case 2:
                         // Quitar un plato
-                        System.out.print("Ingrese el índice del plato a quitar (empezando desde 0): ");
+                        System.out.print("Ingrese el índice del plato a quitar (empezando desde 0): \n");
+                        ordenVista.mostrarPlatosDeOrden(orden);
                         int indiceQuitar = scan.nextInt();
                         scan.nextLine();  // capturar el salto de linea desp del nextInt
                         if (indiceQuitar >= 0 && indiceQuitar < platos.size()) {
@@ -151,12 +156,12 @@ public class OrdenControlador {
                         break;
                     case 3:
                         // Reemplazar un plato
-                        System.out.print("Ingrese el índice del plato a reemplazar (empezando desde 0): ");
+                        System.out.print("Ingrese el índice del plato a reemplazar (empezando desde 0): \n");
+                        ordenVista.mostrarPlatosDeOrden(orden);
                         int indiceReemplazar = scan.nextInt();
                         scan.nextLine();  // capturar el salto de linea desp del nextInt
                         if (indiceReemplazar >= 0 && indiceReemplazar < platos.size()) {
-                            //Plato platoReemplazo = platoControlador.seleccionarPlato(); // Método que selecciona y retorna un plato
-                            Plato platoReemplazo = null; //borrar al tener la funcion para agregar plato
+                            Plato platoReemplazo = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista);
                             platos.set(indiceReemplazar, platoReemplazo);
                         } else {
                             System.out.println("Índice inválido.");
