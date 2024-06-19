@@ -9,6 +9,7 @@ import Empleado.Empleado;
 import Empleado.EmpleadoRepositorio;
 import Empleado.EmpleadoVista;
 import Excepciones.ExcepcionDNIStringInvalido;
+import Excepciones.ExcepcionEntradaInvalida;
 import Excepciones.ExcepcionOrdenNoEncontrada;
 import Plato.Plato;
 import Plato.PlatoControlador;
@@ -194,6 +195,8 @@ public class OrdenControlador {
 
         } catch (ExcepcionOrdenNoEncontrada e) {
             e.mensaje();
+        } catch (ExcepcionEntradaInvalida e) {
+            e.mensaje();
         }
     }
 
@@ -226,6 +229,8 @@ public class OrdenControlador {
             }
         } catch (ExcepcionOrdenNoEncontrada e) {
             e.mensaje();
+        }catch (ExcepcionEntradaInvalida excepcionEntradaInvalida){
+            excepcionEntradaInvalida.mensaje();
         }
     }
 
