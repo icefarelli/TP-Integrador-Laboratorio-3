@@ -5,20 +5,29 @@ import Excepciones.Reservas.ExcepcionReservaCaracterInvalido;
 import Excepciones.Reservas.ExcepcionReservaValorNegativo;
 import MesasReservadas.MesasReservadas;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
 public class ReservaVista {
     public static Scanner scanner = new Scanner(System.in);
 
-    public Reserva pedirFecha() throws ExcepcionReservaCaracterInvalido, ExcepcionReservaCamposVacios, ExcepcionReservaValorNegativo {
+    public Reserva pedirFecha() throws ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido {
         System.out.println("Ingrese fecha de la reserva (formato dd/MM/yyyy): ");
-        LocalDateTime fecha = LocalDateTime.parse(scanner.nextLine());
-        if(fecha == null){
-            throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
+        String input = scanner.nextLine().trim();
+
+        if (input.isEmpty()) {
+            throw new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacío. Intente nuevamente.");
         }
-        if(!esNumero(String.valueOf(fecha))){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate fecha;
+
+        try {
+            fecha = LocalDate.parse(input, formatter);
+        } catch (DateTimeParseException e) {
             throw new ExcepcionReservaCaracterInvalido("Error: el formato de fecha no es válido. Debe ser dd/MM/yyyy. Intente nuevamente.");
         }
 
@@ -84,11 +93,11 @@ public class ReservaVista {
         return nombre;
     }
 
-    public LocalDateTime modificarFecha() throws ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo {
-        LocalDateTime fecha = null;
+    public LocalDate modificarFecha() throws ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo {
+        LocalDate fecha = null;
         System.out.println("Ingrese la nueva fecha. ");
 
-        fecha = LocalDateTime.parse(scanner.nextLine());
+        fecha = LocalDate.parse(scanner.nextLine());
         if(fecha == null){
             throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
         }
@@ -98,10 +107,10 @@ public class ReservaVista {
         return fecha;
     }
 
-    public LocalDateTime buscarFechaReserva() throws ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo {
-        LocalDateTime fecha = null;
+    public LocalDate buscarFechaReserva() throws ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo {
+        LocalDate fecha = null;
         System.out.println("Ingrese fecha: ");
-        fecha = LocalDateTime.parse(scanner.nextLine());
+        fecha = LocalDate.parse(scanner.nextLine());
 
         if(fecha == null){
             throw  new ExcepcionReservaCamposVacios("Error: el campo no puede estar vacio. Intente nuevamente.");
@@ -125,12 +134,12 @@ public class ReservaVista {
     }
 
     public void mostrarReservasDisponibles(List<Reserva> reservas) {
-        LocalDateTime hoy = LocalDateTime.now();
+        LocalDate hoy = LocalDate.now();
 
         for (Reserva reserva : reservas) {
             if (reserva.getMesasReservadas().isEmpty()) {
-                LocalDateTime fechaInicio = reserva.getFecha();
-                LocalDateTime fechaFin = fechaInicio.plusDays(15);
+                LocalDate fechaInicio = reserva.getFecha();
+                LocalDate fechaFin = fechaInicio.plusDays(15);
 
                 if (fechaInicio.isAfter(hoy) && fechaInicio.isBefore(fechaFin)) {
                     System.out.println("Reservas disponibles desde " + fechaInicio + " hasta " + fechaFin + ": " + reserva);

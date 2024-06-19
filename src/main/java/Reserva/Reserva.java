@@ -2,28 +2,28 @@ package Reserva;
 
 import MesasReservadas.MesasReservadas;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Reserva {
-    private LocalDateTime fecha;
+    private LocalDate fecha;
     private List<MesasReservadas> mesasReservadas = new ArrayList<MesasReservadas>();
 
-    public Reserva(LocalDateTime fecha, List<MesasReservadas> mesasReservadas) {
+    public Reserva(LocalDate fecha, List<MesasReservadas> mesasReservadas) {
         this.fecha = fecha;
         this.mesasReservadas = mesasReservadas;
     }
 
-    public Reserva(LocalDateTime fecha) {
+    public Reserva(LocalDate fecha) {
         this.fecha = fecha;
     }
 
-    public LocalDateTime getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
