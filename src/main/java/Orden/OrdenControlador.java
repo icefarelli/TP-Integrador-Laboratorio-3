@@ -212,7 +212,7 @@ public class OrdenControlador {
 
             // Confirmar la eliminación
             System.out.println("¿Está seguro de que desea eliminar la siguiente orden?");
-            ordenVista.mostrarUnaOrden(orden);
+            mostrarOrden(orden.getId());
             System.out.print("Ingrese 's' para confirmar, cualquier otra tecla para cancelar: ");
             String op = scan.nextLine();
 
@@ -252,6 +252,10 @@ public class OrdenControlador {
         try {
             Orden orden = ordenRepositorio.obtenerOrden(id);
             ordenVista.mostrarUnaOrden(orden);
+            System.out.println("------------------");
+            System.out.println("Total  $ " + ordenRepositorio.calcularTotalOrden(orden.getId()));
+            System.out.println("------------------");
+            System.out.println("------------------------------------------------");
         } catch (ExcepcionOrdenNoEncontrada e) {
             e.mensaje();
         }
