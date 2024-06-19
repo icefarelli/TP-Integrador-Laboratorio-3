@@ -1,49 +1,22 @@
 package Reserva;
 
-import Cliente.model.entitie.Cliente;
+import MesasReservadas.MesasReservadas;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Reserva {
-    private static int secReserva = 0;
-    private Integer id;
-    private Cliente cliente;
-    private Integer cantPersonas;
     private LocalDateTime fecha;
+    private List<MesasReservadas> mesasReservadas = new ArrayList<MesasReservadas>();
 
-    public Reserva(Integer cantPersonas, LocalDateTime fecha) {
-        this.id = ++secReserva;
-        this.cliente = cliente;
-        this.cantPersonas = cantPersonas;
+    public Reserva(LocalDateTime fecha, List<MesasReservadas> mesasReservadas) {
         this.fecha = fecha;
+        this.mesasReservadas = mesasReservadas;
     }
 
-    public static int getSecReserva() {
-        return secReserva;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public Integer getCantPersonas() {
-        return cantPersonas;
-    }
-
-    public void setCantPersonas(Integer cantPersonas) {
-        this.cantPersonas = cantPersonas;
+    public Reserva(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 
     public LocalDateTime getFecha() {
@@ -52,5 +25,13 @@ public class Reserva {
 
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
+    }
+
+    public List<MesasReservadas> getMesasReservadas() {
+        return mesasReservadas;
+    }
+
+    public void setMesasReservadas(List<MesasReservadas> mesasReservadas) {
+        this.mesasReservadas = mesasReservadas;
     }
 }

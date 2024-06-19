@@ -25,6 +25,12 @@ public class OrdenVista {
         System.out.println(mensaje);
     }
 
+    public Integer pedirIdOrden(){
+        Scanner scan = new Scanner(System.in);
+        System.out.print("Ingrese el ID de la orden buscada: ");
+        return scan.nextInt();
+    }
+
     public Integer pedirIdOrdenModificar(){
         Scanner scan = new Scanner(System.in);
         System.out.print("Ingrese el ID de la orden a modificar: ");

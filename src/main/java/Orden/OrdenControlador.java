@@ -5,13 +5,13 @@ import Cliente.model.entitie.Cliente;
 import Cliente.model.repository.ClienteRepositorio;
 import Cliente.view.ClienteVista;
 import Empleado.Empleado;
-import Empleado.EmpleadoVista;
 import Empleado.EmpleadoRepositorio;
+import Empleado.EmpleadoVista;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionOrdenNoEncontrada;
 import Plato.Plato;
-import Plato.PlatoRepositorio;
 import Plato.PlatoControlador;
+import Plato.PlatoRepositorio;
 import Plato.PlatoVista;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class OrdenControlador {
     private PlatoControlador platoControlador;
 
     public OrdenControlador(OrdenRepositorio ordenRepositorio, OrdenVista ordenVista,
-                            EmpleadoRepositorio empleadoRepositorio,EmpleadoVista empleadoVista,
+                            EmpleadoRepositorio empleadoRepositorio, EmpleadoVista empleadoVista,
                             ClienteRepositorio clienteRepositorio, ClienteVista clienteVista,
                             PlatoRepositorio platoRepositorio, PlatoVista platoVista, PlatoControlador platoControlador) {
         this.ordenRepositorio = ordenRepositorio;
@@ -45,13 +45,14 @@ public class OrdenControlador {
         this.platoVista = platoVista;
         this.platoControlador = platoControlador;
     }
+
     //crearOrden requiere que previo a su llamado, se pasen a memoria todos los archivos.
     public void crearOrden() throws ExcepcionClienteNoEncontrado, ExcepcionDNIStringInvalido {
         ordenRepositorio.cargarOrdenesDesdeArchivo();
         Integer idOrden;
-        if(ordenRepositorio.obtenerMap().isEmpty() || ordenRepositorio.obtenerMap() == null){
+        if (ordenRepositorio.obtenerMap().isEmpty() || ordenRepositorio.obtenerMap() == null) {
             idOrden = 0;
-        }else {
+        } else {
             idOrden = ordenRepositorio.obtenerMap().lastKey();
         }
 
@@ -72,7 +73,7 @@ public class OrdenControlador {
         do {
             claveEmpleado = empleadoVista.pedirClave();
             e = empleadoRepositorio.buscarEmpleado(claveEmpleado);
-            if(e == null){
+            if (e == null) {
                 empleadoVista.mensajeErrorBusqueda();
             }
         } while (e == null);
@@ -80,10 +81,14 @@ public class OrdenControlador {
 
         List<Plato> platos = new ArrayList<>();
         Scanner scan = new Scanner(System.in);
-        String op = null;
+        String op;
         do {
-            Plato p = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista); //se arreglara cuando el metodo deje de ser static
-            platos.add(p);
+            Plato p = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista);
+            if (p != null) {
+                platos.add(p);
+            } else {
+                System.out.println("Plato no agregado");
+            }
             System.out.println("Ingrese 's' si quiere agregar otro plato: ");
             op = scan.nextLine();
         } while (op.equals("s"));
@@ -97,16 +102,7 @@ public class OrdenControlador {
         ordenVista.mostrarMensaje("Orden creada exitosamente.");
     }
 
-    public void mostrarOrden(Integer id) throws ExcepcionOrdenNoEncontrada {
-        try {
-            Orden orden = ordenRepositorio.obtenerOrden(id);
-            ordenVista.mostrarUnaOrden(orden);
-        }catch (ExcepcionOrdenNoEncontrada e){
-            e.mensaje();
-        }
-    }
-
-    public void modificarOrden(){
+    public void modificarOrden() {
         try {
             ordenRepositorio.cargarOrdenesDesdeArchivo();
 
@@ -120,7 +116,7 @@ public class OrdenControlador {
             }
 
             // Mostrar la orden existente
-            ordenVista.mostrarUnaOrden(orden);
+            mostrarOrden(orden.getId());
 
             // Modificar los platos de la orden
             List<Plato> platos = new ArrayList<>(orden.getPlatoList());
@@ -140,7 +136,11 @@ public class OrdenControlador {
                     case 1:
                         // Agregar un plato
                         Plato nuevoPlato = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista); // Método que selecciona y retorna un plato
-                        platos.add(nuevoPlato);
+                        if (nuevoPlato != null) {
+                            platos.add(nuevoPlato);
+                        } else {
+                            System.out.println("Plato no agregado");
+                        }
                         break;
                     case 2:
                         // Quitar un plato
@@ -162,7 +162,11 @@ public class OrdenControlador {
                         scan.nextLine();  // capturar el salto de linea desp del nextInt
                         if (indiceReemplazar >= 0 && indiceReemplazar < platos.size()) {
                             Plato platoReemplazo = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista);
-                            platos.set(indiceReemplazar, platoReemplazo);
+                            if (platoReemplazo != null) {
+                                platos.set(indiceReemplazar, platoReemplazo);
+                            } else {
+                                System.out.println("Plato no agregado");
+                            }
                         } else {
                             System.out.println("Índice inválido.");
                         }
@@ -208,7 +212,7 @@ public class OrdenControlador {
 
             // Confirmar la eliminación
             System.out.println("¿Está seguro de que desea eliminar la siguiente orden?");
-            ordenVista.mostrarUnaOrden(orden);
+            mostrarOrden(orden.getId());
             System.out.print("Ingrese 's' para confirmar, cualquier otra tecla para cancelar: ");
             String op = scan.nextLine();
 
@@ -223,4 +227,39 @@ public class OrdenControlador {
             e.mensaje();
         }
     }
+
+    public void mostrarTodasLasOrdenes() {
+        try {
+            ordenRepositorio.cargarOrdenesDesdeArchivo();
+
+            if (ordenRepositorio.obtenerMap().isEmpty()) {
+                ordenVista.mostrarMensaje("No hay órdenes disponibles.");
+                return;
+            }
+
+            for (Orden orden : ordenRepositorio.obtenerMap().values()) {
+                mostrarOrden(orden.getId());
+            }
+
+        } catch (Exception e) {
+            ordenVista.mostrarMensaje("Ocurrió un error al cargar las órdenes.");
+            e.printStackTrace();
+        }
+    }
+
+    public void mostrarOrden(Integer id) throws ExcepcionOrdenNoEncontrada {
+
+        try {
+            Orden orden = ordenRepositorio.obtenerOrden(id);
+            ordenVista.mostrarUnaOrden(orden);
+            System.out.println("------------------");
+            System.out.println("Total  $ " + ordenRepositorio.calcularTotalOrden(orden.getId()));
+            System.out.println("------------------");
+            System.out.println("------------------------------------------------");
+        } catch (ExcepcionOrdenNoEncontrada e) {
+            e.mensaje();
+        }
+    }
+
+
 }
