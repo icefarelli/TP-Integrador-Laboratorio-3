@@ -58,8 +58,6 @@ public class ReservaControlador {
         }
     }
 
-
-
     public void eliminarReserva() throws ExcepcionReservaNoEncontrada, ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo {
         reservaRepositorio.cargarReserva();
         LocalDate fecha = reservaVista.buscarFechaReserva();
@@ -88,6 +86,10 @@ public class ReservaControlador {
 
             if (opcion.equalsIgnoreCase("fecha")) {
                 LocalDate nuevaFecha = reservaVista.solicitarNuevaFecha(reservaRepositorio.todasLasReservas());
+                while(nuevaFecha.isEqual(fecha)){
+                    reservaVista.mensaje("La fecha ingresa es la misma. Ingrese nuevamente");
+                    nuevaFecha = reservaVista.solicitarNuevaFecha(reservaRepositorio.todasLasReservas());
+                }
                 LocalDate fechaNueva = reservaVista.modificarFecha();
                 Reserva nuevaReserva = reservaRepositorio.buscarReserva(fechaNueva);
                 if(nuevaReserva == null){
@@ -95,16 +97,18 @@ public class ReservaControlador {
                     mesas.add(mesasReservadas);
                     Reserva reserva1 = new Reserva(fecha,mesas);
                     reservaRepositorio.agregar(reserva1);
+                    reservaRepositorio.guardarReserva();
                 }else {
                     nuevaReserva.getMesasReservadas().add(mesasReservadas);
+                    reservaRepositorio.guardarReserva();
                 }
-                //chequear que la fecha no sea la misma que la nueva
                 reservaRepositorio.modificar(nuevaReserva);
                 reservaRepositorio.guardarReserva();
                 reservaVista.mensaje("Reserva modificada con éxito!");
             } else if(opcion.equalsIgnoreCase("cantPersonas")) {
                 Integer cantPersonas = reservaVista.modificarCantPersonas();
                 reserva.getMesasReservadas().get(id).setCantPersonas(cantPersonas);
+                reservaRepositorio.guardarReserva();
             }
         }
     }

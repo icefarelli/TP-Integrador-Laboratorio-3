@@ -57,20 +57,6 @@ public class ReservaRepositorio implements IABM<Reserva> {
         return null;
     }
 
-    /*
-        try {
-            Empleado empleado = empleadoView.agregar();
-            if (empleado.getNombre().isEmpty() || empleado.getEmail().isEmpty()){
-                throw new CamposVacios("Nombre o email del empleado invalidos");
-            }
-            empleadoRepository.agregar(empleado);
-            empleadoSet.add(empleado);
-            guardarDatos();
-        } catch (CamposVacios e) {
-            System.out.println("Error al agregar empleado: " + e.getMessage());
-        }
-         */
-
     public Reserva buscarReserva(LocalDate fecha) throws ExcepcionReservaNoEncontrada {
         Reserva reserva = null;
         for (Reserva reserva1 : reservas) {
