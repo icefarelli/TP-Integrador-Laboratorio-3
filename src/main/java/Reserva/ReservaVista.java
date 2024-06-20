@@ -133,16 +133,17 @@ public class ReservaVista {
         return fecha;
     }
 
-    public void mostrarReservaConArreglo(List<Reserva> reservas, List<MesasReservadas> mesasReservadas){
-        for(Reserva reserva:reservas){
-            System.out.println("Fecha: " +reserva.getFecha());
+    public void mostrarReservaConArreglo(List<Reserva> reservas, List<MesasReservadas> mesasReservadas) {
+        for (Reserva reserva : reservas) {
+            System.out.println("Fecha: " + reserva.getFecha());
             System.out.println("Todas las Reservas");
-            for(MesasReservadas mesas: mesasReservadas){
-                System.out.println("Cliente: " +mesas.getCliente().getNombre());
-                System.out.println("Cantidad de Personas: " +mesas.getCantPersonas());
+            for (MesasReservadas mesas : reserva.getMesasReservadas()) { // Accede a las mesas reservadas de la reserva actual
+                System.out.println("Cliente: " + mesas.getCliente().getNombre());
+                System.out.println("Cantidad de Personas: " + mesas.getCantPersonas());
             }
         }
     }
+
 
     public LocalDate solicitarNuevaFecha(List<Reserva> reservas) throws ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido {
         LocalDate hoy = LocalDate.now();

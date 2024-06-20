@@ -17,6 +17,7 @@ import Excepciones.Reservas.ExcepcionReservaValorNegativo;
 import Orden.OrdenControlador;
 import Orden.OrdenRepositorio;
 import Orden.OrdenVista;
+import Plato.Excepciones.ExcepIngresoInvalido;
 import Plato.PlatoControlador;
 import Plato.PlatoRepositorio;
 import Plato.PlatoVista;
@@ -75,7 +76,7 @@ public class MenuOrdenes {
                         try {
                             ordenControlador.mostrarOrden(ordenVista.pedirIdOrden());
                         } catch (ExcepcionEntradaInvalida e) {
-                            e.mensaje();
+                            System.out.println(e.getMessage());
                         }
                         break;
                     case 6:
@@ -88,8 +89,9 @@ public class MenuOrdenes {
                     default:
                         System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
                 }
-                }catch (InputMismatchException e) {
-                    new ExcepcionEntradaInvalida().mensaje();
+                }catch (InputMismatchException | ExcepcionReservaCamposVacios | ExcepcionReservaNoEncontrada |
+                        ExcepcionReservaCaracterInvalido | ExcepcionReservaValorNegativo e) {
+                    System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
                     scanner.nextLine();
                 } catch (ExcepcionReservaCamposVacios e) {
                     throw new RuntimeException(e);
@@ -102,6 +104,5 @@ public class MenuOrdenes {
                 }
             } while (op != 6 && op != 7);
             scanner.close();
-
         }
 }

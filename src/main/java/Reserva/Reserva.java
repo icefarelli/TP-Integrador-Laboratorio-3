@@ -34,4 +34,11 @@ public class Reserva {
     public void setMesasReservadas(List<MesasReservadas> mesasReservadas) {
         this.mesasReservadas = mesasReservadas;
     }
+
+    @Override
+    public String toString() {
+        return "Reserva: " +
+                "fecha: " + fecha +
+                ", Mesas Reservadas: " + mesasReservadas;
+    }
 }

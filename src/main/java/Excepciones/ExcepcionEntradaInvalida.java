@@ -6,10 +6,4 @@ public class ExcepcionEntradaInvalida extends Exception {
         super(mensaje);
     }
 
-    public ExcepcionEntradaInvalida() {
-    }
-
-    public void mensaje(){
-        System.out.println("Entrada invalida..");
-    }
 }

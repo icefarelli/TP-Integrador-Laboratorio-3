@@ -13,8 +13,5 @@ public class ExcepcionOrdenNoEncontrada extends Exception {
         super(message);
     }
 
-    public void mensaje() {
-        System.out.println("Orden no encontrada...");
-    }
 }
 
