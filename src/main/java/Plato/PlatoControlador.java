@@ -1,6 +1,8 @@
 package Plato;
+import Plato.Excepciones.ExcepCargaNoRealizada;
 import Plato.Excepciones.ExcepIngresoInvalido;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -10,36 +12,30 @@ public class PlatoControlador {
     private PlatoRepositorio platoRepositorio;
     private PlatoVista platoVista;
 
-
     public PlatoControlador(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
         this.platoRepositorio = platoRepositorio;
         this.platoVista = platoVista;
     }
 
     //Agregar Plato
-    public void cargarPlatoEnSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws ExcepIngresoInvalido {
-
+    public void cargarPlatoEnSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
+//
+        Plato nuevoPlato = null;
         try {
-            Plato nuevoPlato = platoVista.nuevoPlato();
-            if (nuevoPlato != null) {
-                boolean confirmacion = platoVista.metodoConfirmacion("¿Desea confirmar la carga?");
+            nuevoPlato = platoVista.nuevoPlato();
 
-                if (confirmacion) {
+            if (nuevoPlato != null) {
+                boolean confirm = platoVista.metodoConfirmacion("¿Desea confirmar la carga?");
+
+                if (confirm) {
                     platoRepositorio.agregar(nuevoPlato);
-                    platoVista.mensajeCargaExitoFracaso(confirmacion);
+                    platoVista.mensajeCargaExitoFracaso(true);
                 } else {
-                    platoVista.mensajeCargaExitoFracaso(confirmacion);
+                    platoVista.mensajeCargaExitoFracaso(false);
                 }
-            } else {
-                throw new ExcepIngresoInvalido("No se realizo la Carga correctamente");
             }
-        }catch (ExcepIngresoInvalido e) {
-            platoVista.mensajePersonalizado("Error: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            platoVista.mensajePersonalizado("Ocurrió un error inesperado al cargar el plato: " + e.getMessage());
-//            e.printStackTrace();
-            throw new ExcepIngresoInvalido("No se realizó la carga correctamente debido a un error inesperado.");
+        } catch (ExcepCargaNoRealizada e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -48,7 +44,9 @@ public class PlatoControlador {
         Plato buscado;
 
         try {
-            buscado = platoRepositorio.buscarPlatoXnombre(platoVista.ingresarNombre());
+            String nombre = platoVista.ingresarNombre();
+
+            buscado = platoRepositorio.buscarPlatoXnombre(nombre);
 
             if( buscado!= null) {
                 boolean confirmEliminar = platoVista.metodoConfirmacion("¿Confirmar la eliminacion?");
@@ -62,8 +60,8 @@ public class PlatoControlador {
                 platoVista.mensajeEliminacionPlatoInexistente();
                 platoVista.mensajeEliminacionExitoFracaso(false);
             }
-        }catch (Exception e){
-            e.printStackTrace();
+        }catch (ExcepIngresoInvalido eii){
+            platoVista.mensajePersonalizado("Error: " + eii.getMessage());
         }
     }
 
@@ -106,12 +104,16 @@ public class PlatoControlador {
     }
 
     //Actualizar Platos y sus variantes
-    public void actualizarPlatoExistente(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws ExcepIngresoInvalido {
+    public void actualizarPlatoExistente(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws ExcepIngresoInvalido, IOException {
         String tipo = platoVista.menuTipoComida();
         platoRepositorio.mostrarEnlistadoBonitoXtipoOld(tipo);
 
-        String nombre = platoVista.ingresarNombre();
-        Plato buscado = null;
+        String nombre;
+        do {
+            nombre = platoVista.ingresarNombre();
+        }while (nombre==null);
+
+        Plato buscado;
         try {
             buscado = platoRepositorio.buscarPlatoXnombre(nombre);
         } catch (ExcepIngresoInvalido e) {
@@ -121,11 +123,20 @@ public class PlatoControlador {
         if (buscado == null) {
             platoVista.mensajePersonalizado("Plato no encontrado");
         }else {
+            System.out.println(buscado.toString());
             Plato actualizado = platoVista.actualizarPlato(tipo, nombre);
             if (actualizado == null) {
                 throw new ExcepIngresoInvalido("Carga de datos inválida. \nIntente nuevamente.");
             }
-            platoRepositorio.modificar(actualizado);
+            System.out.println(actualizado.toString());
+
+            boolean confirmUpdate = platoVista.metodoConfirmacion("¿Confirmar la actualizacion?");
+            if(confirmUpdate){
+                platoRepositorio.modificar(actualizado);
+                platoVista.mensajeCargaExitoFracaso(confirmUpdate);
+            }else {
+                platoVista.mensajeCargaExitoFracaso(confirmUpdate);
+            }
         }
     }
 
@@ -181,11 +192,8 @@ public class PlatoControlador {
         }
     }
     //metodo pausar pantalla
-    public static void pausarPantalla() {
-        System.out.println("Presione Enter para continuar...");
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
+    public static void pausarPantalla(PlatoVista platoVista) {
+        platoVista.pausarPantalla();
     }
-
 
 }

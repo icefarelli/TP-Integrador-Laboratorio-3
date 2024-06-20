@@ -1,7 +1,6 @@
 package Plato;
 
 import Interfaces.IABM;
-import Plato.Excepciones.ExcepFileNF;
 import Plato.Excepciones.ExcepIngresoInvalido;
 import Plato.Variedad.Variedad;
 import com.google.gson.Gson;
@@ -33,12 +32,7 @@ public class PlatoRepositorio implements IABM<Plato> {
             platoSet = gson.fromJson(reader,setType);
             if (platoSet ==null) platoSet = new HashSet<>();
         }catch (FileNotFoundException fnf){
-            try {
-                throw new ExcepFileNF("El archivo " + FILE_COMIDAS + " no fue encontrado.");
-            } catch (ExcepFileNF ex) {
-                ex.printStackTrace();
-                platoSet = new HashSet<>();
-            }
+            platoSet = new HashSet<>();
         }catch (IOException ioe){
             ioe.printStackTrace();
         }
@@ -47,8 +41,8 @@ public class PlatoRepositorio implements IABM<Plato> {
     private void saveFilePlatos(){
         try(Writer writer = new FileWriter(FILE_COMIDAS)){
             gson.toJson(platoSet,writer);
-        }catch (IOException ioException){
-            ioException.printStackTrace();
+        }catch (IOException ioE){
+            ioE.printStackTrace();
         }
     }
 
@@ -161,73 +155,63 @@ public class PlatoRepositorio implements IABM<Plato> {
     // y el total de indices. en diferentes metodos. Por ultimo mostrarEnlistadoBonitoXtipoNew imprime el total del Set.
 
     public void mostrarCartaDePlatosCompleta() {
-        int largoMaximoDelNombre = calcularLargoMaximoDelNombre();
-        int largoMaximoDelIndice = calcularLargoMaximoDelIndice();
         Set<String> tiposYaMostrados = new HashSet<>();
         for (Plato plato : this.platoSet) {
             String tipoActual = plato.getTipo();
             if (!tiposYaMostrados.contains(tipoActual)) {
                 tiposYaMostrados.add(tipoActual);
-                mostrarEnlistadoBonitoXtipoNew(tipoActual, largoMaximoDelNombre, largoMaximoDelIndice);
+                mostrarEnlistadoBonitoXtipoNew(tipoActual);
             }
         }
     }
 
-    public int calcularLargoMaximoDelNombre() {
-        int largoMaximoDelNombre = 0;
-        for (Plato plato : platoSet) {
-            if (plato.getVariedades().isEmpty()) {
-                if (plato.getNombre().length() > largoMaximoDelNombre) {
-                    largoMaximoDelNombre = plato.getNombre().length();
-                }
-            } else {
-                for (Variedad variedad : plato.getVariedades()) {
-                    String nombreCompuesto = plato.getNombre() + " " + variedad.getNombre();
-                    if (nombreCompuesto.length() > largoMaximoDelNombre) {
-                        largoMaximoDelNombre = nombreCompuesto.length();
-                    }
-                }
-            }
-        }
-        return largoMaximoDelNombre;
-    }
-    public int calcularLargoMaximoDelIndice() {
-        int totalPlatos = 0;
-        for (Plato plato : platoSet) {
-            if (plato.getVariedades().isEmpty()) {
-                totalPlatos++;
-            } else {
-                totalPlatos += plato.getVariedades().size();
-            }
-        }
-        return String.valueOf(totalPlatos).length();
-    }
-
-    public void mostrarEnlistadoBonitoXtipoNew(String tipo, int largoMaximoDelNombre, int largoMaximoDelIndice) {
-        List<String> nombre = new ArrayList<>();
-        List<Double> precio = new ArrayList<>();
+    public void mostrarEnlistadoBonitoXtipoNew(String tipo) {
+        List<Plato> platosPorTipo = new ArrayList<>();
         for (Plato plato : platoSet) {
             if (tipo.equals(plato.getTipo())) {
-                if (plato.getVariedades().isEmpty()) {
-                    nombre.add(plato.getNombre());
-                    precio.add(plato.getPrecio());
-                } else {
-                    for (Variedad variedad : plato.getVariedades()) {
-                        String nombreCompuesto = String.format(plato.getNombre() + " " + variedad.getNombre());
-                        nombre.add(nombreCompuesto);
-                        precio.add(variedad.getPrecio());
-                    }
-                }
+                platosPorTipo.add(plato);
             }
         }
 
         // Imprimir el menú formateado
         System.out.println("Menu de " + tipo);
         System.out.println("====================================================");
-        for (int i = 0; i < nombre.size(); i++) {
-            System.out.printf("% " + largoMaximoDelIndice + "d. %-" + largoMaximoDelNombre + "s  $%.2f%n", i + 1, nombre.get(i), precio.get(i));
+        for (Plato plato : platosPorTipo) {
+            System.out.println(plato.toString());
         }
     }
+
+//    public int calcularLargoMaximoDelNombre() {
+//        int largoMaximoDelNombre = 0;
+//        for (Plato plato : platoSet) {
+//            if (plato.getVariedades().isEmpty()) {
+//                if (plato.getNombre().length() > largoMaximoDelNombre) {
+//                    largoMaximoDelNombre = plato.getNombre().length();
+//                }
+//            } else {
+//                for (Variedad variedad : plato.getVariedades()) {
+//                    String nombreCompuesto = plato.getNombre() + " " + variedad.getNombre();
+//                    if (nombreCompuesto.length() > largoMaximoDelNombre) {
+//                        largoMaximoDelNombre = nombreCompuesto.length();
+//                    }
+//                }
+//            }
+//        }
+//        return largoMaximoDelNombre;
+//    }
+//
+//    public int calcularLargoMaximoDelIndice() {
+//        int totalPlatos = 0;
+//        for (Plato plato : platoSet) {
+//            if (plato.getVariedades().isEmpty()) {
+//                totalPlatos++;
+//            } else {
+//                totalPlatos += plato.getVariedades().size();
+//            }
+//        }
+//        return String.valueOf(totalPlatos).length();
+//    }
+
 
 
     //Si el plato contiene variedades imprime las variedades, sino imprime los platos base con sus valores

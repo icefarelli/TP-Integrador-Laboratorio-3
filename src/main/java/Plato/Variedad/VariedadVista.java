@@ -22,15 +22,15 @@ public class VariedadVista {
     public double ingresarPrecio() {
         boolean validarPrecio = false;
         double precioVariedad = 0.0;
-        int intentos = 3;
+        int intentos = 2;
 
         while (!validarPrecio && intentos > 0){
-            System.out.println("Ingrese el precio de la variedad (Formato X.XX): $");
             try {
+                System.out.println("Ingrese el precio de la variedad (Formato X.XX): $");
                 precioVariedad = checkDouble(scanner.nextLine());
                 validarPrecio = true;
             }catch (NumberFormatException nfe){
-                System.out.println("El formato ingresado es Invalido. Por Favor, Intente nuevamente");
+                System.out.println(nfe.getMessage());
                 intentos--;
             }
         }
@@ -39,8 +39,12 @@ public class VariedadVista {
     }
 
     //Metodo que corrobora que el ingreso del precio sea de tipo double
-    public double checkDouble(String precioString) throws NumberFormatException{
-            return Double.parseDouble(precioString);
+    public double checkDouble(String precioString) throws NumberFormatException {
+            try {
+                return Double.parseDouble(precioString);
+            }catch (NumberFormatException nfe){
+                throw new NumberFormatException("El formato ingresado es Invalido.");
+            }
     }
 
     public void mensajeCargaIncorrecta(){

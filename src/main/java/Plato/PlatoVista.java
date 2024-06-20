@@ -1,10 +1,11 @@
 package Plato;
 import Plato.Colores.Colores;
+import Plato.Excepciones.ExcepCargaNoRealizada;
+import Plato.Excepciones.ExcepIngresoInvalido;
 import Plato.Variedad.Variedad;
 import Plato.Variedad.VariedadController;
 import Plato.Variedad.VariedadRepositorio;
 import Plato.Variedad.VariedadVista;
-
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -17,80 +18,81 @@ public class PlatoVista {
     VariedadController variedadController = new VariedadController(varVista, varRepositorio);
 
     //Crear un nuevo plato para el menu
-    public Plato nuevoPlato() throws NumberFormatException {
+    public Plato nuevoPlato() throws ExcepCargaNoRealizada {
         Colores.printInColor("=====CARGAR UN NUEVO PLATO===== ",Colores.GREEN);
         try {
             String tipo = menuTipoComida();
+            String nombre = " ";
 
-            if (tipo==null){
-                mensajePersonalizado("Saliendo...");
-                return null;
-            }
-
-            //Nombre del Plato
-            String nombre = ingresarNombre();
-
-            boolean tieneVariedades = metodoConfirmacion("-¿Este plato tiene variedades?");
-
-            if (tieneVariedades) {
-                List<Variedad> listaVariedad = variedadController.crearListaDeVariedades(new VariedadVista(), new VariedadRepositorio());
-                return new Plato(tipo, nombre, listaVariedad);
+            if (tipo == null) {
+                throw new NumberFormatException("Saliendo...");
             } else {
-                double price = variedadController.cargarPrecio(new VariedadVista());
-                if (price != 0.0) {
-                    return new Plato(tipo, nombre, price);
+                nombre = ingresarNombre();
+                boolean tieneVariedades = metodoConfirmacion("-¿Este plato tiene variedades?");
+
+                if (tieneVariedades) {
+                    List<Variedad> listaVariedad = variedadController.crearListaDeVariedades(varVista, varRepositorio);
+                    return new Plato(tipo, nombre, listaVariedad);
                 } else {
-                    System.out.println("El Plato no pudo ser creado.");
-                    return null;
+                    double price = variedadController.cargarPrecio(varVista);
+                    if (price != 0.0) {
+                        return new Plato(tipo, nombre, price);
+                    } else {
+                        throw new ExcepCargaNoRealizada("No se realizo la Carga correctamente");
+                    }
                 }
             }
-        }catch (Exception e){
-            System.out.println("Ocurrió un error al crear el plato: " + e.getMessage());
-            e.printStackTrace();
+        }catch (ExcepIngresoInvalido eii){
+            mensajePersonalizado("Ocurrió un error al cargar el plato: \n" + eii.getMessage());
+            return null;
+        }catch (NumberFormatException nfe){
+            mensajePersonalizado(nfe.getMessage());
             return null;
         }
     }
 
     //Ingreso de nombre modularizado con comprobacion
-    public String ingresarNombre(){
+    public String ingresarNombre() throws ExcepIngresoInvalido {
+
         System.out.println("-Nombre del Plato");
         String nombre = scanner.nextLine();
 
         if (nombre == null || nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z ]+")) {
-            System.out.println("El nombre del plato solo debe contener letras.");
-            return ingresarNombre();
-        }
+            throw new ExcepIngresoInvalido("Ha ingresado Numeros o Caracteres invalidos en el nombre.\nEl nombre del plato solo debe contener letras.");
+        }else {
         return nombre;
+        }
     }
 
     //Metodo de confirmacion para concretar o validar acciones
     public boolean metodoConfirmacion (String mensaje){
         System.out.println(mensaje + "(s/n)");
-        String confirmacion = scanner.nextLine().trim().toLowerCase();
-        if (confirmacion.equals("s")) {
+        String respuesta = scanner.nextLine().trim().toLowerCase();
+        if (respuesta.equals("s")) {
             return true;
-        } else if (confirmacion.equals("n")) {
+        } else if (respuesta.equals("n")) {
             return false;
         } else {
             System.out.println("Opción inválida. Por favor, ingrese 's' para SI o 'n' para NO.");
-            return metodoConfirmacion(mensaje); // Llamada recursiva para volver a solicitar la entrada
+            return metodoConfirmacion(mensaje); // Llamada recursiva para volver a solicitar la respuesta
         }
     }
+
     //utilizar para personalizar mensajes
     public void mensajePersonalizado(String mensajePersonalizado){
         System.out.println(mensajePersonalizado);
     }
 
     //Actualizar un plato para el menu
-    public Plato actualizarPlato(String tipo, String nombre) throws NumberFormatException {
+    public Plato actualizarPlato(String tipo, String nombre) {
 
         boolean tieneVariedades = metodoConfirmacion("¿Este plato tiene variedades?");
 
         if (tieneVariedades) {
-            List<Variedad> listaVariedad = variedadController.crearListaDeVariedades(new VariedadVista(),new VariedadRepositorio());
+            List<Variedad> listaVariedad = variedadController.crearListaDeVariedades(varVista,varRepositorio);
             return new Plato(tipo,nombre,listaVariedad);
         } else {
-            double price = variedadController.cargarPrecio(new VariedadVista());
+            double price = ingresePrecioDePlato();
             if (price != 0.0) {
                 return new Plato(tipo, nombre, price);
             } else {
@@ -101,7 +103,7 @@ public class PlatoVista {
     }
 
     // Seleccion de categoria por seleccion en menu. Devuelve el nombre en String para evitar errores de carga
-    public String menuTipoComida(){
+    public String menuTipoComida() throws NumberFormatException{
         Colores.printInColor("===============================",Colores.YELLOW);
         Colores.printInColor(" Seleccione la Categoria:",Colores.GREEN);
         Colores.printInColor("-------------------------------",Colores.YELLOW);
@@ -141,8 +143,7 @@ public class PlatoVista {
                     return menuTipoComida();
             }
         }catch (NumberFormatException nfe){
-            System.out.println("Entrada inválida. Por favor, ingrese un número.");
-            return menuTipoComida();
+            throw new NumberFormatException("Entrada inválida. Solo se aceptan números. Carga cancelada.");
         }
     }
 
@@ -172,16 +173,11 @@ public class PlatoVista {
 //        return this.menuTipoComida();
 //    }
 
-//    public String ingreseNombreDePlato(){
-//        System.out.println("Ingrese nombre del Plato a seleccionar");
-//        return scanner.nextLine();
-//    }
+    public double ingresePrecioDePlato() {
+        System.out.println(" Ingrese Valor en pesos (Formato X.XX): $");
+        return variedadController.checkPrecio(scanner.nextLine());
 
-//    public double ingresePrecioDePlato(){
-//        System.out.println(" Ingrese Valor en pesos (Formato X.XX): $");
-//        return variedadController.checkPrecio(scanner.nextLine());
-//
-//    }
+    }
 
     public int obtenerIndiceSeleccionado(List<Plato> platos) {
         int indiceSeleccionado = -1;
@@ -230,6 +226,12 @@ public class PlatoVista {
     public void mensajeEliminacionExitoFracaso(boolean confirmacion){
         if(confirmacion) System.out.println("Se elimino correctamente.");
         else System.out.println("No se completo la eliminacion.");
+    }
+
+    public void pausarPantalla() {
+        System.out.println("Presione Enter para continuar...");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
     }
 
 

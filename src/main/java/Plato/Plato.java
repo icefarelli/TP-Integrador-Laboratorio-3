@@ -59,9 +59,21 @@ public class Plato {
         this.variedades = variedades;
     }
 
+    // Modifique el toString para darle un mejor formato a la impresion de un plato solo utilizando StringBuilder
+    // construyendo el String dependiendo se tiene variedad o no el plato.
     @Override
     public String toString() {
-        return "-" + nombre + " -----------------------$ " + precio + '\n';
+        StringBuilder constructorString = new StringBuilder();
+        constructorString.append(String.format("- %-30s ", nombre));
+        if (variedades == null || variedades.isEmpty()) {
+            constructorString.append(String.format("$%6.2f", precio));
+        } else {
+            constructorString.append("\n");
+            for (Variedad variedad : variedades) {
+                constructorString.append(variedad.toString()).append("\n");
+            }
+        }
+        return constructorString.toString();
     }
 
     @Override

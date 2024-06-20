@@ -1,6 +1,7 @@
 package GestionMenu;
 
 import Plato.Colores.Colores;
+import Plato.Excepciones.ExcepCargaNoRealizada;
 import Plato.Excepciones.ExcepIngresoInvalido;
 import Plato.PlatoControlador;
 import Plato.PlatoRepositorio;
@@ -11,7 +12,7 @@ import java.util.Scanner;
 
 public class MenuPlato {
 
-    public static void mainMenu() throws IOException, ExcepIngresoInvalido {
+    public static void mainMenu() throws IOException, ExcepIngresoInvalido, ExcepCargaNoRealizada {
         PlatoRepositorio repositorio = new PlatoRepositorio();
         PlatoVista vista = new PlatoVista();
         PlatoControlador pControlador = new PlatoControlador(repositorio, vista);
@@ -30,28 +31,30 @@ public class MenuPlato {
             switch (opcion) {
                 case 1:
                     pControlador.cargarPlatoEnSistema(repositorio, vista);
-                    PlatoControlador.limpiarPantalla();
+                    PlatoControlador.pausarPantalla(vista);
                     break;
                 case 2:
                     pControlador.actualizarPlatoExistente(repositorio, vista);
+                    PlatoControlador.pausarPantalla(vista);
                     break;
                 case 3:
                     pControlador.aumentoPreciosPorcentualmente(repositorio, vista);
+                    PlatoControlador.pausarPantalla(vista);
                     break;
                 case 4:
                     mPlato.menuEliminar(repositorio, vista, pControlador);
+                    PlatoControlador.pausarPantalla(vista);
                     break;
                 case 5:
                     pControlador.mostrarPlatosXTipo(repositorio, vista);
-                    PlatoControlador.pausarPantalla();
-                    PlatoControlador.limpiarPantalla();
+                    PlatoControlador.pausarPantalla(vista);
                     break;
                 case 6:
                     pControlador.mostrarMenuCompleto(repositorio);
-                    PlatoControlador.pausarPantalla();
-                    PlatoControlador.limpiarPantalla();
+                    PlatoControlador.pausarPantalla(vista);
                     break;
                 case 0:
+                    vista.mensajePersonalizado("Saliendo del Menu...");
                     break;
                 default:vista.mensajePersonalizado("Opcion Invalida");
             }
