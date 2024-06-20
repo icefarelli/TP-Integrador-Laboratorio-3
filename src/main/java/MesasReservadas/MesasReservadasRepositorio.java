@@ -1,6 +1,5 @@
 package MesasReservadas;
 
-import Cliente.model.entitie.Cliente;
 import Interfaces.IABM;
 
 import java.util.ArrayList;

@@ -1,16 +1,22 @@
 package GestionMenu;
 
+import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionNombreInvalido;
+import Excepciones.Reservas.ExcepcionReservaCamposVacios;
+import Excepciones.Reservas.ExcepcionReservaCaracterInvalido;
+import Excepciones.Reservas.ExcepcionReservaNoEncontrada;
+import Excepciones.Reservas.ExcepcionReservaValorNegativo;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 public class MenuPrincipal {
 
-    public void menuPrincipal() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException {
+    public void menuPrincipal() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionReservaCamposVacios, ExcepcionReservaNoEncontrada, ExcepcionClienteNoEncontrado, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo {
 
         MenuEmpleados menuEmpleados = new MenuEmpleados();
+        MenuReservas menuReservas = new MenuReservas();
 
         System.out.println("--------------------BIENVENIDOS A ´INTERFAZ DE SABORES´---------------------------");
         System.out.println("Que desea hacer?");
@@ -30,7 +36,7 @@ public class MenuPrincipal {
             op = scanner.nextInt(); // Leer la entrada como cadena
             switch (op) {
                 case 1:
-                    // agregar menu de reservas
+                    menuReservas.menuReservas();
                     break;
                 case 2:
                     //agregar menu de ordenes

@@ -42,16 +42,34 @@ public class ReservaRepositorio implements IABM<Reserva> {
         }
     }
 
-    public Reserva buscarFecha(LocalDate fecha) throws ExcepcionReservaNoEncontrada {
-        for (Reserva reserva : reservas) {
-            if (reserva.getFecha().equals(fecha)) {
-                return reserva;
-            }else {
-                return null;
+    public LocalDate buscarFecha(LocalDate fecha) throws ExcepcionReservaNoEncontrada {
+        try {
+            for (Reserva reserva : reservas) {
+                if (reserva.getFecha().equals(fecha)) {
+                    return reserva.getFecha();
+                }else {
+                    throw new ExcepcionReservaNoEncontrada("Reserva no encontrada para la fecha: " + fecha);
+                }
             }
+        }catch (ExcepcionReservaNoEncontrada e){
+            System.out.println("Error al buscar la fecha");
         }
-        throw new ExcepcionReservaNoEncontrada("Reserva no encontrada para la fecha: " + fecha);
+        return null;
     }
+
+    /*
+        try {
+            Empleado empleado = empleadoView.agregar();
+            if (empleado.getNombre().isEmpty() || empleado.getEmail().isEmpty()){
+                throw new CamposVacios("Nombre o email del empleado invalidos");
+            }
+            empleadoRepository.agregar(empleado);
+            empleadoSet.add(empleado);
+            guardarDatos();
+        } catch (CamposVacios e) {
+            System.out.println("Error al agregar empleado: " + e.getMessage());
+        }
+         */
 
     public Reserva buscarReserva(LocalDate fecha) throws ExcepcionReservaNoEncontrada {
         Reserva reserva = null;
