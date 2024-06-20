@@ -77,7 +77,7 @@ public class ClienteVista {
         boolean validInput = false;
 
         while (!validInput) {
-            System.out.println("Ingrese el id del cliente a modificar");
+            System.out.println("Ingrese el id del cliente: ");
             try {
                 id = scanner.nextInt();
                 validInput = true;

@@ -16,7 +16,6 @@ public class main {
     public static void main(String[] args) throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionFormatoIncorrecto {
 
 
-
         ClienteVista clienteVista = new ClienteVista();
         ClienteRepositorio clienteRepositorio = new ClienteRepositorio();
         ClienteControlador clienteControlador = new ClienteControlador(clienteVista,clienteRepositorio);

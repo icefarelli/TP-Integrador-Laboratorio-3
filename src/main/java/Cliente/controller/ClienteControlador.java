@@ -187,7 +187,6 @@ public class ClienteControlador {
                 System.out.println(excepcionClienteNoEncontrado.getMessage());
             }
         }
-
     }
 
 

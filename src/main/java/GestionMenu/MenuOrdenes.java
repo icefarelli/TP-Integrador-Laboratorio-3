@@ -93,14 +93,6 @@ public class MenuOrdenes {
                         ExcepcionReservaCaracterInvalido | ExcepcionReservaValorNegativo e) {
                     System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
                     scanner.nextLine();
-                } catch (ExcepcionReservaCamposVacios e) {
-                    throw new RuntimeException(e);
-                } catch (ExcepcionReservaNoEncontrada e) {
-                    throw new RuntimeException(e);
-                } catch (ExcepcionReservaCaracterInvalido e) {
-                    throw new RuntimeException(e);
-                } catch (ExcepcionReservaValorNegativo e) {
-                    throw new RuntimeException(e);
                 }
             } while (op != 6 && op != 7);
             scanner.close();
