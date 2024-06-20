@@ -10,6 +10,10 @@ import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionEntradaInvalida;
 import Excepciones.ExcepcionNombreInvalido;
 import Excepciones.ExcepcionOrdenNoEncontrada;
+import Excepciones.Reservas.ExcepcionReservaCamposVacios;
+import Excepciones.Reservas.ExcepcionReservaCaracterInvalido;
+import Excepciones.Reservas.ExcepcionReservaNoEncontrada;
+import Excepciones.Reservas.ExcepcionReservaValorNegativo;
 import Orden.OrdenControlador;
 import Orden.OrdenRepositorio;
 import Orden.OrdenVista;
@@ -87,6 +91,14 @@ public class MenuOrdenes {
                 }catch (InputMismatchException e) {
                     new ExcepcionEntradaInvalida().mensaje();
                     scanner.nextLine();
+                } catch (ExcepcionReservaCamposVacios e) {
+                    throw new RuntimeException(e);
+                } catch (ExcepcionReservaNoEncontrada e) {
+                    throw new RuntimeException(e);
+                } catch (ExcepcionReservaCaracterInvalido e) {
+                    throw new RuntimeException(e);
+                } catch (ExcepcionReservaValorNegativo e) {
+                    throw new RuntimeException(e);
                 }
             } while (op != 6 && op != 7);
             scanner.close();
