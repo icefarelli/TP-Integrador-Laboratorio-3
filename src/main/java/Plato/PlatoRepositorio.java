@@ -2,17 +2,22 @@ package Plato;
 
 import Interfaces.IABM;
 import Plato.Excepciones.ExcepFileNF;
+import Plato.Excepciones.ExcepIngresoInvalido;
 import Plato.Variedad.Variedad;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import java.io.*;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class PlatoRepositorio implements IABM<Plato> {
 
     private Gson gson = new Gson();
-    private static final String FILE_COMIDAS = "src/main/java/Plato/File/platos.json";
+    private static final String FILE_COMIDAS = "src/main/resources/Platos.json";
     private Set<Plato> platoSet;
 
     //Constructor del Repositorio de Plato
@@ -74,7 +79,7 @@ public class PlatoRepositorio implements IABM<Plato> {
     }
 
     //Recibe un string con el nombre del plato a buscar. Si lo encuentra devuelve el plato, caso contrario devuelve null
-    public Plato buscarPlatoXnombre(String nombre) {
+    public Plato buscarPlatoXnombre(String nombre) throws ExcepIngresoInvalido {
         for (Plato plato : platoSet) {
             if (plato.getNombre().equals(nombre)) {
                 return plato;

@@ -3,6 +3,7 @@ import Plato.Excepciones.ExcepIngresoInvalido;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class PlatoControlador {
@@ -47,7 +48,6 @@ public class PlatoControlador {
         Plato buscado;
 
         try {
-
             buscado = platoRepositorio.buscarPlatoXnombre(platoVista.ingresarNombre());
 
             if( buscado!= null) {
@@ -106,30 +106,26 @@ public class PlatoControlador {
     }
 
     //Actualizar Platos y sus variantes
-    public void actualizarPlatoExistente(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
+    public void actualizarPlatoExistente(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws ExcepIngresoInvalido {
         String tipo = platoVista.menuTipoComida();
-        platoRepositorio.mostrarPlatosXtipo(tipo);
+        platoRepositorio.mostrarEnlistadoBonitoXtipoOld(tipo);
 
         String nombre = platoVista.ingresarNombre();
-        Plato buscado = platoRepositorio.buscarPlatoXnombre(nombre);
+        Plato buscado = null;
+        try {
+            buscado = platoRepositorio.buscarPlatoXnombre(nombre);
+        } catch (ExcepIngresoInvalido e) {
+            throw new RuntimeException(e);
+        }
 
-        if (buscado != null) {
+        if (buscado == null) {
+            platoVista.mensajePersonalizado("Plato no encontrado");
+        }else {
             Plato actualizado = platoVista.actualizarPlato(tipo, nombre);
-            if (actualizado != null) {
-                platoRepositorio.modificar(actualizado);
-            } else {
-                try {
-                    throw new ExcepIngresoInvalido("Carga de datos Invalida. \nIntente nuevamente.");
-                } catch (ExcepIngresoInvalido e) {
-                    throw new RuntimeException(e);
-                }
+            if (actualizado == null) {
+                throw new ExcepIngresoInvalido("Carga de datos inválida. \nIntente nuevamente.");
             }
-        } else {
-            try {
-                throw new ExcepIngresoInvalido("Error en la busqueda. \nIntente nuevamente.");
-            } catch (ExcepIngresoInvalido e) {
-                throw new RuntimeException(e);
-            }
+            platoRepositorio.modificar(actualizado);
         }
     }
 
@@ -170,6 +166,25 @@ public class PlatoControlador {
     //Mostrar Platos por categoria
     public void mostrarPlatosXTipo (PlatoRepositorio platoRepositorio, PlatoVista platoVista){
         platoRepositorio.mostrarEnlistadoBonitoXtipoOld(platoVista.menuTipoComida());
+    }
+
+    //Mostrar Menu Completo
+    public void mostrarMenuCompleto(PlatoRepositorio platoRepositorio){
+        platoRepositorio.mostrarCartaDePlatosCompleta();
+    }
+
+
+    //metodo simil limpiar pantalla
+    public static void limpiarPantalla() {
+        for (int i = 0; i < 50; i++) { // Puedes ajustar el número de líneas según sea necesario
+            System.out.println();
+        }
+    }
+    //metodo pausar pantalla
+    public static void pausarPantalla() {
+        System.out.println("Presione Enter para continuar...");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
     }
 
 

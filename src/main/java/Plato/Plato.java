@@ -1,6 +1,10 @@
 package Plato;
+
 import Plato.Variedad.Variedad;
-import java.util.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class Plato {
     private String tipo;
