@@ -22,18 +22,20 @@ public class ReservaControlador {
     private ClienteRepositorio clienteRepositorio;
     private MesasReservadasRepositorio mesasReservadasRepositorio;
 
-    public ReservaControlador(ReservaRepositorio reservaRepositorio, ReservaVista reservaVista, ClienteVista clienteVista, ClienteRepositorio clienteRepositorio) {
+    public ReservaControlador(ReservaRepositorio reservaRepositorio, ReservaVista reservaVista, ClienteVista clienteVista, ClienteRepositorio clienteRepositorio, MesasReservadasRepositorio mesasReservadasRepositorio) {
         this.reservaRepositorio = reservaRepositorio;
         this.reservaVista = reservaVista;
         this.clienteVista = clienteVista;
         this.clienteRepositorio = clienteRepositorio;
+        this.mesasReservadasRepositorio = mesasReservadasRepositorio;
     }
 
     public void agregarReserva() throws ExcepcionReservaCaracterInvalido, ExcepcionReservaCamposVacios, ExcepcionReservaValorNegativo, ExcepcionClienteNoEncontrado, ExcepcionReservaNoEncontrada {
         reservaRepositorio.cargarReserva();
         Reserva reserva = reservaVista.pedirFecha();
-        LocalDate fecha = reservaRepositorio.buscarFecha(reserva.getFecha()).getFecha();
+        LocalDate fecha = reservaRepositorio.buscarFecha(reserva.getFecha());
         if(fecha == null){
+            reservaVista.mensaje("Esa fecha no existe.");
             reserva = reservaVista.pedirFecha();
             Integer cantPersonas = reservaVista.pedirCantidadPersonas();
             Integer id = clienteVista.consultarCliente();
@@ -69,7 +71,6 @@ public class ReservaControlador {
         }else {
             reservaVista.mensaje("Error al eliminar la reserva");
         }
-
     }
 
     public void modificarReserva() throws ExcepcionReservaNoEncontrada, ExcepcionReservaCamposVacios, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo, ExcepcionClienteNoEncontrado {
@@ -86,10 +87,9 @@ public class ReservaControlador {
             String opcion = reservaVista.preguntarQueModificar();
 
             if (opcion.equalsIgnoreCase("fecha")) {
-                //hacer un metodo que muestre los dias con reservas disponibles desde la reserva original mas quince dias
-                //nos tiene que devolver que fecha quiere la reserva nueva
+                LocalDate nuevaFecha = reservaVista.solicitarNuevaFecha(reservaRepositorio.todasLasReservas());
                 LocalDate fechaNueva = reservaVista.modificarFecha();
-                Reserva nuevaReserva = reservaRepositorio.buscarFecha(fechaNueva);
+                Reserva nuevaReserva = reservaRepositorio.buscarReserva(fechaNueva);
                 if(nuevaReserva == null){
                     List<MesasReservadas> mesas = new ArrayList<>();
                     mesas.add(mesasReservadas);

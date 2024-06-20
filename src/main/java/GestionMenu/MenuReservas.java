@@ -7,6 +7,7 @@ import Excepciones.Reservas.ExcepcionReservaCamposVacios;
 import Excepciones.Reservas.ExcepcionReservaCaracterInvalido;
 import Excepciones.Reservas.ExcepcionReservaNoEncontrada;
 import Excepciones.Reservas.ExcepcionReservaValorNegativo;
+import MesasReservadas.MesasReservadasRepositorio;
 import Reserva.ReservaControlador;
 import Reserva.ReservaRepositorio;
 import Reserva.ReservaVista;
@@ -14,18 +15,16 @@ import Reserva.ReservaVista;
 import java.util.Scanner;
 
 public class MenuReservas {
-    public static void main(String[] args) throws ExcepcionReservaCamposVacios, ExcepcionReservaNoEncontrada, ExcepcionClienteNoEncontrado, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo {
-        ReservaRepositorio reservaRepositorio = new ReservaRepositorio();
-        ReservaVista reservaVista= new ReservaVista();
-        ClienteVista clienteVista = new ClienteVista();
-        ClienteRepositorio clienteRepositorio = new ClienteRepositorio();
-        ReservaControlador reservaControlador = new ReservaControlador(reservaRepositorio, reservaVista, clienteVista, clienteRepositorio);
-        menuReservas(reservaControlador);
-    }
+    ReservaVista reservaVista = new ReservaVista();
+    ReservaRepositorio reservaRepositorio = new ReservaRepositorio();
+    ClienteRepositorio clienteRepositorio = new ClienteRepositorio();
+    ClienteVista clienteVista = new ClienteVista();
+    MesasReservadasRepositorio  mesasReservadasRepositorio = new MesasReservadasRepositorio();
+    ReservaControlador reservaControlador = new ReservaControlador(reservaRepositorio,reservaVista,clienteVista,clienteRepositorio,mesasReservadasRepositorio);
 
     public static Scanner scanner = new Scanner(System.in);
 
-    public static void menuReservas(ReservaControlador reservaControlador) throws ExcepcionReservaCamposVacios, ExcepcionClienteNoEncontrado, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo, ExcepcionReservaNoEncontrada {
+    public void menuReservas() throws ExcepcionReservaCamposVacios, ExcepcionClienteNoEncontrado, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo, ExcepcionReservaNoEncontrada {
         int opcion = 0;
         do {
             System.out.println("=====================MENU RESERVAS=====================");
