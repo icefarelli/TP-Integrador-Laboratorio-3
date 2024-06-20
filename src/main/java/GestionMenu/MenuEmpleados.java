@@ -15,6 +15,7 @@ public class MenuEmpleados {
 
     EmpleadoRepositorio empleadoRepositorio = new EmpleadoRepositorio();
     EmpleadoVista empleadoVista = new EmpleadoVista();
+    MenuPrincipal menuPrincipal = new MenuPrincipal();
 
 
     EmpleadoControlador empleadoControlador = new EmpleadoControlador(empleadoVista, empleadoRepositorio);
@@ -31,8 +32,10 @@ public class MenuEmpleados {
                 System.out.println("1- Agregar empleados");
                 System.out.println("2- Eliminar empleados");
                 System.out.println("3- Modificar empleados");
-                System.out.println("4- Listar empleados");
-                System.out.println("5- Volver");
+                System.out.println("4- Mostrar empleados");
+                System.out.println("5- Mostrar un empleado");
+                System.out.println("6- Volver al menu principal");
+                System.out.println("7- Salir del sistema");
 
                 System.out.println("Ingrese una opción");
                 op = scanner.nextInt(); // Leer la entrada como cadena
@@ -50,7 +53,14 @@ public class MenuEmpleados {
                         empleadoControlador.mostrarListaEmpleados();
                         break;
                     case 5:
+                        empleadoControlador.mostrarUnEmpleado();
                         break;
+                    case 6:
+                        //menuPrincipal.menuPrincipal();
+                        break;
+                    case 7:
+                        System.out.println("Saliendo...");
+                        System.exit(0);
                     default:
                         System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
                 }
@@ -59,7 +69,7 @@ public class MenuEmpleados {
                 scanner.nextLine();
             }
         }
-            while (op != 5) ;
+            while (op != 6 && op!=7) ;
             scanner.close();
         }
     }
