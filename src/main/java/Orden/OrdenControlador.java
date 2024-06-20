@@ -197,10 +197,10 @@ public class OrdenControlador {
             ordenRepositorio.guardarOrden(orden);
             ordenVista.mostrarMensaje("Orden modificada exitosamente.");
 
-        } catch (ExcepcionOrdenNoEncontrada e) {
-            e.mensaje();
-        } catch (ExcepcionEntradaInvalida e) {
-            e.mensaje();
+        } catch (ExcepcionOrdenNoEncontrada excepcionOrdenNoEncontrada) {
+            System.out.println(excepcionOrdenNoEncontrada.getMessage());
+        } catch (ExcepcionEntradaInvalida excepcionEntradaInvalida) {
+            System.out.println(excepcionEntradaInvalida.getMessage());
         }
     }
 
@@ -232,9 +232,9 @@ public class OrdenControlador {
                 ordenVista.mostrarMensaje("Eliminación cancelada.");
             }
         } catch (ExcepcionOrdenNoEncontrada e) {
-            e.mensaje();
-        }catch (ExcepcionEntradaInvalida excepcionEntradaInvalida){
-            excepcionEntradaInvalida.mensaje();
+            System.out.println(e.getMessage());
+        } catch (ExcepcionEntradaInvalida excepcionEntradaInvalida) {
+            System.out.println(excepcionEntradaInvalida.getMessage());
         }
     }
 
@@ -258,7 +258,7 @@ public class OrdenControlador {
     }
 
     public void mostrarOrden(Integer id) throws ExcepcionOrdenNoEncontrada {
-
+        ordenRepositorio.cargarOrdenesDesdeArchivo();
         try {
             Orden orden = ordenRepositorio.obtenerOrden(id);
             ordenVista.mostrarUnaOrden(orden);
@@ -267,7 +267,7 @@ public class OrdenControlador {
             System.out.println("------------------");
             System.out.println("------------------------------------------------");
         } catch (ExcepcionOrdenNoEncontrada e) {
-            e.mensaje();
+            System.out.println(e.getMessage());
         }
     }
 
