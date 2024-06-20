@@ -50,62 +50,66 @@ public class OrdenControlador {
 
     //crearOrden requiere que previo a su llamado, se pasen a memoria todos los archivos.
     public void crearOrden() throws ExcepcionClienteNoEncontrado, ExcepcionDNIStringInvalido, ExcepcionFormatoIncorrecto {
-     try {
-         ordenRepositorio.cargarOrdenesDesdeArchivo();
-         Integer idOrden;
-         if (ordenRepositorio.obtenerMap().isEmpty() || ordenRepositorio.obtenerMap() == null) {
-             idOrden = 0;
-         } else {
-             idOrden = ordenRepositorio.obtenerMap().lastKey();
-         }
 
-         Set<Cliente> setClientes = clienteRepositorio.getClienteSet();
-         Integer clienteId;
-         Cliente c;
-         do {
-             clienteId = clienteVista.seleccId();
-             c = clienteRepositorio.findCliente(clienteId, setClientes);
-             if (c == null) {
-                 System.out.println("Cliente no encontrado");
-             }
-         } while (c == null);
+        ordenRepositorio.cargarOrdenesDesdeArchivo();
+        Integer idOrden;
+        if (ordenRepositorio.obtenerMap().isEmpty() || ordenRepositorio.obtenerMap() == null) {
+            idOrden = 0;
+        } else {
+            idOrden = ordenRepositorio.obtenerMap().lastKey();
+        }
 
+        Set<Cliente> setClientes = clienteRepositorio.getClienteSet();
+        Integer clienteId;
+        Cliente c = null;
 
-         Integer claveEmpleado;
-         Empleado e;
-         do {
-             claveEmpleado = empleadoVista.pedirClave();
-             e = empleadoRepositorio.buscarEmpleado(claveEmpleado);
-             if (e == null) {
-                 empleadoVista.mensajeErrorBusqueda();
-             }
-         } while (e == null);
+        do {
+            clienteId = clienteVista.seleccId();
+            try {
+                c = clienteRepositorio.findCliente(clienteId, setClientes);
+            } catch (ExcepcionClienteNoEncontrado excepcionClienteNoEncontrado) {
+                System.out.println(excepcionClienteNoEncontrado.getMessage());
+            }
+        } while (c == null);
 
 
-         List<Plato> platos = new ArrayList<>();
-         Scanner scan = new Scanner(System.in);
-         String op;
-         do {
-             Plato p = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista);
-             if (p != null) {
-                 platos.add(p);
-             } else {
-                 System.out.println("Plato no agregado");
-             }
-             System.out.println("Ingrese 's' si quiere agregar otro plato: ");
-             op = scan.nextLine();
-         } while (op.equals("s"));
+        Integer claveEmpleado;
+        Empleado e;
+        do {
+            claveEmpleado = empleadoVista.pedirClave();
+            e = empleadoRepositorio.buscarEmpleado(claveEmpleado);
+            if (e == null) {
+                empleadoVista.mensajeErrorBusqueda();
+            }
+        } while (e == null);
 
-         Orden orden = new Orden(c, e);
-         orden.setId(idOrden + 1);
-         orden.setPlatoList(platos);
 
-         ordenRepositorio.guardarOrden(orden);
-         ordenRepositorio.guardarOrdenesEnArchivo();
-         ordenVista.mostrarMensaje("Orden creada exitosamente.");
-     }catch (ExcepcionClienteNoEncontrado excepcionClienteNoEncontrado){
-         System.out.println(excepcionClienteNoEncontrado.getMessage());
-     }
+        List<Plato> platos = new ArrayList<>();
+        Scanner scan = new Scanner(System.in);
+        String op;
+        do {
+            Plato p = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista);
+            if (p != null) {
+                platos.add(p);
+            } else {
+                System.out.println("Plato no agregado");
+            }
+            System.out.println("Ingrese 's' si quiere agregar otro plato: ");
+            op = scan.nextLine();
+        } while (op.equals("s"));
+
+        if (!platos.isEmpty()) {
+            Orden orden = new Orden(c, e);
+            orden.setId(idOrden + 1);
+            orden.setPlatoList(platos);
+
+            ordenRepositorio.guardarOrden(orden);
+            ordenRepositorio.guardarOrdenesEnArchivo();
+            ordenVista.mostrarMensaje("Orden creada exitosamente.");
+        }else {
+            System.out.println("Orden cancelada, no se agrego ningun plato");
+        }
+
     }
 
     public void modificarOrden() {
