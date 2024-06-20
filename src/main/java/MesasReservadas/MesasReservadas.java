@@ -26,4 +26,11 @@ public class MesasReservadas {
     public void setCantPersonas(Integer cantPersonas) {
         this.cantPersonas = cantPersonas;
     }
+
+    @Override
+    public String toString() {
+        return "Mesa Reservada:" +
+                "cliente: " + cliente +
+                ", cantPersonas: " + cantPersonas;
+    }
 }
