@@ -52,12 +52,18 @@ public class EmpleadoControlador {
         pasarAMemoria();
         Integer clave;
         Empleado empleado = empleadoVista.pedirUnEmpleado();
-        if(!empleadoRepositorio.listaEmpleados.isEmpty()){
+        Empleado empleadoEncontrado = empleadoRepositorio.buscarEmpleadoPorDNI(empleado.getId());
+        if(empleadoEncontrado!=null){
+            System.out.println("Empleado ya cargado en el sistema");
+
+        } else if (!empleadoRepositorio.listaEmpleados.isEmpty() ) {
             clave = empleadoRepositorio.listaEmpleados.lastKey();
             empleado.setIdEmpleado(clave + 1);
             empleadoRepositorio.agregar(empleado);
-        } else{
+            System.out.println("Empleado agregado con exito");
+        } else {
             empleadoRepositorio.agregar(empleado);
+            System.out.println("Empleado agregado con exito");
         }
         pasarAarchivo();
     }
@@ -68,6 +74,7 @@ public class EmpleadoControlador {
         Empleado empleado = empleadoRepositorio.buscarEmpleado(clave);
         if(empleado!=null){
             empleadoRepositorio.eliminar(empleado);
+            System.out.println("Empleado eliminado con exito");
         } else {
             empleadoVista.mensajeErrorBusqueda();
         }
@@ -80,16 +87,18 @@ public class EmpleadoControlador {
         Integer clave = empleadoVista.pedirClave();
         Empleado empleado = empleadoRepositorio.buscarEmpleado(clave);
         if(empleado!=null){
-                String modificacion = empleadoVista.pedirModificacion();
-                if(modificacion.equalsIgnoreCase("nombre")) {
-                    String nombreNuevo = empleadoVista.pedirNombreParaModificar();
-                    empleadoModificado = new Empleado(nombreNuevo,empleado.getId(),empleado.getIdEmpleado(),empleado.getPuesto());
-                    empleadoRepositorio.agregar(empleadoModificado);
-                } else if(modificacion.equalsIgnoreCase("puesto")) {
-                    String puestoNuevo = empleadoVista.elegirPuesto();
-                    empleadoModificado = new Empleado(empleado.getNombre(),empleado.getId(),empleado.getIdEmpleado(),puestoNuevo);
-                    empleadoRepositorio.agregar(empleadoModificado);
-                }
+            String modificacion = empleadoVista.pedirModificacion();
+            if(modificacion.equalsIgnoreCase("nombre")) {
+                String nombreNuevo = empleadoVista.pedirNombreParaModificar();
+                empleadoModificado = new Empleado(nombreNuevo,empleado.getId(),empleado.getIdEmpleado(),empleado.getPuesto());
+                empleadoRepositorio.agregar(empleadoModificado);
+                System.out.println("Empleado modificado correctamente");
+            } else if(modificacion.equalsIgnoreCase("puesto")) {
+                String puestoNuevo = empleadoVista.elegirPuesto();
+                empleadoModificado = new Empleado(empleado.getNombre(),empleado.getId(),empleado.getIdEmpleado(),puestoNuevo);
+                empleadoRepositorio.agregar(empleadoModificado);
+                System.out.println("Empleado modificado correctamente");
+            }
         } else {
             empleadoVista.mensajeErrorBusqueda();
         }

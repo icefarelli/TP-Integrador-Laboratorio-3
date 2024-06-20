@@ -3,6 +3,7 @@ package Empleado;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionNombreInvalido;
 
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -44,35 +45,59 @@ public String elegirPuesto() {
 }
 
 
-public Empleado pedirUnEmpleado() throws ExcepcionNombreInvalido, ExcepcionDNIStringInvalido {
+    public Empleado pedirUnEmpleado() throws ExcepcionNombreInvalido, ExcepcionDNIStringInvalido {
 
-    Scanner scan = new Scanner(System.in);
-    System.out.println("Ingrese el nombre y apellido del empleado:");
-    String nombre = scan.nextLine();
+        Scanner scan = new Scanner(System.in);
+        String nombre = null;
+        String DNI = null;
+        boolean flag= false;
+        while (!flag) {
+            try {
+                System.out.println("Ingrese el nombre y apellido del empleado:");
+                nombre = scan.nextLine();
 
-    if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z ]+")){
-        throw new ExcepcionNombreInvalido("El nombre solo debe contener letras");
+                if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z ]+")) {
+                    throw new ExcepcionNombreInvalido("El nombre debe contener letras y no estar vacio");
+                }
+                System.out.println("Ingrese el DNI del empleado:");
+                DNI = scan.nextLine();
+
+                if (DNI.isEmpty() || !DNI.matches("\\d{7,8}")) {
+                    throw new ExcepcionDNIStringInvalido("El DNI debe contener números y ser de 7 u 8 dígitos");
+                }
+                flag=true;
+
+            } catch (ExcepcionNombreInvalido excepcionNombreInvalido) {
+                System.out.println(excepcionNombreInvalido.getMessage());
+
+            } catch (ExcepcionDNIStringInvalido excepcionDNIStringInvalido) {
+                System.out.println(excepcionDNIStringInvalido.getMessage());
+            }
+        }
+        String puesto = elegirPuesto();
+
+        Empleado empleado = new Empleado(nombre,DNI,puesto);
+
+        return empleado;
     }
-    System.out.println("Ingrese el DNI del empleado:");
-    String DNI = scan.nextLine();
 
-    if(DNI==null || !DNI.matches("\\d{8}")) {
-        throw new ExcepcionDNIStringInvalido("El DNI solo debe contener números y ser de 8 dígitos");
+    public Integer pedirClave()  {
+        Integer id = null;
+        Scanner scan = new Scanner(System.in);
+        boolean op= false;
+        while(!op) {
+            System.out.println("Ingrese el ID del empleado:");
+            try{
+                id = scan.nextInt();
+                op=true; // para cortar el while
+            } catch (InputMismatchException e){
+                System.out.println("Error: el id debe ser un numero entero. Intentelo de nuevo");
+                scan.next();
+            }
+        }
+
+        return id;
     }
-
-    String puesto = elegirPuesto();
-
-    Empleado empleado = new Empleado(nombre,DNI,puesto);
-
-    return empleado;
-}
-
-public Integer pedirClave()  {
-    Scanner scan = new Scanner(System.in);
-    System.out.println("Ingrese el ID del empleado:");
-    Integer id = scan.nextInt();
-    return id;
-}
 
 public String pedirModificacion() {
     Scanner scan = new Scanner(System.in);
@@ -101,17 +126,25 @@ public String pedirModificacion() {
     return nombre;
 }
 
-public String pedirNombreParaModificar() throws ExcepcionNombreInvalido {
-    Scanner scan = new Scanner(System.in);
-    System.out.println("Ingrese el nombre y apellido del empleado:");
-    String nombre = scan.nextLine();
+    public String pedirNombreParaModificar() throws ExcepcionNombreInvalido {
+        boolean flag=false;
+        Scanner scan = new Scanner(System.in);
+        String nombre =null;
+        while (!flag) {
+            System.out.println("Ingrese el nombre y apellido del empleado:");
+            try {
+                nombre = scan.nextLine();
+                if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z ]+")) {
+                    throw new ExcepcionNombreInvalido("El nombre debe contener letras y no estar vacio");
+                }
+                flag=true;
+            } catch (ExcepcionNombreInvalido e){
+                System.out.println(e.getMessage());
 
-    if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z ]+")){
-        throw new ExcepcionNombreInvalido("El nombre solo debe contener letras");
+            }
+        }
+        return nombre;
     }
-
-    return nombre;
-}
 
 public void mensajeErrorBusqueda() {
     System.out.println("Empleado no encontrado");

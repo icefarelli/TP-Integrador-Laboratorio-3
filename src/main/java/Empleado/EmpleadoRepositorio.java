@@ -43,5 +43,14 @@ public class EmpleadoRepositorio implements IABM<Empleado> {
         }
         return empleado;
     }
+    public Empleado buscarEmpleadoPorDNI(String DNI){
+        Empleado empleado = null;
+        for (Map.Entry<Integer,Empleado> entry : listaEmpleados.entrySet()){
+            if(entry.getValue().getId().equals(DNI)){
+                empleado = entry.getValue();
+            }
+        }
+        return empleado;
+    }
 
 }
