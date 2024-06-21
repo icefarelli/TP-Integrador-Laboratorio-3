@@ -29,8 +29,8 @@ public class MenuPlato {
         Scanner scanner = new Scanner(System.in);
 
         int opcion = 0;
-        try {
             do {
+                try {
                 Colores.printInColor("==========MENU PLATOS==========", Colores.BLUE);
                 System.out.println(" 1. NUEVO PLATO\n 2. MODIFICAR PLATO\n 3. AUMENTAR PRECIO A LOS PLATOS\n 4. ELIMINAR PLATOS\n 5. MOSTRAR PLATOS POR CATEGORIA\n 6. MOSTRAR CARTA COMPLETA\n 0. SALIR");
                 Colores.printInColor("-------------------------------", Colores.YELLOW);
@@ -64,19 +64,21 @@ public class MenuPlato {
                             break;
                         case 0:
                             vista.mensajePersonalizado("Saliendo del Menu...");
+                            System.exit(0);
                             break;
                         default:
                             vista.mensajePersonalizado("Opcion Invalida");
 
                     }
 
-                } while (opcion != 0);
-        }catch (InputMismatchException inputMismatchException){
-        System.out.println("Ingresar solo numero.");
-        mainMenu();
-        }catch (RuntimeException e){
-            e.printStackTrace();
-        }
+                }catch (InputMismatchException inputMismatchException){
+                    System.out.println("Ingresar solo numero.");
+                    mainMenu();
+                }catch (RuntimeException e){
+                    e.printStackTrace();
+                }
+            } while (true);
+
     }
 
 

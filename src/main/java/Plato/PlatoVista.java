@@ -263,7 +263,7 @@ public class PlatoVista {
         scanner.nextLine();
     }
     public void printearLineasSeparadoras(){
-        Colores.printInColor("-------------------------------",Colores.YELLOW);
+        Colores.printInColor("------------------------------------------------------",Colores.YELLOW);
     }
 
 
