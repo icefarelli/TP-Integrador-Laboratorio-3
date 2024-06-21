@@ -1,4 +1,6 @@
 package Plato.Variedad;
+import Plato.Excepciones.ExcepIngresoInvalido;
+
 import java.util.Scanner;
 
 public class VariedadVista {
@@ -7,14 +9,27 @@ public class VariedadVista {
     //Crea una variedad dentro de un Plato
 
     public Variedad crearUnaVariedad() {
-        System.out.println("Ingrese el nombre de la variedad:");
-        String nombreVariedad = scanner.nextLine();
-        double precioVariedad = ingresarPrecio();
-        if (precioVariedad != 0.0) {
-            return new Variedad(nombreVariedad, precioVariedad);
-        } else {
-            System.out.println("La variedad no pudo ser creada.");
-            return null;
+        try {
+            System.out.println("Ingrese el nombre de la variedad:");
+            String nombreVariedad = ingresarNombre();
+            double precioVariedad = ingresarPrecio();
+            if (precioVariedad != 0.0) {
+                return new Variedad(nombreVariedad, precioVariedad);
+            } else {
+                System.out.println("La variedad no pudo ser creada.");
+                return null;
+            }
+        }catch (ExcepIngresoInvalido eii){
+            System.out.println(eii.getMessage());
+        }
+        return null;
+    }
+    public String ingresarNombre() throws ExcepIngresoInvalido {
+        String nombre = scanner.nextLine();
+        if (nombre == null || nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z ]+")) {
+            throw new ExcepIngresoInvalido("Ha ingresado Numeros o Caracteres invalidos en el nombre.\nEl nombre del plato solo debe contener letras.");
+        }else {
+            return nombre;
         }
     }
 
@@ -22,15 +37,15 @@ public class VariedadVista {
     public double ingresarPrecio() {
         boolean validarPrecio = false;
         double precioVariedad = 0.0;
-        int intentos = 3;
+        int intentos = 2;
 
         while (!validarPrecio && intentos > 0){
-            System.out.println("Ingrese el precio de la variedad (Formato X.XX): $");
             try {
+                System.out.println("Ingrese el precio de la variedad (Formato X.XX): $");
                 precioVariedad = checkDouble(scanner.nextLine());
                 validarPrecio = true;
             }catch (NumberFormatException nfe){
-                System.out.println("El formato ingresado es Invalido. Por Favor, Intente nuevamente");
+                System.out.println(nfe.getMessage());
                 intentos--;
             }
         }
@@ -39,8 +54,12 @@ public class VariedadVista {
     }
 
     //Metodo que corrobora que el ingreso del precio sea de tipo double
-    public double checkDouble(String precioString) throws NumberFormatException{
-            return Double.parseDouble(precioString);
+    public double checkDouble(String precioString) throws NumberFormatException {
+            try {
+                return Double.parseDouble(precioString);
+            }catch (NumberFormatException nfe){
+                throw new NumberFormatException("El formato ingresado es Invalido.");
+            }
     }
 
     public void mensajeCargaIncorrecta(){
