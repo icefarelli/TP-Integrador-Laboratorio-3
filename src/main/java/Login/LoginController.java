@@ -13,7 +13,6 @@ import java.util.Set;
 
 public class LoginController {
 
-
     private LoginRepository loginRepository;
     private LoginView loginView;
     private Gson gson = new Gson();
@@ -35,7 +34,7 @@ public class LoginController {
                 this.loginRepository.setUsuarios = new HashSet<>();
             } else {
                 this.loginRepository.setUsuarios.forEach(usuario -> {
-                    loginRepository.registrarUsuario(usuario);
+                    loginRepository.agregar(usuario);
                 });
 
             }
@@ -69,9 +68,21 @@ public class LoginController {
     }
 
     public void addUser() throws ExcepcionCamposVacios, ExcepcionNombreNumerico {
+        //abrir el archivo
         try {
-            Usuario usuario = this.loginView.solicitarDatosRegistro();
-            this.loginRepository.registrarUsuario(usuario);
+            Usuario usuario = null;
+            boolean flag= false;
+            while(!flag) {
+                usuario = this.loginView.solicitarDatosRegistro();
+                if (loginRepository.setUsuarios.contains(usuario)) {
+                    System.out.println("usuario ya registrado anteriormente");
+                } else {
+                    flag=true;
+                }
+            }
+            String cargo = loginView.pedirCargo();
+            Usuario usuarioFinal = new Usuario(usuario.getUsername(), usuario.getPassword(),cargo);
+            this.loginRepository.agregar(usuarioFinal);
             this.loginView.control();
             this.Update();
         } catch (ExcepcionCamposVacios excepcionCamposVacios) {
@@ -82,20 +93,43 @@ public class LoginController {
 
     }
 
-    public Boolean iniciarSesion() throws ExcepcionCamposVacios {
+    public Usuario iniciarSesion() throws ExcepcionCamposVacios {
         {
-            Boolean ok = false;
+            loadGestionUsuario();
+            Usuario usuarioBuscado = null;
+            Usuario usuario;
+            Boolean ok;
             try {
-                Usuario usuario = this.loginView.solicitarDatosRegistro();
-                Usuario usuario1 = this.loginRepository.buscar(usuario, this.loginRepository.getSetUsuarios());
-                ok = this.loginView.verificarUser(usuario1);
+                usuario = loginView.solicitarDatosRegistro();
+                usuarioBuscado = loginRepository.buscar(usuario.getUsername());
+                if(usuarioBuscado==null) {
+                    System.out.println("XXX NOMBRE DE USUARIO Y CONTRASENA INCORRECTOS XXX");
+                }
             } catch (ExcepcionCamposVacios excepcionCamposVacios) {
                 System.out.println(excepcionCamposVacios.getMessage());
             } catch (ExcepcionNombreNumerico e) {
                 System.out.println(e.getMessage());
             }
-            return ok;
+            return usuarioBuscado;
 
         }
     }
+
+    public void eliminarUsuario(){
+        loadGestionUsuario();
+        String nombreUser = loginView.pedirNombreUsuario();
+        Usuario usuarioBuscado = loginRepository.buscar(nombreUser);
+        if(usuarioBuscado==null) {
+            System.out.println("XXX NOMBRE DE USUARIO NO ENCONTRADO XXX");
+        }
+        loginRepository.eliminar(usuarioBuscado);
+        Update();
+    }
+
+    public void mostrarUsuarios(){
+        loadGestionUsuario();
+        loginView.mostrarUsuarios(loginRepository.getSetUsuarios());
+    }
+
+
 }
