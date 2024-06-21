@@ -1,4 +1,4 @@
-package Cliente.model.entitie;
+package Cliente;
 
 import Excepciones.ExcepcionCamposVacios;
 import Persona.Persona;

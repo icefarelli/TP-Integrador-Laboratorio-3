@@ -1,6 +1,6 @@
 package MesasReservadas;
 
-import Cliente.model.entitie.Cliente;
+import Cliente.Cliente;
 
 public class MesasReservadas {
     private Cliente cliente;

@@ -1,9 +1,8 @@
-package Cliente.view;
+package Cliente;
 
 import Excepciones.ExcepcionCamposVacios;
 import Excepciones.ExcepcionFormatoIncorrecto;
 import Excepciones.ExcepcionNombreNumerico;
-import Cliente.model.entitie.Cliente;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -32,8 +31,8 @@ public class ClienteVista {
                 validarTelefono(phone);
 
                 cliente = new Cliente(name, dni, phone);
-                System.out.println("Cliente agregado exitosamente.");
-                break; // Salir del bucle si se ingresaron correctamente todos los datos
+                System.out.println("Cliente cargado exitosamente.");
+                break;
             } catch (ExcepcionCamposVacios | ExcepcionNombreNumerico | ExcepcionFormatoIncorrecto e) {
                 System.out.println(e.getMessage());
                 System.out.println("Por favor, intente de nuevo.");
@@ -158,6 +157,7 @@ public class ClienteVista {
             System.out.println(" \n--------------------------------\n");
         }
     }
+
 
 
 }

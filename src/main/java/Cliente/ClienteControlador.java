@@ -1,10 +1,7 @@
-package Cliente.controller;
+package Cliente;
 
 import Excepciones.ExcepcionFormatoIncorrecto;
-import Cliente.model.entitie.Cliente;
-import Cliente.view.ClienteVista;
 import Excepciones.ExcepcionClienteNoEncontrado;
-import Cliente.model.repository.ClienteRepositorio;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -16,9 +13,8 @@ import java.util.Set;
 
 public class ClienteControlador {
 
-    private ClienteVista clienteVista;
-    private ClienteRepositorio clienteRepositorio;
-    private Set<Cliente> clienteSet;
+    private ClienteVista clienteVista = new ClienteVista();
+    private ClienteRepositorio clienteRepositorio = new ClienteRepositorio();
     private Gson gson = new Gson();
     private  static  final String PATH= "src/main/resources/Clientes.json";
     private static int lastId=0;
@@ -27,7 +23,6 @@ public class ClienteControlador {
     public ClienteControlador(ClienteVista clienteVista, ClienteRepositorio clienteRepositorio) {
         this.clienteVista = clienteVista;
         this.clienteRepositorio = clienteRepositorio;
-        this.clienteSet = new HashSet<>();
         this.loadGestionCliente();
     }
 
@@ -36,14 +31,14 @@ public class ClienteControlador {
         try (Reader reader= new FileReader(PATH);)
         {
             Type type= new TypeToken<Set<Cliente>>(){}.getType();
-            clienteSet = gson.fromJson(reader,type);
-            if (clienteSet==null)
+            this.clienteRepositorio.clienteSet = gson.fromJson(reader,type);
+            if (this.clienteRepositorio.clienteSet==null)
             {
-                clienteSet = new HashSet<>();
+                this.clienteRepositorio.clienteSet = new HashSet<>();
             }
             else
             {
-                clienteSet.forEach( cliente -> {
+                this.clienteRepositorio.clienteSet.forEach( cliente -> {
                     clienteRepositorio.addCliente(cliente);
                     lastId = cliente.getIdCliente();
                 });
@@ -56,14 +51,14 @@ public class ClienteControlador {
     }
 
     public Set<Cliente> getClienteSet() {
-        return clienteSet;
+        return this.clienteRepositorio.clienteSet;
     }
 
     public void Update ()
     {
         try (Writer writer = new FileWriter(PATH);)
         {
-            gson.toJson(clienteSet,writer);
+            gson.toJson(this.clienteRepositorio.clienteSet,writer);
         }catch (IOException io)
         {
             System.out.println(io.getMessage());
@@ -93,12 +88,8 @@ public class ClienteControlador {
         lastId ++;
         cliente.setIdCliente(lastId);
         this.clienteRepositorio.addCliente(cliente);
-        this.clienteSet.add(cliente);
-        this.clienteVista.verTodosClientes(this.clienteRepositorio.getClienteSet());
         this.Update();
-
     }
-
     public void updateClientes () {
         Cliente cliente = null;
         Integer ok = 0;

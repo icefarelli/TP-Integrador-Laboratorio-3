@@ -2,9 +2,9 @@ package GestionMenu;
 
 import Excepciones.ExcepcionClienteNoEncontrado;
 import Excepciones.ExcepcionFormatoIncorrecto;
-import Cliente.controller.ClienteControlador;
-import Cliente.model.repository.ClienteRepositorio;
-import Cliente.view.ClienteVista;
+import Cliente.ClienteControlador;
+import Cliente.ClienteRepositorio;
+import Cliente.ClienteVista;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionNombreInvalido;
 import Excepciones.ExcepcionReservaCamposVacios;
@@ -30,6 +30,9 @@ public class MenuClientes {
         this.clienteControlador = clienteControlador;
     }
 
+    public MenuClientes() {
+    }
+
     private Integer seguirOSalir() throws ExcepcionFormatoIncorrecto{
         Scanner scanner = new Scanner(System.in);
         Integer num = null;
@@ -47,7 +50,7 @@ public class MenuClientes {
         }
         return num;
     }
-    public void menuCliente(ClienteControlador clienteControlador) throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionFormatoIncorrecto {
+    public void menuCliente() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionFormatoIncorrecto {
         Integer ok = -1;
         Scanner scanner = new Scanner(System.in);
 

@@ -2,10 +2,10 @@ package Reserva;
 
 
 import Excepciones.ExcepcionClienteNoEncontrado;
-import Cliente.controller.ClienteControlador;
-import Cliente.model.entitie.Cliente;
-import Cliente.model.repository.ClienteRepositorio;
-import Cliente.view.ClienteVista;
+import Cliente.ClienteControlador;
+import Cliente.Cliente;
+import Cliente.ClienteRepositorio;
+import Cliente.ClienteVista;
 import Excepciones.ExcepcionReservaCamposVacios;
 import Excepciones.ExcepcionReservaCaracterInvalido;
 import Excepciones.ExcepcionReservaNoEncontrada;

@@ -2,9 +2,9 @@ package Orden;
 
 import Excepciones.ExcepcionClienteNoEncontrado;
 import Excepciones.ExcepcionFormatoIncorrecto;
-import Cliente.model.entitie.Cliente;
-import Cliente.model.repository.ClienteRepositorio;
-import Cliente.view.ClienteVista;
+import Cliente.Cliente;
+import Cliente.ClienteRepositorio;
+import Cliente.ClienteVista;
 import Empleado.Empleado;
 import Empleado.EmpleadoRepositorio;
 import Empleado.EmpleadoVista;

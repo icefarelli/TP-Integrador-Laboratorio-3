@@ -3,9 +3,9 @@ package GestionMenu;
 
 import Excepciones.ExcepcionClienteNoEncontrado;
 import Excepciones.ExcepcionFormatoIncorrecto;
-import Cliente.controller.ClienteControlador;
-import Cliente.model.repository.ClienteRepositorio;
-import Cliente.view.ClienteVista;
+import Cliente.ClienteControlador;
+import Cliente.ClienteRepositorio;
+import Cliente.ClienteVista;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionNombreInvalido;
 import Excepciones.ExcepcionReservaCamposVacios;

@@ -2,8 +2,8 @@ package GestionMenu;
 
 import Excepciones.ExcepcionClienteNoEncontrado;
 import Excepciones.ExcepcionFormatoIncorrecto;
-import Cliente.model.repository.ClienteRepositorio;
-import Cliente.view.ClienteVista;
+import Cliente.ClienteRepositorio;
+import Cliente.ClienteVista;
 import Empleado.EmpleadoRepositorio;
 import Empleado.EmpleadoVista;
 import Excepciones.ExcepcionDNIStringInvalido;

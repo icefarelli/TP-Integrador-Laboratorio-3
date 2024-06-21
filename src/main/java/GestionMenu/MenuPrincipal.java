@@ -1,5 +1,7 @@
 package GestionMenu;
 
+import Cliente.ClienteControlador;
+import Cliente.ClienteRepositorio;
 import Excepciones.ExcepcionClienteNoEncontrado;
 import Excepciones.ExcepcionFormatoIncorrecto;
 import Excepciones.ExcepcionDNIStringInvalido;
@@ -18,6 +20,7 @@ public class MenuPrincipal {
 
         MenuEmpleados menuEmpleados = new MenuEmpleados();
         MenuReservas menuReservas = new MenuReservas();
+        MenuClientes menuClientes = new MenuClientes();
 
         System.out.println("--------------------BIENVENIDOS A ´INTERFAZ DE SABORES´---------------------------");
         System.out.println("Que desea hacer?");
@@ -46,7 +49,7 @@ public class MenuPrincipal {
                     menuEmpleados.menuEmpleados();
                     break;
                 case 4:
-                    //agregar menu de clientes
+                    menuClientes.menuCliente();
                     break;
                 case 5:
                     break;

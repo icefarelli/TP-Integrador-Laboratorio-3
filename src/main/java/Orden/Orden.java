@@ -1,6 +1,6 @@
 package Orden;
 
-import Cliente.model.entitie.Cliente;
+import Cliente.Cliente;
 import Empleado.Empleado;
 import Plato.Plato;
 import java.util.List;
