@@ -58,7 +58,7 @@ public class MenuPrincipal {
                         menuPlato.mainMenu();
                         break;
                     case 6:
-
+                        menuUsuarios.menuUsuarios();
                     case 0:
                         break;
                     default:
