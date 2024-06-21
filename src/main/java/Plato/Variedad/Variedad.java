@@ -26,6 +26,6 @@ public class Variedad {
 
     @Override
     public String toString() {
-        return " -" + nombre + " -----------------------$ " + precio;
+        return String.format("  - %-32s $%.2f", nombre, precio);
     }
 }

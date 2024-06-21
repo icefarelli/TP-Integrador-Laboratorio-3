@@ -12,8 +12,24 @@ public class Colores {
     public static final String CYAN = "\033[0;36m";
     public static final String WHITE = "\033[0;37m";
 
+    // Fondos de color
+    public static final String BLACK_BG = "\033[40m";
+    public static final String RED_BG = "\033[41m";
+    public static final String GREEN_BG = "\033[42m";
+    public static final String YELLOW_BG = "\033[43m";
+    public static final String BLUE_BG = "\033[44m";
+    public static final String PURPLE_BG = "\033[45m";
+    public static final String CYAN_BG = "\033[46m";
+    public static final String WHITE_BG = "\033[47m";
+
     // Método para imprimir texto en color
     public static void printInColor(String text, String color) {
         System.out.println(color + text + RESET);
     }
+
+    // Método para imprimir texto en color con fondo
+    public static void printBackground(String text, String background) {
+        System.out.println(background + text + RESET);
+    }
+
 }

@@ -1,8 +1,8 @@
 package Plato;
 
 import Interfaces.IABM;
-import Plato.Excepciones.ExcepFileNF;
 import Plato.Excepciones.ExcepIngresoInvalido;
+import Plato.Excepciones.ExcepPlatoExistente;
 import Plato.Variedad.Variedad;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,12 +33,7 @@ public class PlatoRepositorio implements IABM<Plato> {
             platoSet = gson.fromJson(reader,setType);
             if (platoSet ==null) platoSet = new HashSet<>();
         }catch (FileNotFoundException fnf){
-            try {
-                throw new ExcepFileNF("El archivo " + FILE_COMIDAS + " no fue encontrado.");
-            } catch (ExcepFileNF ex) {
-                ex.printStackTrace();
-                platoSet = new HashSet<>();
-            }
+            platoSet = new HashSet<>();
         }catch (IOException ioe){
             ioe.printStackTrace();
         }
@@ -47,8 +42,8 @@ public class PlatoRepositorio implements IABM<Plato> {
     private void saveFilePlatos(){
         try(Writer writer = new FileWriter(FILE_COMIDAS)){
             gson.toJson(platoSet,writer);
-        }catch (IOException ioException){
-            ioException.printStackTrace();
+        }catch (IOException ioE){
+            ioE.printStackTrace();
         }
     }
 
@@ -68,24 +63,47 @@ public class PlatoRepositorio implements IABM<Plato> {
     //Modificar y actualizar plato en el archivo y HashSet
     @Override
     public void modificar(Plato comida) {
-        for(Plato plato : platoSet){
-            if(comida.getNombre().equals(plato.getNombre())){
+        for (Plato plato : platoSet) {
+            if (comida.getNombre().equals(plato.getNombre())) {
                 plato.setPrecio(comida.getPrecio());
                 plato.getVariedades().clear();
-                plato.setVariedades(comida.getVariedades());
+                plato.getVariedades().addAll(comida.getVariedades());
             }
         }
         saveFilePlatos();
     }
+    public void comprobarExistenciaPlato (String nombre) throws ExcepPlatoExistente {
+        for (Plato plato : platoSet){
+            if (nombre.equals(plato.getNombre())){
+                throw new ExcepPlatoExistente("Ya existen un plato cargado con ese nombre. Carga Cancelada");
+            }
+        }
+        System.out.println("El Nombre " + nombre + " esta disponible.");
+    }
 
     //Recibe un string con el nombre del plato a buscar. Si lo encuentra devuelve el plato, caso contrario devuelve null
-    public Plato buscarPlatoXnombre(String nombre) throws ExcepIngresoInvalido {
+    public Plato buscarPlatoXnombre(String nombre){
         for (Plato plato : platoSet) {
             if (plato.getNombre().equals(nombre)) {
                 return plato;
             }
         }
         return null;
+    }
+    public void mostrarUnPlato(Plato plato){
+        System.out.println(plato.toString());
+        if (plato.getVariedades() != null && !plato.getVariedades().isEmpty()) {
+            List<Variedad> variedades = plato.getVariedades();
+            for (int i = 0; i < variedades.size(); i++) {
+                Variedad variedad = variedades.get(i);
+                if (i == variedades.size() - 1) {
+                    System.out.print("  - " + variedad.toString());
+                } else {
+                    System.out.println("  - " + variedad.toString());
+                }
+            }
+        }
+        System.out.println(); //salto de linea
     }
 
     //recibe un String con el tipo de categoria y carga una lista recorriendo el set la cual devuelve
@@ -116,6 +134,13 @@ public class PlatoRepositorio implements IABM<Plato> {
             }
         }
         return listaAuxiliar;
+    }
+    public void mostrarListaParaEliminar (List<Plato> listaPlatos){
+        int contadorDeIndices = 1;
+        for (Plato plato : listaPlatos){
+            System.out.println(String.format("%d - %-20s",contadorDeIndices,plato.getNombre()));
+            contadorDeIndices++;
+        }
     }
 
     // Recibe un tipo por parametro y crea dos listas, una con nombre y otra con precio. Complementa el nombre del plato que contiene variedad
@@ -161,74 +186,50 @@ public class PlatoRepositorio implements IABM<Plato> {
     // y el total de indices. en diferentes metodos. Por ultimo mostrarEnlistadoBonitoXtipoNew imprime el total del Set.
 
     public void mostrarCartaDePlatosCompleta() {
-        int largoMaximoDelNombre = calcularLargoMaximoDelNombre();
-        int largoMaximoDelIndice = calcularLargoMaximoDelIndice();
         Set<String> tiposYaMostrados = new HashSet<>();
         for (Plato plato : this.platoSet) {
             String tipoActual = plato.getTipo();
             if (!tiposYaMostrados.contains(tipoActual)) {
                 tiposYaMostrados.add(tipoActual);
-                mostrarEnlistadoBonitoXtipoNew(tipoActual, largoMaximoDelNombre, largoMaximoDelIndice);
+                mostrarEnlistadoBonitoXtipoNew(tipoActual);
             }
         }
     }
 
-    public int calcularLargoMaximoDelNombre() {
-        int largoMaximoDelNombre = 0;
-        for (Plato plato : platoSet) {
-            if (plato.getVariedades().isEmpty()) {
-                if (plato.getNombre().length() > largoMaximoDelNombre) {
-                    largoMaximoDelNombre = plato.getNombre().length();
-                }
-            } else {
-                for (Variedad variedad : plato.getVariedades()) {
-                    String nombreCompuesto = plato.getNombre() + " " + variedad.getNombre();
-                    if (nombreCompuesto.length() > largoMaximoDelNombre) {
-                        largoMaximoDelNombre = nombreCompuesto.length();
-                    }
-                }
-            }
-        }
-        return largoMaximoDelNombre;
-    }
-    public int calcularLargoMaximoDelIndice() {
-        int totalPlatos = 0;
-        for (Plato plato : platoSet) {
-            if (plato.getVariedades().isEmpty()) {
-                totalPlatos++;
-            } else {
-                totalPlatos += plato.getVariedades().size();
-            }
-        }
-        return String.valueOf(totalPlatos).length();
-    }
-
-    public void mostrarEnlistadoBonitoXtipoNew(String tipo, int largoMaximoDelNombre, int largoMaximoDelIndice) {
-        List<String> nombre = new ArrayList<>();
-        List<Double> precio = new ArrayList<>();
+    public void mostrarEnlistadoBonitoXtipoNew(String tipo) {
+        List<Plato> platosPorTipo = new ArrayList<>();
         for (Plato plato : platoSet) {
             if (tipo.equals(plato.getTipo())) {
-                if (plato.getVariedades().isEmpty()) {
-                    nombre.add(plato.getNombre());
-                    precio.add(plato.getPrecio());
-                } else {
-                    for (Variedad variedad : plato.getVariedades()) {
-                        String nombreCompuesto = String.format(plato.getNombre() + " " + variedad.getNombre());
-                        nombre.add(nombreCompuesto);
-                        precio.add(variedad.getPrecio());
-                    }
-                }
+                platosPorTipo.add(plato);
             }
         }
 
         // Imprimir el menú formateado
         System.out.println("Menu de " + tipo);
         System.out.println("====================================================");
-        for (int i = 0; i < nombre.size(); i++) {
-            System.out.printf("% " + largoMaximoDelIndice + "d. %-" + largoMaximoDelNombre + "s  $%.2f%n", i + 1, nombre.get(i), precio.get(i));
-        }
-    }
 
+        for (int i = 0; i < platosPorTipo.size(); i++) {
+            Plato plato = platosPorTipo.get(i);
+
+            // Imprimir el plato principal
+            System.out.println(plato.toString());
+
+            // Imprimir las variedades, si existen
+            if (plato.getVariedades() != null && !plato.getVariedades().isEmpty()) {
+                List<Variedad> variedades = plato.getVariedades();
+                for (int j = 0; j < variedades.size(); j++) {
+                    Variedad variedad = variedades.get(j);
+                    if (j == variedades.size() - 1) {
+                        System.out.print("  - " + variedad.toString());
+                    } else {
+                        System.out.println("  - " + variedad.toString());
+                    }
+                }
+                System.out.println();//salto de linea
+            }
+        }
+        System.out.println(); //salto de linea
+    }
 
     //Si el plato contiene variedades imprime las variedades, sino imprime los platos base con sus valores
     public void mostrarPlato(Plato plato){
@@ -242,33 +243,29 @@ public class PlatoRepositorio implements IABM<Plato> {
         }
     }
 
-    public void mostrarPlatosXtipo(String tipo){
-        for (Plato plato : platoSet){
-            if (plato.getTipo().equals(tipo)){
-                mostrarPlato(plato);
-            }
-        }
-    }
-
     // Se ingresa un valor para aumentar el precio total de los productos de manera porcentual
     public void aumentoPorcentualPrecio(double aumento){
-        aumento = aumento * 0.01;
-        for (Plato plato : this.platoSet) {
-            if (plato.getVariedades().size() == 0) {
-                // Si el plato no tiene variedades, aumentar el precio del plato mismo
-                double valorAnterior = plato.getPrecio();
-                double nuevoValor = valorAnterior + (valorAnterior * aumento);
-                plato.setPrecio(nuevoValor);
-            }else {
-                // Aumentar el precio de las variedades, si existen
-                for (Variedad variedad : plato.getVariedades()) {
-                    double valorAnterior = variedad.getPrecio();
+        if (aumento != 0) {
+            aumento = aumento * 0.01;
+            for (Plato plato : this.platoSet) {
+                if (plato.getVariedades().size() == 0) {
+                    // Si el plato no tiene variedades, aumentar el precio del plato mismo
+                    double valorAnterior = plato.getPrecio();
                     double nuevoValor = valorAnterior + (valorAnterior * aumento);
-                    variedad.setPrecio(nuevoValor);
+                    plato.setPrecio(nuevoValor);
+                } else {
+                    // Aumentar el precio de las variedades, si existen
+                    for (Variedad variedad : plato.getVariedades()) {
+                        double valorAnterior = variedad.getPrecio();
+                        double nuevoValor = valorAnterior + (valorAnterior * aumento);
+                        variedad.setPrecio(nuevoValor);
+                    }
                 }
             }
+            saveFilePlatos();
+        }else {
+            System.out.println("No se realizo el aumento.");
         }
-        saveFilePlatos();
     }
 
 
