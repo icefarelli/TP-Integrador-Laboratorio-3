@@ -7,7 +7,6 @@ import Plato.PlatoVista;
 import Plato.Variedad.VariedadController;
 import Plato.Variedad.VariedadRepositorio;
 import Plato.Variedad.VariedadVista;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -61,7 +60,7 @@ public class MenuPlato {
                         PlatoControlador.pausarPantalla(vista);
                         break;
                     case 7:
-                        vista.mensajePersonalizado("Saliendo del Menu...");
+                        System.out.println("Volviendo al menu principal...");
                         break;
                     case 8:
                         System.out.println("Saliendo...");
@@ -77,7 +76,7 @@ public class MenuPlato {
                 scanner.nextLine();
                 e.printStackTrace();
             }
-        } while (opcion != 0);
+        } while (opcion != 8 && opcion !=7);
     }
 
 
