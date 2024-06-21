@@ -72,6 +72,6 @@ public class MenuReservas {
                 System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
                 scanner.nextLine();
             }
-        }while (op != 6 && op != 7);
+        }while (op != 5 && op != 6);
     }
 }
