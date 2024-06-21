@@ -37,15 +37,14 @@ public class MenuOrdenes {
     PlatoVista platoVista = new PlatoVista();
     PlatoControlador platoControlador = new PlatoControlador(platoRepositorio, platoVista);
 
-    OrdenControlador ordenControlador = new OrdenControlador(ordenRepositorio, ordenVista, empleadoRepositorio, empleadoVista,clienteRepositorio, clienteVista, platoRepositorio, platoVista, platoControlador);
+    OrdenControlador ordenControlador = new OrdenControlador(ordenRepositorio, ordenVista, empleadoRepositorio, empleadoVista, clienteRepositorio, clienteVista, platoRepositorio, platoVista, platoControlador);
     public void menuOrdenes() throws ExcepcionDNIStringInvalido, ExcepcionClienteNoEncontrado, ExcepcionOrdenNoEncontrada, ExcepcionFormatoIncorrecto, ExcepcionEntradaInvalida, ExcepcionNombreInvalido, IOException {
 
         Scanner scanner = new Scanner(System.in);
 
         int op = -1;
-
-            do {
-                try {
+        do {
+            try {
                 System.out.println("----------------------------------MENU GESTION ORDENES--------------------------------");
 
                 System.out.println("1- Agregar orden");
@@ -88,12 +87,12 @@ public class MenuOrdenes {
                     default:
                         System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
                 }
-                }catch (InputMismatchException | ExcepcionReservaCamposVacios | ExcepcionReservaNoEncontrada |
-                        ExcepcionReservaCaracterInvalido | ExcepcionReservaValorNegativo e) {
-                    System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
-                    scanner.nextLine();
-                }
-            } while (op != 6 && op != 7);
-            scanner.close();
-        }
+            }catch (InputMismatchException | ExcepcionReservaCamposVacios | ExcepcionReservaNoEncontrada |
+                     ExcepcionReservaCaracterInvalido | ExcepcionReservaValorNegativo e) {
+                System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
+                scanner.nextLine();
+            }
+        } while (op != 6 && op != 7);
+        scanner.close();
+    }
 }

@@ -112,4 +112,13 @@ public class EmpleadoControlador {
         pasarAarchivo();
     }
 
+    public void mostrarUnEmpleado() throws IOException {
+        pasarAMemoria();
+        Integer clave = empleadoVista.pedirClave();
+        Empleado empleado = empleadoRepositorio.buscarEmpleado(clave);
+        empleadoVista.mostrarEmpleado(empleado);
+        pasarAarchivo();
+
+    }
+
 }

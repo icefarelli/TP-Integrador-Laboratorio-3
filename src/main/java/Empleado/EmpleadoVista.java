@@ -1,6 +1,7 @@
 package Empleado;
 
 import Excepciones.ExcepcionDNIStringInvalido;
+import Excepciones.ExcepcionEntradaInvalida;
 import Excepciones.ExcepcionNombreInvalido;
 
 import java.util.InputMismatchException;
@@ -15,30 +16,35 @@ public String elegirPuesto() {
     int op = -1;
     String nombre = null;
     do {
-        System.out.println("Ingrese una opcion para el puesto:");
-        System.out.println("1. Gerente general");
-        System.out.println("2. Anfitrión");
-        System.out.println("3. Cajero");
-        System.out.println("4. Mesero");
+        try {
+            System.out.println("Ingrese una opcion para el puesto:");
+            System.out.println("1. Gerente general");
+            System.out.println("2. Anfitrión");
+            System.out.println("3. Cajero");
+            System.out.println("4. Mesero");
 
-        op = scan.nextInt();
+            op = scan.nextInt();
 
-        switch (op) {
-            case 1:
-                nombre ="Gerente general";
-                break;
-            case 2:
-                nombre ="Anfitrion";
-                break;
-            case 3:
-                nombre ="Cajero";
-                break;
-            case 4:
-                nombre ="Mesero";
-                break;
-            default:
-                System.out.println("Opcion incorrecta, ingrese una opcion valida");
+            switch (op) {
+                case 1:
+                    nombre = "Gerente general";
+                    break;
+                case 2:
+                    nombre = "Anfitrion";
+                    break;
+                case 3:
+                    nombre = "Cajero";
+                    break;
+                case 4:
+                    nombre = "Mesero";
+                    break;
+                default:
+                    System.out.println("Opcion incorrecta, ingrese una opcion valida");
 
+            }
+        }catch (InputMismatchException e) {
+            System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
+            scan.nextLine();
         }
     } while(op!=1 && op!=2 && op!=3 && op!=4);
     return nombre;
@@ -104,6 +110,7 @@ public String pedirModificacion() {
     int op = -1;
     String nombre = null;
     do {
+        try{
         System.out.println("Ingrese una opcion para modificar:");
         System.out.println("1. Nombre y apellido");
         System.out.println("2. Puesto");
@@ -121,6 +128,10 @@ public String pedirModificacion() {
             default:
                 System.out.println("Opcion incorrecta, ingrese una opcion valida");
 
+        }
+        } catch (InputMismatchException e) {
+            System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
+            scan.nextLine();
         }
     } while(op!=1 && op!=2);
     return nombre;
@@ -151,10 +162,12 @@ public void mensajeErrorBusqueda() {
 }
 
 public void mostrarEmpleado(Empleado e){
+    System.out.println("--------------------------------------------------------");
     System.out.println("DNI: " + e.getId());
     System.out.println("Nombre y Apellido: " + e.getNombre());
     System.out.println("Id empleado: " + e.getIdEmpleado());
     System.out.println("Puesto: " + e.getPuesto());
+    System.out.println("--------------------------------------------------------");
 }
 
 public void mostrarListaEmpleados(Map<Integer, Empleado> mapaEmpleados){
@@ -163,7 +176,7 @@ public void mostrarListaEmpleados(Map<Integer, Empleado> mapaEmpleados){
     } else {
         for (Map.Entry<Integer,Empleado> entry : mapaEmpleados.entrySet()){
             Empleado empleado = entry.getValue();
-            System.out.println("-------------------------------------------------------");
+            System.out.println("=====================================================");
             mostrarEmpleado(empleado);
         }
     }
