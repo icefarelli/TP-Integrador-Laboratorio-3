@@ -35,7 +35,7 @@ public class MenuReservas {
     public static Scanner scanner = new Scanner(System.in);
 
 
-    public void menuReservas() throws ExcepcionReservaCamposVacios, ExcepcionClienteNoEncontrado, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo, ExcepcionReservaNoEncontrada, ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionFormatoIncorrecto {
+    public void menuReservas() throws ExcepcionClienteNoEncontrado, ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionFormatoIncorrecto {
         int opcion = 0;
         do {
             System.out.println("=====================MENU RESERVAS=====================");
@@ -61,7 +61,7 @@ public class MenuReservas {
                     reservaControlador.modificarReserva();
                     break;
                 case 4:
-                    reservaControlador.mostraReservasConFechaYArreglo();
+                    reservaControlador.mostrarReservasConArreglo();
                     break;
                 case 5:
                     System.out.println("Volviendo al Menú Principal...");

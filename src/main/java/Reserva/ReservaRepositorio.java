@@ -20,25 +20,26 @@ import java.util.List;
 
 
 public class ReservaRepositorio implements IABM<Reserva> {
-    List<Reserva> reservas = new LinkedList<Reserva>();
-    MesasReservadasRepositorio mesasReservadasRepositorio = new MesasReservadasRepositorio();
-
-
+    private List<Reserva> reservas = new LinkedList<>();
+    private MesasReservadasRepositorio mesasReservadasRepositorio = new MesasReservadasRepositorio();
     private static final String PATH_Reservas = "src/main/resources/Reservas.json";
     private Gson gson = new Gson();
 
+    public ReservaRepositorio() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
+        gson = gsonBuilder.create();
+    }
 
     @Override
     public void agregar(Reserva obj) {
         reservas.add(obj);
     }
 
-
     @Override
     public void eliminar(Reserva obj) {
         reservas.remove(obj);
     }
-
 
     @Override
     public void modificar(Reserva obj) {
@@ -50,50 +51,43 @@ public class ReservaRepositorio implements IABM<Reserva> {
         }
     }
 
-
-    public ReservaRepositorio() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
-        gson = gsonBuilder.create();
-    }
-
-
-    public LocalDate buscarFecha(LocalDate fecha) throws ExcepcionReservaNoEncontrada {
+    public LocalDate buscarFecha(LocalDate fecha){
         try {
             for (Reserva reserva : reservas) {
                 if (reserva.getFecha().equals(fecha)) {
                     return reserva.getFecha();
-                }else {
-                    throw new ExcepcionReservaNoEncontrada("Reserva no encontrada para la fecha: " + fecha);
                 }
             }
-        }catch (ExcepcionReservaNoEncontrada e){
-            System.out.println("Error al buscar la fecha");
+            throw new ExcepcionReservaNoEncontrada("Reserva no encontrada para la fecha: " + fecha);
+        } catch (ExcepcionReservaNoEncontrada e) {
+            System.out.println(e.getMessage());
+        }
+        return fecha;
+    }
+
+    public Reserva buscarReserva(LocalDate fecha){
+        try {
+            for (Reserva reserva : reservas) {
+                if (reserva.getFecha().equals(fecha)) {
+                    return reserva;
+                }
+            }
+            throw new ExcepcionReservaNoEncontrada("Reserva no encontrada para la fecha: " + fecha);
+        } catch (ExcepcionReservaNoEncontrada e) {
+            System.out.println(e.getMessage());
         }
         return null;
     }
 
-
-    public Reserva buscarReserva(LocalDate fecha) throws ExcepcionReservaNoEncontrada {
-        for (Reserva reserva : reservas) {
-            if (reserva.getFecha().equals(fecha)) {
-                return reserva;
-            }
-        }
-        throw new ExcepcionReservaNoEncontrada("Reserva no encontrada para la fecha: " + fecha);
-    }
-
-
-
-    public void guardarReserva() {
+    public void guardarReserva(){
         try (FileWriter writer = new FileWriter(PATH_Reservas)) {
             gson.toJson(reservas, writer);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
-    public void cargarReserva() {
+    public void cargarReserva(){
         try (FileReader reader = new FileReader(PATH_Reservas)) {
             Type type = new TypeToken<List<Reserva>>() {}.getType();
             List<Reserva> reservaList = gson.fromJson(reader, type);
@@ -103,16 +97,15 @@ public class ReservaRepositorio implements IABM<Reserva> {
                 reservas = new LinkedList<>();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
-
-
 
     public List<Reserva> todasLasReservas() {
         return reservas;
     }
 
-
-    public List<MesasReservadas> todasLasMesasReservadas(){return mesasReservadasRepositorio.todasLasMesasReservadas();}
+    public List<MesasReservadas> todasLasMesasReservadas() {
+        return mesasReservadasRepositorio.todasLasMesasReservadas();
+    }
 }

@@ -1,22 +1,19 @@
 package GestionMenu;
 
-import Cliente.ClienteControlador;
-import Cliente.ClienteRepositorio;
+
+
+
 import Excepciones.ExcepcionClienteNoEncontrado;
-import Excepciones.ExcepcionFormatoIncorrecto;
 import Excepciones.ExcepcionDNIStringInvalido;
+import Excepciones.ExcepcionFormatoIncorrecto;
 import Excepciones.ExcepcionNombreInvalido;
-import Excepciones.ExcepcionReservaCamposVacios;
-import Excepciones.ExcepcionReservaCaracterInvalido;
-import Excepciones.ExcepcionReservaNoEncontrada;
-import Excepciones.ExcepcionReservaValorNegativo;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 public class MenuPrincipal {
 
-    public void menuPrincipal() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionReservaCamposVacios, ExcepcionReservaNoEncontrada, ExcepcionClienteNoEncontrado, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo, ExcepcionFormatoIncorrecto {
+    public void menuPrincipal() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionFormatoIncorrecto, ExcepcionClienteNoEncontrado {
 
         MenuEmpleados menuEmpleados = new MenuEmpleados();
         MenuReservas menuReservas = new MenuReservas();
@@ -59,5 +56,4 @@ public class MenuPrincipal {
         } while (op!=5);
         scanner.close();
     }
-
 }
