@@ -44,6 +44,15 @@ public class MesasReservadasRepositorio implements IABM<MesasReservadas> {
         return indice;
     }
 
+    public MesasReservadas buscarMesasReservadas(List<MesasReservadas> mesasReservadas, Integer id){
+        for (MesasReservadas mesaReservada : mesasReservadas) {
+            if (mesaReservada.getCliente().getIdCliente().equals(id)) {
+                return mesaReservada;
+            }
+        }
+        return null;
+    }
+
     public MesasReservadas buscarMesaReservadaPorIndice(Integer id){
         MesasReservadas mesa = null;
         for(MesasReservadas mesas : mesasReservadas){
