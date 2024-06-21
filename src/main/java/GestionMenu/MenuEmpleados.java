@@ -6,6 +6,7 @@ import Empleado.EmpleadoVista;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionEntradaInvalida;
 import Excepciones.ExcepcionNombreInvalido;
+import Plato.Colores.Colores;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -27,17 +28,16 @@ public class MenuEmpleados {
         int op = -1;
         do {
             try {
-                System.out.println("----------------------------------MENU GESTION EMPLEADOS------------------------------");
+                Colores.printInColor("========MENU GESTION EMPLEADOS========", Colores.BLUE);
+                System.out.println("1. Agregar empleados");
+                System.out.println("2. Eliminar empleados");
+                System.out.println("3. Modificar empleados");
+                System.out.println("4. Mostrar empleados");
+                System.out.println("5. Mostrar un empleado");
+                System.out.println("6. Volver al menu principal");
+                System.out.println("7. Salir del sistema");
+                Colores.printInColor("--------------------------------------", Colores.BLUE);
 
-                System.out.println("1- Agregar empleados");
-                System.out.println("2- Eliminar empleados");
-                System.out.println("3- Modificar empleados");
-                System.out.println("4- Mostrar empleados");
-                System.out.println("5- Mostrar un empleado");
-                System.out.println("6- Volver al menu principal");
-                System.out.println("7- Salir del sistema");
-
-                System.out.println("Ingrese una opción");
                 op = scanner.nextInt(); // Leer la entrada como cadena
                 switch (op) {
                     case 1:
@@ -56,7 +56,7 @@ public class MenuEmpleados {
                         empleadoControlador.mostrarUnEmpleado();
                         break;
                     case 6:
-                        //menuPrincipal.menuPrincipal();
+                        System.out.println("Volviendo al menu principal...");
                         break;
                     case 7:
                         System.out.println("Saliendo...");
@@ -70,6 +70,5 @@ public class MenuEmpleados {
             }
         }
             while (op != 6 && op!=7) ;
-            scanner.close();
         }
     }

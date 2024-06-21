@@ -1,7 +1,7 @@
-package Login;
+package GestionMenu;
 
 import Excepciones.*;
-import GestionMenu.MenuPrincipal;
+import Login.LoginController;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -30,7 +30,7 @@ public class MenuLogin {
             System.out.println("0. Salir");
             try {
                 ok = scanner.nextInt();
-
+                scanner.nextLine();
                 switch (ok) {
                     case 1:
                         if (loginController.iniciarSesion()) {

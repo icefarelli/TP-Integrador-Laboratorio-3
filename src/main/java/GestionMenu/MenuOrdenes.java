@@ -17,6 +17,7 @@ import Excepciones.ExcepcionReservaValorNegativo;
 import Orden.OrdenControlador;
 import Orden.OrdenRepositorio;
 import Orden.OrdenVista;
+import Plato.Colores.Colores;
 import Plato.PlatoControlador;
 import Plato.PlatoRepositorio;
 import Plato.PlatoVista;
@@ -45,17 +46,16 @@ public class MenuOrdenes {
         int op = -1;
         do {
             try {
-                System.out.println("----------------------------------MENU GESTION ORDENES--------------------------------");
+                Colores.printInColor("==========MENU ORDENES==========", Colores.BLUE);
+                System.out.println("1. Agregar orden");
+                System.out.println("2. Eliminar orden");
+                System.out.println("3. Modificar orden");
+                System.out.println("4. Listar ordenes");
+                System.out.println("5. Mostrar orden por ID");
+                System.out.println("6. Volver al menu principal");
+                System.out.println("7. Salir del sistema");
+                Colores.printInColor("-------------------------------", Colores.BLUE);
 
-                System.out.println("1- Agregar orden");
-                System.out.println("2- Eliminar orden");
-                System.out.println("3- Modificar orden");
-                System.out.println("4- Listar ordenes");
-                System.out.println("5- Mostrar orden por ID");
-                System.out.println("6- Volver al menu principal");
-                System.out.println("7- Salir del sistema");
-
-                System.out.println("Ingrese una opción");
                 op = scanner.nextInt(); // Leer la entrada
                 switch (op) {
                     case 1:
