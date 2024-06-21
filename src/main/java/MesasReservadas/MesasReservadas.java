@@ -1,6 +1,6 @@
 package MesasReservadas;
 
-import Cliente.model.entitie.Cliente;
+import Cliente.Cliente;
 
 public class MesasReservadas {
     private Cliente cliente;
@@ -25,5 +25,12 @@ public class MesasReservadas {
 
     public void setCantPersonas(Integer cantPersonas) {
         this.cantPersonas = cantPersonas;
+    }
+
+    @Override
+    public String toString() {
+        return "Mesa Reservada:" +
+                "cliente: " + cliente +
+                ", cantPersonas: " + cantPersonas;
     }
 }

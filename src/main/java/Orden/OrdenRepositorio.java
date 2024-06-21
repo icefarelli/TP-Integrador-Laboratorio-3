@@ -25,7 +25,7 @@ public class OrdenRepositorio {
 
     public Orden obtenerOrden(Integer id) throws ExcepcionOrdenNoEncontrada {
         if(ordenes.get(id)== null) {
-            throw new ExcepcionOrdenNoEncontrada("Orden no encontrada");
+            throw new ExcepcionOrdenNoEncontrada("No se encontro ninguna orden con el ID: " + id);
         }
         return ordenes.get(id);
     }
@@ -42,7 +42,7 @@ public class OrdenRepositorio {
         try (FileWriter writer = new FileWriter(PATH_Ordenes)) {
             gson.toJson(ordenes, writer);
         } catch (IOException e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
     }
     public void cargarOrdenesDesdeArchivo() {
@@ -53,7 +53,7 @@ public class OrdenRepositorio {
                 ordenes = new TreeMap<>();
             }
         } catch (IOException e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
             ordenes = new TreeMap<>();
         }
     }

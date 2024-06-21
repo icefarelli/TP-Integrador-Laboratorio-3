@@ -1,11 +1,7 @@
-package Cliente.controller;
+package Cliente;
 
-import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
-import Cliente.Excepciones.ExcepcionListaVacia;
-import Cliente.model.entitie.Cliente;
-import Cliente.view.ClienteVista;
-import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
-import Cliente.model.repository.ClienteRepositorio;
+import Excepciones.ExcepcionFormatoIncorrecto;
+import Excepciones.ExcepcionClienteNoEncontrado;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -17,9 +13,8 @@ import java.util.Set;
 
 public class ClienteControlador {
 
-    private ClienteVista clienteVista;
-    private ClienteRepositorio clienteRepositorio;
-    private Set<Cliente> clienteSet;
+    private ClienteVista clienteVista = new ClienteVista();
+    private ClienteRepositorio clienteRepositorio = new ClienteRepositorio();
     private Gson gson = new Gson();
     private  static  final String PATH= "src/main/resources/Clientes.json";
     private static int lastId=0;
@@ -28,23 +23,22 @@ public class ClienteControlador {
     public ClienteControlador(ClienteVista clienteVista, ClienteRepositorio clienteRepositorio) {
         this.clienteVista = clienteVista;
         this.clienteRepositorio = clienteRepositorio;
-        this.clienteSet = new HashSet<>();
-        this.loadGestionCurso();
+        this.loadGestionCliente();
     }
 
-    public void loadGestionCurso()
+    public void loadGestionCliente()
     {
         try (Reader reader= new FileReader(PATH);)
         {
             Type type= new TypeToken<Set<Cliente>>(){}.getType();
-            clienteSet = gson.fromJson(reader,type);
-            if (clienteSet==null)
+            this.clienteRepositorio.clienteSet = gson.fromJson(reader,type);
+            if (this.clienteRepositorio.clienteSet==null)
             {
-                clienteSet = new HashSet<>();
+                this.clienteRepositorio.clienteSet = new HashSet<>();
             }
             else
             {
-                clienteSet.forEach( cliente -> {
+                this.clienteRepositorio.clienteSet.forEach( cliente -> {
                     clienteRepositorio.addCliente(cliente);
                     lastId = cliente.getIdCliente();
                 });
@@ -57,14 +51,14 @@ public class ClienteControlador {
     }
 
     public Set<Cliente> getClienteSet() {
-        return clienteSet;
+        return this.clienteRepositorio.clienteSet;
     }
 
     public void Update ()
     {
         try (Writer writer = new FileWriter(PATH);)
         {
-            gson.toJson(clienteSet,writer);
+            gson.toJson(this.clienteRepositorio.clienteSet,writer);
         }catch (IOException io)
         {
             System.out.println(io.getMessage());
@@ -94,41 +88,36 @@ public class ClienteControlador {
         lastId ++;
         cliente.setIdCliente(lastId);
         this.clienteRepositorio.addCliente(cliente);
-        this.clienteSet.add(cliente);
-        this.clienteVista.verTodosClientes(this.clienteRepositorio.getClienteSet());
         this.Update();
-
     }
+    public void updateClientes () {
+        Cliente cliente = null;
+        Integer ok = 0;
+        if (this.clienteRepositorio.getClienteSet().isEmpty())
+        {
+            System.out.println("XXX NO HAY CLIENTES CARGADOS XXX");
+            System.out.println("Saliendo...");
+            System.exit(0);}
+            do {
+                try {
+                    Integer id = this.clienteVista.seleccId();
 
-    public void updateClientes ()
-    {           Cliente cliente= null;
-            Integer ok=0;
-            try
-            {
-                this.clienteRepositorio.listaVacia();
-                do {
-                    try {
-                        Integer id = this.clienteVista.seleccId();
+                    cliente = this.clienteRepositorio.findCliente(id, this.clienteRepositorio.getClienteSet());
+                    String phone = this.clienteVista.newPhone();
+                    this.clienteRepositorio.updateCliente(cliente, phone);
+                    System.out.println("--- ¡ DATOS MODIFICADOS CON EXITO ! ---");
+                    ok = 1;
+                    System.out.println(cliente.toString());
+                } catch (ExcepcionClienteNoEncontrado excepcionClienteNoEncontrado) {
+                    System.out.println(excepcionClienteNoEncontrado.getMessage());
+                } catch (ExcepcionFormatoIncorrecto excepcionFormatoIncorrecto) {
+                    System.out.println(excepcionFormatoIncorrecto.getMessage());
+                }
+            } while (ok == 0);
 
-                        cliente = this.clienteRepositorio.findCliente(id, this.clienteRepositorio.getClienteSet());
-                        String phone = this.clienteVista.newPhone();
-                        this.clienteRepositorio.updateCliente(cliente, phone);
-                        System.out.println("--- ¡ DATOS MODIFICADOS CON EXITO ! ---");
-                        ok=1;
-                        System.out.println(cliente.toString());
-                    } catch (ExcepcionClienteNoEncontrado excepcionClienteNoEncontrado) {
-                        System.out.println(excepcionClienteNoEncontrado.getMessage());
-                    }catch (ExcepcionFormatoIncorrecto excepcionFormatoIncorrecto)
-                    {
-                        System.out.println(excepcionFormatoIncorrecto.getMessage());
-                    }
-                } while (ok==0);
 
-            }catch (ExcepcionListaVacia excepcionListaVacia)
-            {
-                System.out.println(excepcionListaVacia.getMessage());
-            }
         this.Update();
+
 
     }
 
@@ -136,9 +125,11 @@ public class ClienteControlador {
     {
         Cliente cliente = null;
         Integer id= null;
-        try
+        if (this.clienteRepositorio.getClienteSet().isEmpty())
         {
-            this.clienteRepositorio.listaVacia();
+            System.out.println("XXX NO HAY CLIENTES CARGADOS XXX");
+            System.out.println("Saliendo...");
+            System.exit(0);}
             do {
                 try {
                     id = this.clienteVista.selecIdRemove();
@@ -155,30 +146,28 @@ public class ClienteControlador {
                     cliente=null;
                 }
             }while (cliente==null);
-        }catch (ExcepcionListaVacia excepcionListaVacia)
-        {
-            System.out.println(excepcionListaVacia.getMessage());
-        }
+
         this.Update();
 
     }
     public void viewClientes ()
     {
-        try
+        if (this.clienteRepositorio.getClienteSet().isEmpty())
         {
-            this.clienteRepositorio.listaVacia();
+            System.out.println("XXX NO HAY CLIENTES CARGADOS XXX");
+            System.out.println("Saliendo...");
+            System.exit(0);}
             this.clienteVista.verTodosClientes(this.clienteRepositorio.getClienteSet());
-        }catch (ExcepcionListaVacia excepcionListaVacia)
-        {
-            System.out.println(excepcionListaVacia.getMessage());
-        }
     }
 
     public void consultCliente ()  {
-        try{
-            this.clienteRepositorio.listaVacia();
-            this.clienteVista.verIdAndName(this.clienteRepositorio.getClienteSet());
+        if (this.clienteRepositorio.getClienteSet().isEmpty())
+        {
+            System.out.println("XXX NO HAY CLIENTES CARGADOS XXX");
+            System.out.println("Saliendo...");
+            System.exit(0);}
             try {
+                this.clienteVista.verIdAndName(this.clienteRepositorio.getClienteSet());
                 Integer id = this.clienteVista.consultarCliente();
                 Cliente cliente = this.clienteRepositorio.findCliente(id, this.clienteRepositorio.getClienteSet());
                 System.out.println("------------------------");
@@ -188,13 +177,8 @@ public class ClienteControlador {
             {
                 System.out.println(excepcionClienteNoEncontrado.getMessage());
             }
-        }catch (ExcepcionListaVacia excepcionListaVacia)
-        {
-            System.out.println(excepcionListaVacia.getMessage());
         }
-
-
     }
 
 
-}
+

@@ -1,16 +1,26 @@
 package GestionMenu;
 
+import Cliente.ClienteControlador;
+import Cliente.ClienteRepositorio;
+import Excepciones.ExcepcionClienteNoEncontrado;
+import Excepciones.ExcepcionFormatoIncorrecto;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionNombreInvalido;
+import Excepciones.ExcepcionReservaCamposVacios;
+import Excepciones.ExcepcionReservaCaracterInvalido;
+import Excepciones.ExcepcionReservaNoEncontrada;
+import Excepciones.ExcepcionReservaValorNegativo;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 public class MenuPrincipal {
 
-    public void menuPrincipal() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException {
+    public void menuPrincipal() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionReservaCamposVacios, ExcepcionReservaNoEncontrada, ExcepcionClienteNoEncontrado, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo, ExcepcionFormatoIncorrecto {
 
         MenuEmpleados menuEmpleados = new MenuEmpleados();
+        MenuReservas menuReservas = new MenuReservas();
+        MenuClientes menuClientes = new MenuClientes();
 
         System.out.println("--------------------BIENVENIDOS A ´INTERFAZ DE SABORES´---------------------------");
         System.out.println("Que desea hacer?");
@@ -30,7 +40,7 @@ public class MenuPrincipal {
             op = scanner.nextInt(); // Leer la entrada como cadena
             switch (op) {
                 case 1:
-                    // agregar menu de reservas
+                    menuReservas.menuReservas();
                     break;
                 case 2:
                     //agregar menu de ordenes
@@ -39,7 +49,7 @@ public class MenuPrincipal {
                     menuEmpleados.menuEmpleados();
                     break;
                 case 4:
-                   //agregar menu de clientes
+                    menuClientes.menuCliente();
                     break;
                 case 5:
                     break;
@@ -51,4 +61,3 @@ public class MenuPrincipal {
     }
 
 }
-

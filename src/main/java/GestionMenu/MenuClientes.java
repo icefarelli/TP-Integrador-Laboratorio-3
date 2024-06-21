@@ -1,12 +1,16 @@
 package GestionMenu;
 
-import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
-import Cliente.Excepciones.ExcepcionListaVacia;
-import Cliente.controller.ClienteControlador;
-import Cliente.model.repository.ClienteRepositorio;
-import Cliente.view.ClienteVista;
+import Excepciones.ExcepcionClienteNoEncontrado;
+import Excepciones.ExcepcionFormatoIncorrecto;
+import Cliente.ClienteControlador;
+import Cliente.ClienteRepositorio;
+import Cliente.ClienteVista;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionNombreInvalido;
+import Excepciones.ExcepcionReservaCamposVacios;
+import Excepciones.ExcepcionReservaCaracterInvalido;
+import Excepciones.ExcepcionReservaNoEncontrada;
+import Excepciones.ExcepcionReservaValorNegativo;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -26,6 +30,9 @@ public class MenuClientes {
         this.clienteControlador = clienteControlador;
     }
 
+    public MenuClientes() {
+    }
+
     private Integer seguirOSalir() throws ExcepcionFormatoIncorrecto{
         Scanner scanner = new Scanner(System.in);
         Integer num = null;
@@ -43,7 +50,7 @@ public class MenuClientes {
         }
         return num;
     }
-    public void menuCliente(ClienteControlador clienteControlador) throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionFormatoIncorrecto {
+    public void menuCliente() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionFormatoIncorrecto {
         Integer ok = -1;
         Scanner scanner = new Scanner(System.in);
 
@@ -100,6 +107,16 @@ public class MenuClientes {
             } catch (ExcepcionFormatoIncorrecto e) {
                 System.out.println(e.getMessage());
                 scanner.nextLine();
+            } catch (ExcepcionReservaCamposVacios e) {
+                throw new RuntimeException(e);
+            } catch (ExcepcionReservaNoEncontrada e) {
+                throw new RuntimeException(e);
+            } catch (ExcepcionClienteNoEncontrado e) {
+                throw new RuntimeException(e);
+            } catch (ExcepcionReservaCaracterInvalido e) {
+                throw new RuntimeException(e);
+            } catch (ExcepcionReservaValorNegativo e) {
+                throw new RuntimeException(e);
             }
         } while (ok != 6 && ok != 7);
 

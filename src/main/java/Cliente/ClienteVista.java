@@ -1,12 +1,9 @@
-package Cliente.view;
+package Cliente;
 
-import Cliente.Excepciones.ExcepcionCamposVacios;
-import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
-import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
-import Cliente.Excepciones.ExcepcionNombreNumerico;
-import Cliente.model.entitie.Cliente;
+import Excepciones.ExcepcionCamposVacios;
+import Excepciones.ExcepcionFormatoIncorrecto;
+import Excepciones.ExcepcionNombreNumerico;
 
-import java.sql.SQLOutput;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
@@ -34,8 +31,8 @@ public class ClienteVista {
                 validarTelefono(phone);
 
                 cliente = new Cliente(name, dni, phone);
-                System.out.println("Cliente agregado exitosamente.");
-                break; // Salir del bucle si se ingresaron correctamente todos los datos
+                System.out.println("Cliente cargado exitosamente.");
+                break;
             } catch (ExcepcionCamposVacios | ExcepcionNombreNumerico | ExcepcionFormatoIncorrecto e) {
                 System.out.println(e.getMessage());
                 System.out.println("Por favor, intente de nuevo.");
@@ -77,7 +74,7 @@ public class ClienteVista {
         boolean validInput = false;
 
         while (!validInput) {
-            System.out.println("Ingrese el id del cliente a modificar");
+            System.out.println("Ingrese el id del cliente: ");
             try {
                 id = scanner.nextInt();
                 validInput = true;
@@ -124,7 +121,7 @@ public class ClienteVista {
         }
     }
 
-    private boolean contieneNumeros(String str) {
+    public boolean contieneNumeros(String str) {
         return str.matches(".*\\d.*");
     }
 
@@ -160,6 +157,7 @@ public class ClienteVista {
             System.out.println(" \n--------------------------------\n");
         }
     }
+
 
 
 }

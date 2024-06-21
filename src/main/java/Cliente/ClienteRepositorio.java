@@ -1,18 +1,18 @@
-package Cliente.model.repository;
+package Cliente;
 
-import Cliente.Excepciones.ExcepcionListaVacia;
-import Cliente.model.entitie.Cliente;
-import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
+import Excepciones.ExcepcionClienteNoEncontrado;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
-public class ClienteRepositorio {
+public class ClienteRepositorio  {
+    
+     Set<Cliente> clienteSet ;
 
-    private Set<Cliente> clienteSet = new HashSet<>();
+    public ClienteRepositorio() {
+        this.clienteSet = new HashSet<>();
+    }
 
-
-   public void addCliente(Cliente cliente)
+    public void addCliente(Cliente cliente)
     {
         clienteSet.add(cliente);
     }
@@ -47,11 +47,4 @@ public class ClienteRepositorio {
     }
 
 
-    public void listaVacia () throws ExcepcionListaVacia
-    {
-        if(clienteSet.isEmpty())
-        {
-            throw new ExcepcionListaVacia("No hay clientes cargados");
-        }
-    }
 }

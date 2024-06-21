@@ -4,54 +4,72 @@ import Empleado.EmpleadoControlador;
 import Empleado.EmpleadoRepositorio;
 import Empleado.EmpleadoVista;
 import Excepciones.ExcepcionDNIStringInvalido;
+import Excepciones.ExcepcionEntradaInvalida;
 import Excepciones.ExcepcionNombreInvalido;
 
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MenuEmpleados {
 
     EmpleadoRepositorio empleadoRepositorio = new EmpleadoRepositorio();
     EmpleadoVista empleadoVista = new EmpleadoVista();
+    MenuPrincipal menuPrincipal = new MenuPrincipal();
 
 
-    EmpleadoControlador empleadoControlador = new EmpleadoControlador(empleadoVista,empleadoRepositorio);
+    EmpleadoControlador empleadoControlador = new EmpleadoControlador(empleadoVista, empleadoRepositorio);
 
     public void menuEmpleados() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException {
 
-    Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
-    int op = -1;
+        int op = -1;
         do {
-        System.out.println("----------------------------------MENU GESTION EMPLEADOS------------------------------");
+            try {
+                System.out.println("----------------------------------MENU GESTION EMPLEADOS------------------------------");
 
-        System.out.println("1- Agregar empleados");
-        System.out.println("2- Eliminar empleados");
-        System.out.println("3- Modificar empleados");
-        System.out.println("4- Listar empleados");
-        System.out.println("5- Volver");
+                System.out.println("1- Agregar empleados");
+                System.out.println("2- Eliminar empleados");
+                System.out.println("3- Modificar empleados");
+                System.out.println("4- Mostrar empleados");
+                System.out.println("5- Mostrar un empleado");
+                System.out.println("6- Volver al menu principal");
+                System.out.println("7- Salir del sistema");
 
-        System.out.println("Ingrese una opción");
-        op = scanner.nextInt(); // Leer la entrada como cadena
-        switch (op) {
-            case 1:
-                    empleadoControlador.agregarEmpleado();
-                break;
-            case 2:
-                    empleadoControlador.eliminarEmpleado();
-                break;
-            case 3:
-                    empleadoControlador.modificarEmpleado();
-                break;
-            case 4:
-                    empleadoControlador.mostrarListaEmpleados();
-                break;
-            case 5:
-                break;
-            default:
-                System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
+                System.out.println("Ingrese una opción");
+                op = scanner.nextInt(); // Leer la entrada como cadena
+                switch (op) {
+                    case 1:
+                        empleadoControlador.agregarEmpleado();
+                        break;
+                    case 2:
+                        empleadoControlador.eliminarEmpleado();
+                        break;
+                    case 3:
+                        empleadoControlador.modificarEmpleado();
+                        break;
+                    case 4:
+                        empleadoControlador.mostrarListaEmpleados();
+                        break;
+                    case 5:
+                        empleadoControlador.mostrarUnEmpleado();
+                        break;
+                    case 6:
+                        //menuPrincipal.menuPrincipal();
+                        break;
+                    case 7:
+                        System.out.println("Saliendo...");
+                        System.exit(0);
+                    default:
+                        System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
+                scanner.nextLine();
+            }
         }
-    } while (op!=5);
-        scanner.close();
-}
-}
+            while (op != 6 && op!=7) ;
+            scanner.close();
+        }
+    }

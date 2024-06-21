@@ -1,7 +1,9 @@
 package Orden;
 
+import Excepciones.ExcepcionEntradaInvalida;
 import Plato.Plato;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class OrdenVista {
@@ -25,21 +27,36 @@ public class OrdenVista {
         System.out.println(mensaje);
     }
 
-    public Integer pedirIdOrden(){
+    public Integer pedirIdOrden() throws ExcepcionEntradaInvalida {
         Scanner scan = new Scanner(System.in);
         System.out.print("Ingrese el ID de la orden buscada: ");
-        return scan.nextInt();
+        try {
+            return scan.nextInt();
+        } catch (InputMismatchException e) {
+            scan.nextLine(); // Limpiar el buffer
+            throw new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.");
+        }
     }
 
-    public Integer pedirIdOrdenModificar(){
+    public Integer pedirIdOrdenModificar() throws ExcepcionEntradaInvalida {
         Scanner scan = new Scanner(System.in);
         System.out.print("Ingrese el ID de la orden a modificar: ");
-        return scan.nextInt();
+        try {
+            return scan.nextInt();
+        } catch (InputMismatchException e) {
+            scan.nextLine(); // Limpiar el buffer
+            throw new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.");
+        }
     }
 
-    public Integer pedirIdOrdenEliminar(){
+    public Integer pedirIdOrdenEliminar() throws ExcepcionEntradaInvalida {
         Scanner scan = new Scanner(System.in);
         System.out.print("Ingrese el ID de la orden a eliminar: ");
-        return scan.nextInt();
+        try {
+            return scan.nextInt();
+        } catch (InputMismatchException e) {
+            scan.nextLine(); // Limpiar el buffer
+            throw new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.");
+        }
     }
 }
