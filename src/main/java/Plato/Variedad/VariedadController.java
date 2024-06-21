@@ -1,11 +1,13 @@
 package Plato.Variedad;
 
+import Plato.Excepciones.ExcepIngresoInvalido;
+
 import java.util.List;
 
 public class VariedadController {
 
-    private VariedadVista vVista;
-    private VariedadRepositorio vRepositorio;
+    VariedadVista vVista;
+    VariedadRepositorio vRepositorio;
 
     public VariedadController(VariedadVista vVista, VariedadRepositorio vRepositorio) {
         this.vVista = vVista;
@@ -28,16 +30,16 @@ public class VariedadController {
         vRepositorio.limpiarLista();
     }
 
-    public List<Variedad> copiaListaVar(){
-        return vRepositorio.copiaListaVar();
-    }
-
     public double checkPrecio(String precio){
         return vVista.checkDouble(precio);
     }
 
     public double cargarPrecio(VariedadVista vVista){
         return vVista.ingresarPrecio();
+    }
+
+    public String cargarNombre(VariedadVista vVista) throws ExcepIngresoInvalido {
+        return  vVista.ingresarNombre();
     }
 
 

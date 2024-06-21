@@ -1,7 +1,5 @@
 package Plato;
-
 import Plato.Variedad.Variedad;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -47,33 +45,19 @@ public class Plato {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
     public List<Variedad> getVariedades() {
         return variedades;
-    }
-
-    public void setVariedades(List<Variedad> variedades) {
-        this.variedades = variedades;
     }
 
     // Modifique el toString para darle un mejor formato a la impresion de un plato solo utilizando StringBuilder
     // construyendo el String dependiendo se tiene variedad o no el plato.
     @Override
     public String toString() {
-        StringBuilder constructorString = new StringBuilder();
-        constructorString.append(String.format("- %-30s ", nombre));
         if (variedades == null || variedades.isEmpty()) {
-            constructorString.append(String.format("$%6.2f", precio));
+            return String.format("%-40s $%.2f", nombre, precio);
         } else {
-            constructorString.append("\n");
-            for (Variedad variedad : variedades) {
-                constructorString.append(variedad.toString()).append("\n");
-            }
+            return nombre; // Para el encabezado del plato con variedades
         }
-        return constructorString.toString();
     }
 
     @Override
@@ -81,12 +65,12 @@ public class Plato {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Plato plato = (Plato) object;
-        return Double.compare(precio, plato.precio) == 0 && Objects.equals(nombre, plato.nombre);
+        return Objects.equals(nombre, plato.nombre);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nombre, precio);
+        return Objects.hash(nombre);
     }
 
 

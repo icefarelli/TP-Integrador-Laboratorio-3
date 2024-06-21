@@ -1,4 +1,6 @@
 package Plato.Variedad;
+import Plato.Excepciones.ExcepIngresoInvalido;
+
 import java.util.Scanner;
 
 public class VariedadVista {
@@ -7,14 +9,27 @@ public class VariedadVista {
     //Crea una variedad dentro de un Plato
 
     public Variedad crearUnaVariedad() {
-        System.out.println("Ingrese el nombre de la variedad:");
-        String nombreVariedad = scanner.nextLine();
-        double precioVariedad = ingresarPrecio();
-        if (precioVariedad != 0.0) {
-            return new Variedad(nombreVariedad, precioVariedad);
-        } else {
-            System.out.println("La variedad no pudo ser creada.");
-            return null;
+        try {
+            System.out.println("Ingrese el nombre de la variedad:");
+            String nombreVariedad = ingresarNombre();
+            double precioVariedad = ingresarPrecio();
+            if (precioVariedad != 0.0) {
+                return new Variedad(nombreVariedad, precioVariedad);
+            } else {
+                System.out.println("La variedad no pudo ser creada.");
+                return null;
+            }
+        }catch (ExcepIngresoInvalido eii){
+            System.out.println(eii.getMessage());
+        }
+        return null;
+    }
+    public String ingresarNombre() throws ExcepIngresoInvalido {
+        String nombre = scanner.nextLine();
+        if (nombre == null || nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z ]+")) {
+            throw new ExcepIngresoInvalido("Ha ingresado Numeros o Caracteres invalidos en el nombre.\nEl nombre del plato solo debe contener letras.");
+        }else {
+            return nombre;
         }
     }
 

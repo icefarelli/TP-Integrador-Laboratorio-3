@@ -1,16 +1,17 @@
 package Plato;
 import Plato.Excepciones.ExcepCargaNoRealizada;
 import Plato.Excepciones.ExcepIngresoInvalido;
+import Plato.Excepciones.ExcepPlatoExistente;
+import Plato.Variedad.VariedadController;
+import Plato.Variedad.VariedadVista;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-
 
 public class PlatoControlador {
-    private PlatoRepositorio platoRepositorio;
-    private PlatoVista platoVista;
+    PlatoRepositorio platoRepositorio;
+    PlatoVista platoVista;
+    VariedadVista varVista;
+    VariedadController varController;
 
     public PlatoControlador(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
         this.platoRepositorio = platoRepositorio;
@@ -18,33 +19,42 @@ public class PlatoControlador {
     }
 
     //Agregar Plato
-    public void cargarPlatoEnSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
+    public void cargarPlatoEnSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws RuntimeException {
 //
-        Plato nuevoPlato = null;
+        Plato nuevoPlato= null;
         try {
             nuevoPlato = platoVista.nuevoPlato();
-
             if (nuevoPlato != null) {
+                platoRepositorio.comprobarExistenciaPlato(nuevoPlato.getNombre());
+                platoVista.printearLineasSeparadoras();
                 boolean confirm = platoVista.metodoConfirmacion("¿Desea confirmar la carga?");
-
                 if (confirm) {
                     platoRepositorio.agregar(nuevoPlato);
                     platoVista.mensajeCargaExitoFracaso(true);
+                    platoVista.printearLineasSeparadoras();
                 } else {
                     platoVista.mensajeCargaExitoFracaso(false);
+                    platoVista.printearLineasSeparadoras();
                 }
             }
         } catch (ExcepCargaNoRealizada e) {
-            throw new RuntimeException(e);
+            System.out.println("Error: " + e.getMessage());
+        }catch (ExcepPlatoExistente epe){
+            System.out.println(epe.getMessage());
+            platoVista.printearLineasSeparadoras();
+            platoRepositorio.mostrarPlato(platoRepositorio.buscarPlatoXnombre(nuevoPlato.getNombre()));
+            System.out.println();
+            platoVista.printearLineasSeparadoras();
         }
     }
 
     //Eliminar Plato
-    public void eliminarPlatosDelSistemaXNombre(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
+    public void eliminarPlatosDelSistemaXNombre(PlatoRepositorio platoRepositorio, PlatoVista platoVista, VariedadController varController, VariedadVista varVista) {
         Plato buscado;
 
         try {
-            String nombre = platoVista.ingresarNombre();
+            platoVista.mensajePersonalizado("Ingrese el nombre del Plato a eliminar");
+            String nombre = varController.cargarNombre(varVista);
 
             buscado = platoRepositorio.buscarPlatoXnombre(nombre);
 
@@ -52,9 +62,9 @@ public class PlatoControlador {
                 boolean confirmEliminar = platoVista.metodoConfirmacion("¿Confirmar la eliminacion?");
                 if (confirmEliminar) {
                     platoRepositorio.eliminar(buscado);
-                    platoVista.mensajeEliminacionExitoFracaso(confirmEliminar);
+                    platoVista.mensajeEliminacionExitoFracaso(true);
                 } else {
-                    platoVista.mensajeEliminacionExitoFracaso(confirmEliminar);
+                    platoVista.mensajeEliminacionExitoFracaso(false);
                 }
             }else {
                 platoVista.mensajeEliminacionPlatoInexistente();
@@ -65,78 +75,86 @@ public class PlatoControlador {
         }
     }
 
-    public void eliminarPlatosDelSistemaXSeleccion(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
+    public void eliminarPlatosDelSistemaXSeleccion(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws NumberFormatException {
+        Plato buscado = null;
+        int indiceSeleccionado;
         try {
-            Plato buscado;
+
             String tipo = platoVista.menuTipoComida();
             List<Plato> listaP = platoRepositorio.enlistarXTipoSinVariedad(tipo);
-            int indiceSeleccionado = 0;
             do {
-                platoRepositorio.mostrarEnlistadoBonitoXtipoOld(tipo);
+
+                platoRepositorio.mostrarListaParaEliminar(listaP);
                 indiceSeleccionado = platoVista.obtenerIndiceSeleccionado(listaP);
+
                 if (indiceSeleccionado == -1) {
                     System.out.println("Selección cancelada.");
-                    buscado = null;
-                } else if (indiceSeleccionado > listaP.size()) {
-                    try {
-                        throw new ExcepIngresoInvalido("Opcion Inexistente. Intente Nuevamente");
-                    } catch (ExcepIngresoInvalido e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
+                    return;
+                } else if (indiceSeleccionado >= 0 && indiceSeleccionado < listaP.size()) {
                     buscado = listaP.get(indiceSeleccionado);
+                } else {
+                    System.out.println("Opción inexistente. Por favor, intente nuevamente.");
                 }
-            }while (indiceSeleccionado > listaP.size());
-
+            }while (indiceSeleccionado < 0 || indiceSeleccionado >= listaP.size());
 
             if (buscado != null) {
-                boolean confirmEliminar = platoVista.metodoConfirmacion("¿Confirmar la eliminacion?");
+                boolean confirmEliminar = platoVista.metodoConfirmacion("¿Confirmar la eliminación?");
                 if (confirmEliminar) {
                     platoRepositorio.eliminar(buscado);
-                    platoVista.mensajeEliminacionExitoFracaso(confirmEliminar);
+                    platoVista.mensajeEliminacionExitoFracaso(true);
                 } else {
-                    platoVista.mensajeEliminacionExitoFracaso(confirmEliminar);
+                    platoVista.mensajeEliminacionExitoFracaso(false);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NumberFormatException nfe){
+            platoVista.mensajePersonalizado(nfe.getMessage());
         }
+
     }
 
     //Actualizar Platos y sus variantes
-    public void actualizarPlatoExistente(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws ExcepIngresoInvalido, IOException {
-        String tipo = platoVista.menuTipoComida();
-        platoRepositorio.mostrarEnlistadoBonitoXtipoOld(tipo);
-
-        String nombre;
-        do {
-            nombre = platoVista.ingresarNombre();
-        }while (nombre==null);
-
-        Plato buscado;
+    public void actualizarPlatoExistente(PlatoRepositorio platoRepositorio, PlatoVista platoVista, VariedadController varController, VariedadVista varVista) throws NumberFormatException {
         try {
-            buscado = platoRepositorio.buscarPlatoXnombre(nombre);
-        } catch (ExcepIngresoInvalido e) {
-            throw new RuntimeException(e);
-        }
+            String tipo = platoVista.menuTipoComida();
+            platoVista.printearLineasSeparadoras();
+            platoRepositorio.mostrarEnlistadoBonitoXtipoNew(tipo);
+            platoVista.printearLineasSeparadoras();
+            String nombre;
+            do {
+                platoVista.mensajePersonalizado("Ingrese el nombre del plato a modificar: ");
+                nombre = varController.cargarNombre(varVista);
+            } while (nombre == null);
 
-        if (buscado == null) {
-            platoVista.mensajePersonalizado("Plato no encontrado");
-        }else {
-            System.out.println(buscado.toString());
-            Plato actualizado = platoVista.actualizarPlato(tipo, nombre);
-            if (actualizado == null) {
-                throw new ExcepIngresoInvalido("Carga de datos inválida. \nIntente nuevamente.");
-            }
-            System.out.println(actualizado.toString());
+            Plato buscado = platoRepositorio.buscarPlatoXnombre(nombre);
 
-            boolean confirmUpdate = platoVista.metodoConfirmacion("¿Confirmar la actualizacion?");
-            if(confirmUpdate){
-                platoRepositorio.modificar(actualizado);
-                platoVista.mensajeCargaExitoFracaso(confirmUpdate);
-            }else {
-                platoVista.mensajeCargaExitoFracaso(confirmUpdate);
+            if (buscado == null) {
+                platoVista.printearLineasSeparadoras();
+                platoVista.mensajePersonalizado("Plato no encontrado");
+            } else {
+                platoVista.printearLineasSeparadoras();
+                platoRepositorio.mostrarUnPlato(buscado);
+                platoVista.printearLineasSeparadoras();
+                Plato actualizado = platoVista.actualizarPlato(tipo, nombre, buscado.getVariedades());
+                if (actualizado == null) {
+                    platoVista.printearLineasSeparadoras();
+                    throw new ExcepIngresoInvalido("No se realizaron modificaciones en el Plato.");
+                }
+                platoRepositorio.mostrarUnPlato(actualizado);
+                platoVista.printearLineasSeparadoras();
+                boolean confirmUpdate = platoVista.metodoConfirmacion("¿Confirmar la actualización?");
+                if (confirmUpdate) {
+                    platoRepositorio.modificar(actualizado);
+                    platoVista.printearLineasSeparadoras();
+                    platoVista.mensajeCargaExitoFracaso(true);
+                } else {
+                    platoVista.printearLineasSeparadoras();
+                    platoVista.mensajeCargaExitoFracaso(false);
+                }
             }
+        }catch (NumberFormatException | ExcepIngresoInvalido nfe){
+            platoVista.printearLineasSeparadoras();
+            platoVista.mensajePersonalizado(nfe.getMessage());
+            platoVista.printearLineasSeparadoras();
         }
     }
 
@@ -149,14 +167,14 @@ public class PlatoControlador {
     public Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
 
         String tipo = platoVista.menuTipoComida();
-        List<Plato> listaP = new ArrayList<>();
+        List<Plato> listaP;
         if(tipo !=null){
             listaP = platoRepositorio.enlistarXTipo(tipo);
         }else {
             return null;
         }
 
-        int indiceSeleccionado = 0;
+        int indiceSeleccionado;
         do {
             platoRepositorio.mostrarEnlistadoBonitoXtipoOld(tipo);
             indiceSeleccionado = platoVista.obtenerIndiceSeleccionado(listaP);
@@ -184,13 +202,6 @@ public class PlatoControlador {
         platoRepositorio.mostrarCartaDePlatosCompleta();
     }
 
-
-    //metodo simil limpiar pantalla
-    public static void limpiarPantalla() {
-        for (int i = 0; i < 50; i++) { // Puedes ajustar el número de líneas según sea necesario
-            System.out.println();
-        }
-    }
     //metodo pausar pantalla
     public static void pausarPantalla(PlatoVista platoVista) {
         platoVista.pausarPantalla();
