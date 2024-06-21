@@ -11,6 +11,7 @@ import Excepciones.ExcepcionReservaCamposVacios;
 import Excepciones.ExcepcionReservaCaracterInvalido;
 import Excepciones.ExcepcionReservaNoEncontrada;
 import Excepciones.ExcepcionReservaValorNegativo;
+import Plato.Colores.Colores;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -56,7 +57,7 @@ public class MenuClientes {
 
         do {
             try {
-                System.out.println("----------------------------------MENU GESTION CLIENTES------------------------------");
+                Colores.printInColor("========MENU GESTION CLIENTES========", Colores.BLUE);
                 System.out.println(". Elija una opción: ");
                 System.out.println("1. Agregar cliente");
                 System.out.println("2. Eliminar cliente");
@@ -64,7 +65,8 @@ public class MenuClientes {
                 System.out.println("4. Consultar teléfono de cliente");
                 System.out.println("5. Ver todos los clientes");
                 System.out.println("6. Volver al menú principal");
-                System.out.println("7. XXXXXXX EXIT XXXXXXX");
+                System.out.println("7. Salir del sistema");
+                Colores.printInColor("-------------------------------------", Colores.BLUE);
                 ok = scanner.nextInt();
 
                 switch (ok) {
@@ -84,7 +86,7 @@ public class MenuClientes {
                         clienteControlador.viewClientes();
                         break;
                     case 6:
-                        menuPrincipal.menuPrincipal();
+                        System.out.println("Volviendo al menu principal...");
                         break;
                     case 7:
                         System.out.println("Saliendo...");
@@ -92,35 +94,22 @@ public class MenuClientes {
                         break;
                     default:
                         System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
-                        continue;
                 }
 
-                Integer seguir = seguirOSalir();
+                //comentario de Ivan: Este seguirOSalir() no seria necesario si ya se da la
+                //opción de salir en switch y está dentro de un bucle para que haga otra cosa
+                /*Integer seguir = seguirOSalir();
                 if (seguir == 0) {
                     System.out.println("Saliendo...");
                     System.exit(0);
-                }
+                }*/
 
             } catch (InputMismatchException e) {
                 System.out.println("Entrada inválida. Debe ingresar un número entero.");
                 scanner.nextLine();
-            } catch (ExcepcionFormatoIncorrecto e) {
-                System.out.println(e.getMessage());
-                scanner.nextLine();
-            } catch (ExcepcionReservaCamposVacios e) {
-                throw new RuntimeException(e);
-            } catch (ExcepcionReservaNoEncontrada e) {
-                throw new RuntimeException(e);
-            } catch (ExcepcionClienteNoEncontrado e) {
-                throw new RuntimeException(e);
-            } catch (ExcepcionReservaCaracterInvalido e) {
-                throw new RuntimeException(e);
-            } catch (ExcepcionReservaValorNegativo e) {
-                throw new RuntimeException(e);
             }
         } while (ok != 6 && ok != 7);
 
-        scanner.close();
     }
 
 }

@@ -1,63 +1,74 @@
 package GestionMenu;
 
-import Cliente.ClienteControlador;
-import Cliente.ClienteRepositorio;
-import Excepciones.ExcepcionClienteNoEncontrado;
-import Excepciones.ExcepcionFormatoIncorrecto;
-import Excepciones.ExcepcionDNIStringInvalido;
-import Excepciones.ExcepcionNombreInvalido;
-import Excepciones.ExcepcionReservaCamposVacios;
-import Excepciones.ExcepcionReservaCaracterInvalido;
-import Excepciones.ExcepcionReservaNoEncontrada;
-import Excepciones.ExcepcionReservaValorNegativo;
+
+
+
+import Excepciones.*;
+import Plato.Colores.Colores;
 
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MenuPrincipal {
 
-    public void menuPrincipal() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionReservaCamposVacios, ExcepcionReservaNoEncontrada, ExcepcionClienteNoEncontrado, ExcepcionReservaCaracterInvalido, ExcepcionReservaValorNegativo, ExcepcionFormatoIncorrecto {
+    public void menuPrincipal() throws ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionFormatoIncorrecto, ExcepcionClienteNoEncontrado {
 
         MenuEmpleados menuEmpleados = new MenuEmpleados();
         MenuReservas menuReservas = new MenuReservas();
         MenuClientes menuClientes = new MenuClientes();
+        MenuPlato menuPlato = new MenuPlato();
+        MenuOrdenes menuOrdenes = new MenuOrdenes();
 
-        System.out.println("--------------------BIENVENIDOS A ´INTERFAZ DE SABORES´---------------------------");
+        Colores.printInColor("========BIENVENIDOS A ´INTERFAZ DE SABORES´========", Colores.YELLOW);
         System.out.println("Que desea hacer?");
 
         Scanner scanner = new Scanner(System.in);
 
         int op = -1;
         do {
-            System.out.println("1- RESERVAS");
-            System.out.println("2- ORDENES");
-            System.out.println("3- GESTION DE EMPLEADOS");
-            System.out.println("4- GESTION DE CLIENTES");
+            try {
+                System.out.println("1. Reservas");
+                System.out.println("2. Ordenes");
+                System.out.println("3. Gestion de Empleados");
+                System.out.println("4. Gestion de Clientes");
+                System.out.println("5. Gestion de Platos");
 
-            System.out.println("5- Salir");
+                System.out.println("0. Salir");
 
-            System.out.println("Ingrese una opción");
-            op = scanner.nextInt(); // Leer la entrada como cadena
-            switch (op) {
-                case 1:
-                    menuReservas.menuReservas();
-                    break;
-                case 2:
-                    //agregar menu de ordenes
-                    break;
-                case 3:
-                    menuEmpleados.menuEmpleados();
-                    break;
-                case 4:
-                    menuClientes.menuCliente();
-                    break;
-                case 5:
-                    break;
-                default:
-                    System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
+                System.out.println("Ingrese una opción");
+                op = scanner.nextInt(); // Leer la entrada como cadena
+                scanner.nextLine();
+                switch (op) {
+                    case 1:
+                        menuReservas.menuReservas();
+                        break;
+                    case 2:
+                        menuOrdenes.menuOrdenes();
+                        break;
+                    case 3:
+                        menuEmpleados.menuEmpleados();
+                        break;
+                    case 4:
+                        menuClientes.menuCliente();
+                        break;
+                    case 5:
+                        menuPlato.mainMenu();
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
+                }
+            }catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Debe ingresar un número entero.");
+                scanner.nextLine();
+            } catch (ExcepcionEntradaInvalida e) {
+                System.out.println(e.getMessage());
+            } catch (ExcepcionOrdenNoEncontrada excepcionOrdenNoEncontrada) {
+                System.out.println(excepcionOrdenNoEncontrada.getMessage());;
             }
-        } while (op!=5);
+        } while (op!=0);
         scanner.close();
     }
-
 }

@@ -5,9 +5,11 @@ import Excepciones.ExcepcionFormatoIncorrecto;
 import Cliente.Cliente;
 import Cliente.ClienteRepositorio;
 import Cliente.ClienteVista;
+import Cliente.ClienteControlador;
 import Empleado.Empleado;
 import Empleado.EmpleadoRepositorio;
 import Empleado.EmpleadoVista;
+import Empleado.EmpleadoControlador;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionEntradaInvalida;
 import Excepciones.ExcepcionOrdenNoEncontrada;
@@ -16,6 +18,7 @@ import Plato.PlatoControlador;
 import Plato.PlatoRepositorio;
 import Plato.PlatoVista;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 
 
@@ -46,7 +49,7 @@ public class OrdenControlador {
     }
 
 
-    public void crearOrden() throws ExcepcionClienteNoEncontrado, ExcepcionDNIStringInvalido, ExcepcionFormatoIncorrecto {
+    public void crearOrden() throws ExcepcionClienteNoEncontrado, ExcepcionDNIStringInvalido, ExcepcionFormatoIncorrecto, FileNotFoundException {
 
         ordenRepositorio.cargarOrdenesDesdeArchivo();
         Integer idOrden;
@@ -56,10 +59,11 @@ public class OrdenControlador {
             idOrden = ordenRepositorio.obtenerMap().lastKey();
         }
 
+        ClienteControlador clienteControlador = new ClienteControlador(clienteVista, clienteRepositorio);
+        clienteControlador.loadGestionCliente();
         Set<Cliente> setClientes = clienteRepositorio.getClienteSet();
         Integer clienteId;
         Cliente c = null;
-
         do {
             clienteId = clienteVista.seleccId();
             try {
@@ -70,6 +74,8 @@ public class OrdenControlador {
         } while (c == null);
 
 
+        EmpleadoControlador empleadoControlador = new EmpleadoControlador(empleadoVista, empleadoRepositorio);
+        empleadoControlador.pasarAMemoria();
         Integer claveEmpleado;
         Empleado e;
         do {
