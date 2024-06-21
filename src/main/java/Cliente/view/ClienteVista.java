@@ -1,12 +1,10 @@
 package Cliente.view;
 
-import Cliente.Excepciones.ExcepcionCamposVacios;
-import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
-import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
-import Cliente.Excepciones.ExcepcionNombreNumerico;
+import Excepciones.ExcepcionCamposVacios;
+import Excepciones.ExcepcionFormatoIncorrecto;
+import Excepciones.ExcepcionNombreNumerico;
 import Cliente.model.entitie.Cliente;
 
-import java.sql.SQLOutput;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
@@ -124,7 +122,7 @@ public class ClienteVista {
         }
     }
 
-    private boolean contieneNumeros(String str) {
+    public boolean contieneNumeros(String str) {
         return str.matches(".*\\d.*");
     }
 

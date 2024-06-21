@@ -1,13 +1,13 @@
 package GestionMenu;
 
-import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
-import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
+import Excepciones.ExcepcionClienteNoEncontrado;
+import Excepciones.ExcepcionFormatoIncorrecto;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionNombreInvalido;
-import Excepciones.Reservas.ExcepcionReservaCamposVacios;
-import Excepciones.Reservas.ExcepcionReservaCaracterInvalido;
-import Excepciones.Reservas.ExcepcionReservaNoEncontrada;
-import Excepciones.Reservas.ExcepcionReservaValorNegativo;
+import Excepciones.ExcepcionReservaCamposVacios;
+import Excepciones.ExcepcionReservaCaracterInvalido;
+import Excepciones.ExcepcionReservaNoEncontrada;
+import Excepciones.ExcepcionReservaValorNegativo;
 
 import java.io.IOException;
 import java.util.Scanner;

@@ -1,4 +1,4 @@
-package Cliente.Excepciones;
+package Excepciones;
 
 public class ExcepcionClienteNoEncontrado extends Exception{
 

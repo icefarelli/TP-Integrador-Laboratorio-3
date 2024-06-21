@@ -1,8 +1,8 @@
 package Reserva;
 
-import Excepciones.Reservas.ExcepcionReservaCamposVacios;
-import Excepciones.Reservas.ExcepcionReservaCaracterInvalido;
-import Excepciones.Reservas.ExcepcionReservaValorNegativo;
+import Excepciones.ExcepcionReservaCamposVacios;
+import Excepciones.ExcepcionReservaCaracterInvalido;
+import Excepciones.ExcepcionReservaValorNegativo;
 import MesasReservadas.MesasReservadas;
 
 import java.time.LocalDate;
