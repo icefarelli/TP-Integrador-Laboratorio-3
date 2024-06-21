@@ -78,7 +78,7 @@ public class MenuOrdenes {
                         }
                         break;
                     case 6:
-                        new MenuPrincipal().menuPrincipal();
+                        System.out.println("Volviendo al menu principal...");
                         break;
                     case 7:
                         System.out.println("Saliendo...");
@@ -87,12 +87,10 @@ public class MenuOrdenes {
                     default:
                         System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
                 }
-            }catch (InputMismatchException | ExcepcionReservaCamposVacios | ExcepcionReservaNoEncontrada |
-                     ExcepcionReservaCaracterInvalido | ExcepcionReservaValorNegativo e) {
+            }catch (InputMismatchException e) {
                 System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
                 scanner.nextLine();
             }
         } while (op != 6 && op != 7);
-        scanner.close();
     }
 }
