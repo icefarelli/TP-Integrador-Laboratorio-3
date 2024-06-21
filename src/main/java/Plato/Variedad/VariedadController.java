@@ -19,6 +19,7 @@ public class VariedadController {
             Variedad variedad = vRepositorio.cargaDeVariedad(vVista.crearUnaVariedad());
             if (variedad != null) {
                 vRepositorio.cargaListaVariedad(variedad);
+                vVista.mensajeCargaCorrecta();
             } else {
                 vVista.mensajeCargaIncorrecta();
             }

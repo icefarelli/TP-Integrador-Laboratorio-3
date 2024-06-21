@@ -6,6 +6,8 @@ import Plato.Variedad.Variedad;
 import Plato.Variedad.VariedadController;
 import Plato.Variedad.VariedadRepositorio;
 import Plato.Variedad.VariedadVista;
+
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -18,41 +20,35 @@ public class PlatoVista {
     VariedadController variedadController = new VariedadController(varVista, varRepositorio);
 
     //Crear un nuevo plato para el menu
-    public Plato nuevoPlato() throws ExcepCargaNoRealizada, NullPointerException {
-        Colores.printInColor("=====CARGAR UN NUEVO PLATO===== ",Colores.GREEN);
+    public Plato nuevoPlato(String categoria, String nombre) throws ExcepCargaNoRealizada, NullPointerException {
+        //Colores.printInColor("=====CARGAR UN NUEVO PLATO===== ",Colores.GREEN);
         try {
-            String tipo = menuTipoComida();
-            String nombre;
-
-            if (tipo == null) {
+            //String tipo = menuTipoComida();
+            if (categoria == null) {
                 throw new NumberFormatException("Saliendo...");
             } else {
-                printearLineasSeparadoras();
-                System.out.println("Ingrese el Nombre del Plato");
-                nombre = variedadController.cargarNombre(varVista);
+//                printearLineasSeparadoras();
+//                System.out.println("Ingrese el Nombre del Plato");
+//                nombre = variedadController.cargarNombre(varVista);
                 printearLineasSeparadoras();
                 boolean tieneVariedades = metodoConfirmacion("-¿Este plato tiene variedades?");
 
                 if (tieneVariedades) {
                     printearLineasSeparadoras();
                     List<Variedad> listaVariedad = variedadController.crearListaDeVariedades(varVista, varRepositorio);
-                    return new Plato(tipo, nombre, listaVariedad);
+                    return new Plato(categoria, nombre, listaVariedad);
                 } else {
                     printearLineasSeparadoras();
                     double price = variedadController.cargarPrecio(varVista);
                     if (price != 0.0) {
-                        return new Plato(tipo, nombre, price);
+                        return new Plato(categoria, nombre, price);
                     } else {
                         printearLineasSeparadoras();
                         throw new ExcepCargaNoRealizada("No se realizo la Carga correctamente");
                     }
                 }
             }
-        }catch (ExcepIngresoInvalido eii){
-            printearLineasSeparadoras();
-            mensajePersonalizado("Ocurrió un error al cargar el plato: \n" + eii.getMessage());
-            return null;
-        }catch (NumberFormatException nfe){
+        } catch (NumberFormatException nfe){
             printearLineasSeparadoras();
             mensajePersonalizado(nfe.getMessage());
             return null;
@@ -60,8 +56,10 @@ public class PlatoVista {
             printearLineasSeparadoras();
             mensajePersonalizado("Error Al Ingresar datos en el nombre.");
             return null;
+        }catch (IllegalArgumentException iae){
+        System.out.println(iae.getMessage());
+        return null;
         }
-
     }
 
     //Metodo de confirmacion para concretar o validar acciones
@@ -89,40 +87,43 @@ public class PlatoVista {
         System.out.println("La Categoria -" + tipo + "- y su nombre -" + nombre + "- no seran afectados.");
         System.out.println("Al actualizar se pueden agregar variedades a las preexistentes o agregar si el plato no posee.");
         System.out.println("El precio nuevo reemplazara al anterior. Ingrese correctamente los datos.");
-        boolean confirmacion2;
+
+        List<Variedad> listaNueva = new ArrayList<>(listaAnterior);
+
         if (!listaAnterior.isEmpty()) {
             boolean confirmacion1 = metodoConfirmacion("El plato ya posee variedades. ¿Agregar mas?");
             if (confirmacion1) {
-                variedadController.limparListaVariedades();
+                //variedadController.limparListaVariedades();
                 List<Variedad> listaAgregados = variedadController.crearListaDeVariedades(varVista, varRepositorio);
-                listaAgregados.addAll(listaAnterior);
-                return new Plato(tipo, nombre, listaAgregados);
-            }
-            confirmacion2 = metodoConfirmacion("¿Desea eliminar la variedad actual y crear una nueva?");
-            if(confirmacion2) {
-                variedadController.limparListaVariedades();
-                List<Variedad> listaNueva = variedadController.crearListaDeVariedades(varVista, varRepositorio);
+                listaNueva.addAll(listaAgregados);
                 return new Plato(tipo, nombre, listaNueva);
-            }else {
-                boolean confirmacion3 = metodoConfirmacion("¿Desea eliminar las variedades del producto?");
-                if(confirmacion3) {
-                    double price = ingresePrecioDePlato();
-                    if (price != 0.0) {
-                        return new Plato(tipo, nombre, price);
-                    } else {
-                        System.out.println("El Plato no pudo ser creado.");
-                        return null;
-                    }
-                }else {
+            }
+
+            boolean confirmacion2 = metodoConfirmacion("¿Desea eliminar la variedad actual y crear una nueva?");
+            if(confirmacion2) {
+                //variedadController.limparListaVariedades();
+                listaNueva = variedadController.crearListaDeVariedades(varVista, varRepositorio);
+                return new Plato(tipo, nombre, listaNueva);
+            }
+
+            boolean confirmacion3 = metodoConfirmacion("¿Desea eliminar las variedades del producto?");
+            if(confirmacion3) {
+                double price = ingresePrecioDePlato();
+                if (price != 0.0) {
+                    return new Plato(tipo, nombre, price);
+                } else {
+                    System.out.println("El Plato no pudo ser creado.");
                     return null;
                 }
+            }else {
+                return null;
             }
         } else {
             boolean respuesta = metodoConfirmacion("El plato no posee variedades. ¿Desea agregarlas?");
             if (respuesta) {
                 variedadController.limparListaVariedades();
-                List<Variedad> listaCreada = variedadController.crearListaDeVariedades(varVista, varRepositorio);
-                return new Plato(tipo, nombre, listaCreada);
+                listaNueva = variedadController.crearListaDeVariedades(varVista, varRepositorio);
+                return new Plato(tipo, nombre,listaNueva);
             } else {
                 double price = ingresePrecioDePlato();
                 if (price != 0.0) {

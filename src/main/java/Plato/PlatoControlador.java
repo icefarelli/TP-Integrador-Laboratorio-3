@@ -19,32 +19,44 @@ public class PlatoControlador {
     }
 
     //Agregar Plato
-    public void cargarPlatoEnSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws RuntimeException {
+    public void cargarPlatoEnSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista, VariedadVista varVista,VariedadController varController) throws RuntimeException {
 //
-        Plato nuevoPlato= null;
+        Plato nuevoPlato = null;
         try {
-            nuevoPlato = platoVista.nuevoPlato();
-            if (nuevoPlato != null) {
-                platoRepositorio.comprobarExistenciaPlato(nuevoPlato.getNombre());
+            String tipo = platoVista.menuTipoComida();
+            platoRepositorio.mostrarEnlistadoBonitoXtipoNew(tipo);
+            platoVista.mensajePersonalizado("Ingrese el nombre del plato: ");
+            String nombre = varController.cargarNombre(varVista);
+            platoRepositorio.comprobarExistenciaPlato(nombre);
+
+                nuevoPlato = platoVista.nuevoPlato(tipo,nombre);
                 platoVista.printearLineasSeparadoras();
-                boolean confirm = platoVista.metodoConfirmacion("¿Desea confirmar la carga?");
-                if (confirm) {
-                    platoRepositorio.agregar(nuevoPlato);
-                    platoVista.mensajeCargaExitoFracaso(true);
-                    platoVista.printearLineasSeparadoras();
-                } else {
-                    platoVista.mensajeCargaExitoFracaso(false);
-                    platoVista.printearLineasSeparadoras();
+                if (nuevoPlato != null) {
+//                    platoRepositorio.comprobarExistenciaPlato(nuevoPlato.getNombre());
+//                    platoVista.printearLineasSeparadoras();
+                    boolean confirm = platoVista.metodoConfirmacion("¿Desea confirmar la carga?");
+                    if (confirm) {
+                        platoRepositorio.agregar(nuevoPlato);
+                        platoVista.mensajeCargaExitoFracaso(true);
+                        platoVista.printearLineasSeparadoras();
+                    } else {
+                        platoVista.mensajeCargaExitoFracaso(false);
+                        platoVista.printearLineasSeparadoras();
+                    }
                 }
-            }
+
         } catch (ExcepCargaNoRealizada e) {
             System.out.println("Error: " + e.getMessage());
-        }catch (ExcepPlatoExistente epe){
+        } catch (ExcepPlatoExistente epe){
             System.out.println(epe.getMessage());
             platoVista.printearLineasSeparadoras();
-            platoRepositorio.mostrarPlato(platoRepositorio.buscarPlatoXnombre(nuevoPlato.getNombre()));
+            //platoRepositorio.mostrarPlato(platoRepositorio.buscarPlatoXnombre(nuevoPlato.getNombre()));
             System.out.println();
             platoVista.printearLineasSeparadoras();
+        } catch (ExcepIngresoInvalido e) {
+            throw new RuntimeException(e);
+        }catch (NumberFormatException nfe){
+            System.out.println(nfe.getMessage());
         }
     }
 

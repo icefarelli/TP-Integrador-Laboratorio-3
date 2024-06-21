@@ -36,7 +36,7 @@ public class MenuPlato {
 
                 switch (opcion) {
                     case 1:
-                        pControlador.cargarPlatoEnSistema(repositorio, vista);
+                        pControlador.cargarPlatoEnSistema(repositorio, vista, varVista, varController);
                         PlatoControlador.pausarPantalla(vista);
                         break;
                     case 2:

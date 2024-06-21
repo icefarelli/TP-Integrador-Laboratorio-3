@@ -228,7 +228,7 @@ public class PlatoRepositorio implements IABM<Plato> {
                 System.out.println();//salto de linea
             }
         }
-        System.out.println(); //salto de linea
+        System.out.println("===================================================="); //salto de linea
     }
 
     //Si el plato contiene variedades imprime las variedades, sino imprime los platos base con sus valores

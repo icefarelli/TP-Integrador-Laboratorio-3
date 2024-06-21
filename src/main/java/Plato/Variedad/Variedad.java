@@ -9,9 +9,6 @@ public class Variedad {
         this.precio = precio;
     }
 
-    public Variedad() {
-    }
-
     public String getNombre() {
         return nombre;
     }
