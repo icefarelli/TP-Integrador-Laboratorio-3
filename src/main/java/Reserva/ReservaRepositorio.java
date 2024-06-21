@@ -1,7 +1,7 @@
 package Reserva;
 
 
-import Excepciones.Reservas.ExcepcionReservaNoEncontrada;
+import Excepciones.ExcepcionReservaNoEncontrada;
 import Interfaces.IABM;
 import MesasReservadas.MesasReservadas;
 import MesasReservadas.MesasReservadasRepositorio;

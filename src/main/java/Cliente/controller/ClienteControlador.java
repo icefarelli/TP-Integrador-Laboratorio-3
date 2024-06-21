@@ -1,9 +1,9 @@
 package Cliente.controller;
 
-import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
+import Excepciones.ExcepcionFormatoIncorrecto;
 import Cliente.model.entitie.Cliente;
 import Cliente.view.ClienteVista;
-import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
+import Excepciones.ExcepcionClienteNoEncontrado;
 import Cliente.model.repository.ClienteRepositorio;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,10 +28,10 @@ public class ClienteControlador {
         this.clienteVista = clienteVista;
         this.clienteRepositorio = clienteRepositorio;
         this.clienteSet = new HashSet<>();
-        this.loadGestionCurso();
+        this.loadGestionCliente();
     }
 
-    public void loadGestionCurso()
+    public void loadGestionCliente()
     {
         try (Reader reader= new FileReader(PATH);)
         {

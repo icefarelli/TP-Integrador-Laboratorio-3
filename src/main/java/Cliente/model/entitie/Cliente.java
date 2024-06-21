@@ -1,9 +1,8 @@
 package Cliente.model.entitie;
 
-import Cliente.Excepciones.ExcepcionCamposVacios;
+import Excepciones.ExcepcionCamposVacios;
 import Persona.Persona;
 
-import java.util.Comparator;
 import java.util.Objects;
 
 public class Cliente extends Persona implements Comparable<Cliente> {

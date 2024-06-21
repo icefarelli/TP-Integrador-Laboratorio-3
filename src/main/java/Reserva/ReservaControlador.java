@@ -1,15 +1,15 @@
 package Reserva;
 
 
-import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
+import Excepciones.ExcepcionClienteNoEncontrado;
 import Cliente.controller.ClienteControlador;
 import Cliente.model.entitie.Cliente;
 import Cliente.model.repository.ClienteRepositorio;
 import Cliente.view.ClienteVista;
-import Excepciones.Reservas.ExcepcionReservaCamposVacios;
-import Excepciones.Reservas.ExcepcionReservaCaracterInvalido;
-import Excepciones.Reservas.ExcepcionReservaNoEncontrada;
-import Excepciones.Reservas.ExcepcionReservaValorNegativo;
+import Excepciones.ExcepcionReservaCamposVacios;
+import Excepciones.ExcepcionReservaCaracterInvalido;
+import Excepciones.ExcepcionReservaNoEncontrada;
+import Excepciones.ExcepcionReservaValorNegativo;
 import MesasReservadas.MesasReservadas;
 import MesasReservadas.MesasReservadasRepositorio;
 
@@ -38,7 +38,7 @@ public class ReservaControlador {
     }
 
     public void agregarReserva() throws ExcepcionReservaCaracterInvalido, ExcepcionReservaCamposVacios, ExcepcionReservaValorNegativo, ExcepcionClienteNoEncontrado, ExcepcionReservaNoEncontrada {
-        clienteControlador.loadGestionCurso();
+        clienteControlador.loadGestionCliente();
         reservaRepositorio.cargarReserva();
         Reserva reserva = reservaVista.pedirFecha();
         LocalDate fecha = reservaRepositorio.buscarFecha(reserva.getFecha());

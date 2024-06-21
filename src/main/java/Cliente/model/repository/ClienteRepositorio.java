@@ -1,11 +1,11 @@
 package Cliente.model.repository;
 
 import Cliente.model.entitie.Cliente;
-import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
+import Excepciones.ExcepcionClienteNoEncontrado;
 
 import java.util.*;
 
-public class ClienteRepositorio {
+public class ClienteRepositorio  {
 
     private Set<Cliente> clienteSet = new HashSet<>();
 

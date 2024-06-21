@@ -1,7 +1,7 @@
 package Orden;
 
-import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
-import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
+import Excepciones.ExcepcionClienteNoEncontrado;
+import Excepciones.ExcepcionFormatoIncorrecto;
 import Cliente.model.entitie.Cliente;
 import Cliente.model.repository.ClienteRepositorio;
 import Cliente.view.ClienteVista;

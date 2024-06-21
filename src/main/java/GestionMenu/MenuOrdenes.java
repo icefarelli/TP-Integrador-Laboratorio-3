@@ -1,7 +1,7 @@
 package GestionMenu;
 
-import Cliente.Excepciones.ExcepcionClienteNoEncontrado;
-import Cliente.Excepciones.ExcepcionFormatoIncorrecto;
+import Excepciones.ExcepcionClienteNoEncontrado;
+import Excepciones.ExcepcionFormatoIncorrecto;
 import Cliente.model.repository.ClienteRepositorio;
 import Cliente.view.ClienteVista;
 import Empleado.EmpleadoRepositorio;
@@ -10,14 +10,13 @@ import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionEntradaInvalida;
 import Excepciones.ExcepcionNombreInvalido;
 import Excepciones.ExcepcionOrdenNoEncontrada;
-import Excepciones.Reservas.ExcepcionReservaCamposVacios;
-import Excepciones.Reservas.ExcepcionReservaCaracterInvalido;
-import Excepciones.Reservas.ExcepcionReservaNoEncontrada;
-import Excepciones.Reservas.ExcepcionReservaValorNegativo;
+import Excepciones.ExcepcionReservaCamposVacios;
+import Excepciones.ExcepcionReservaCaracterInvalido;
+import Excepciones.ExcepcionReservaNoEncontrada;
+import Excepciones.ExcepcionReservaValorNegativo;
 import Orden.OrdenControlador;
 import Orden.OrdenRepositorio;
 import Orden.OrdenVista;
-import Plato.Excepciones.ExcepIngresoInvalido;
 import Plato.PlatoControlador;
 import Plato.PlatoRepositorio;
 import Plato.PlatoVista;
