@@ -19,6 +19,7 @@ public class MenuPrincipal {
         MenuClientes menuClientes = new MenuClientes();
         MenuPlato menuPlato = new MenuPlato();
         MenuOrdenes menuOrdenes = new MenuOrdenes();
+        MenuUsuarios menuUsuarios = new MenuUsuarios();
 
         Colores.printInColor("========BIENVENIDOS A ´INTERFAZ DE SABORES´========", Colores.YELLOW);
         System.out.println("Que desea hacer?");
@@ -33,6 +34,7 @@ public class MenuPrincipal {
                 System.out.println("3. Gestion de Empleados");
                 System.out.println("4. Gestion de Clientes");
                 System.out.println("5. Gestion de Platos");
+                System.out.println("6. Gestion de Usuarios");
 
                 System.out.println("0. Salir");
 
@@ -55,6 +57,8 @@ public class MenuPrincipal {
                     case 5:
                         menuPlato.mainMenu();
                         break;
+                    case 6:
+                        menuUsuarios.menuUsuarios();
                     case 0:
                         break;
                     default:

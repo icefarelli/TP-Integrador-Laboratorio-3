@@ -2,6 +2,7 @@ package GestionMenu;
 
 import Excepciones.*;
 import Login.LoginController;
+import Login.Usuario;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -12,6 +13,7 @@ public class MenuLogin {
     LoginController loginController;
 
     MenuPrincipal menuPrincipal = new MenuPrincipal();
+    MenuGestionEmpleado menuGestionEmpleado = new MenuGestionEmpleado();
 
     public MenuLogin(LoginController loginController) {
         this.loginController = loginController;
@@ -26,22 +28,22 @@ public class MenuLogin {
             System.out.println("\n");
             System.out.println("---------------------------------- GESTION RESTAURANT ------------------------------");
             System.out.println("1. Iniciar Sesion");
-            System.out.println("2. Registrarse");
             System.out.println("0. Salir");
             try {
                 ok = scanner.nextInt();
                 scanner.nextLine();
                 switch (ok) {
                     case 1:
-                        if (loginController.iniciarSesion()) {
-                            loggedIn = true;
-                            menuPrincipal.menuPrincipal();
+                        Usuario usuario = loginController.iniciarSesion();
+                        if (usuario!= null) {
+                            if(usuario.getCargo().equalsIgnoreCase("admin")){
+                                menuPrincipal.menuPrincipal();
+                            } else {
+                                menuGestionEmpleado.menuGestionEmpleado();
+                            }
                         }
                         menu();
-                        break;
-                    case 2:
-                        loginController.addUser();
-                        menu();
+
                         break;
                     case 0:
                         System.exit(0);

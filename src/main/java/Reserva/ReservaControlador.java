@@ -1,6 +1,5 @@
 package Reserva;
 
-
 import Cliente.ClienteControlador;
 import Cliente.Cliente;
 import Cliente.ClienteRepositorio;
@@ -8,7 +7,6 @@ import Cliente.ClienteVista;
 import Excepciones.*;
 import MesasReservadas.MesasReservadas;
 import MesasReservadas.MesasReservadasRepositorio;
-
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,7 +20,9 @@ public class ReservaControlador {
     private MesasReservadasRepositorio mesasReservadasRepositorio;
     private ClienteControlador clienteControlador;
 
-    public ReservaControlador(ReservaRepositorio reservaRepositorio, ReservaVista reservaVista, ClienteVista clienteVista, ClienteRepositorio clienteRepositorio, MesasReservadasRepositorio mesasReservadasRepositorio, ClienteControlador clienteControlador) {
+    public ReservaControlador(ReservaRepositorio reservaRepositorio, ReservaVista reservaVista,
+                              ClienteVista clienteVista, ClienteRepositorio clienteRepositorio,
+                              MesasReservadasRepositorio mesasReservadasRepositorio, ClienteControlador clienteControlador) {
         this.reservaRepositorio = reservaRepositorio;
         this.reservaVista = reservaVista;
         this.clienteVista = clienteVista;
@@ -31,37 +31,51 @@ public class ReservaControlador {
         this.clienteControlador = clienteControlador;
     }
 
-
     public void agregarReserva() throws ExcepcionClienteNoEncontrado {
         clienteControlador.loadGestionCliente();
         reservaRepositorio.cargarReserva();
         Reserva reserva = reservaVista.pedirFecha();
-        LocalDate fecha = reservaRepositorio.buscarFecha(reserva.getFecha());
+        LocalDate fecha = reserva.getFecha();
+
+        Reserva reservaExistente = reservaRepositorio.buscarReserva(fecha);
         Integer cantPersonas = reservaVista.pedirCantidadPersonas();
         Integer id = clienteVista.seleccId();
         Cliente cliente = clienteRepositorio.findCliente(id, clienteRepositorio.getClienteSet());
+
         if (cliente == null) {
-            clienteRepositorio.addCliente(cliente);
+            throw new ExcepcionClienteNoEncontrado("Cliente no encontrado con el ID: " + id);
         }
-        List<MesasReservadas> mesasReservadas = new ArrayList<>();
-        mesasReservadas.add(new MesasReservadas(cliente, cantPersonas));
-        Reserva reservaCompleta = new Reserva(reserva.getFecha(), mesasReservadas);
-        reservaRepositorio.agregar(reservaCompleta);
+
+        MesasReservadas nuevaMesaReservada = new MesasReservadas(cliente, cantPersonas);
+        if (reservaExistente == null) {
+            List<MesasReservadas> mesasReservadas = new ArrayList<>();
+            mesasReservadas.add(nuevaMesaReservada);
+            Reserva nuevaReserva = new Reserva(fecha, mesasReservadas);
+            reservaRepositorio.agregar(nuevaReserva);
+        } else {
+            reservaExistente.getMesasReservadas().add(nuevaMesaReservada);
+        }
+
         reservaRepositorio.guardarReserva();
     }
 
-    public void eliminarReserva(){
+    public void eliminarMesaReserva() {
         reservaRepositorio.cargarReserva();
         LocalDate fecha = reservaVista.buscarFechaReserva();
         Reserva reserva = reservaRepositorio.buscarReserva(fecha);
-        Integer id = clienteVista.consultarCliente();
-        Integer indice = mesasReservadasRepositorio.buscarIndice(id);
-        MesasReservadas mesasReservadas = mesasReservadasRepositorio.buscarMesaReservadaPorIndice(indice);
 
         if (reserva == null) {
-            reservaVista.mensaje("Esa reserva no existe.");
+            reservaVista.mensaje("No hay reservas para esa fecha.");
+            return;
+        }
+
+        Integer id = clienteVista.seleccId();
+        MesasReservadas mesasReservadasAEliminar = mesasReservadasRepositorio.buscarMesasReservadas(reserva.getMesasReservadas(), id);
+
+        if (mesasReservadasAEliminar == null) {
+            reservaVista.mensaje("Esa mesa reserva no está reservada.");
         } else {
-            mesasReservadasRepositorio.eliminar(mesasReservadas);
+            reserva.getMesasReservadas().remove(mesasReservadasAEliminar);
             reservaRepositorio.guardarReserva();
             reservaVista.mensaje("Reserva eliminada con éxito!");
         }
@@ -71,25 +85,45 @@ public class ReservaControlador {
         reservaRepositorio.cargarReserva();
         LocalDate fecha = reservaVista.buscarFechaReserva();
         Reserva reserva = reservaRepositorio.buscarReserva(fecha);
-        Integer id = clienteVista.consultarCliente();
-        Integer indice = mesasReservadasRepositorio.buscarIndice(id);
-        MesasReservadas mesasReservadas = mesasReservadasRepositorio.buscarMesaReservadaPorIndice(indice);
+
         if (reserva == null) {
-            reservaVista.mensaje("Esa reserva no existe.");
+            reservaVista.mensaje("No hay reservas para esa fecha.");
+            return;
+        }
+
+        Integer id = clienteVista.seleccId();
+        MesasReservadas mesasReservadasAModificar = mesasReservadasRepositorio.buscarMesasReservadas(reserva.getMesasReservadas(), id);
+        if (mesasReservadasAModificar == null) {
+            reservaVista.mensaje("Esa mesa reserva no existe.");
         } else {
             String opcion = reservaVista.preguntarQueModificar();
+
             if (opcion.equalsIgnoreCase("fecha")) {
                 LocalDate nuevaFecha = reservaVista.solicitarNuevaFecha(reservaRepositorio.todasLasReservas());
                 while (nuevaFecha.isEqual(fecha)) {
                     reservaVista.mensaje("La fecha ingresada es la misma. Ingrese nuevamente.");
                     nuevaFecha = reservaVista.solicitarNuevaFecha(reservaRepositorio.todasLasReservas());
                 }
-                reservaRepositorio.modificar(reserva);
+
+                reserva.getMesasReservadas().remove(mesasReservadasAModificar);
+
+                if (reserva.getMesasReservadas().isEmpty()) {
+                    reservaRepositorio.eliminar(reserva);
+                }
+
+                Reserva nuevaReserva = reservaRepositorio.buscarReserva(nuevaFecha);
+                if (nuevaReserva == null) {
+                    nuevaReserva = new Reserva(nuevaFecha, new ArrayList<>());
+                    reservaRepositorio.agregar(nuevaReserva);
+                }
+
+                nuevaReserva.getMesasReservadas().add(mesasReservadasAModificar);
                 reservaRepositorio.guardarReserva();
-                reservaVista.mensaje("Reserva modificada con éxito!");
+                reservaVista.mensaje("Fecha de la reserva modificada con éxito!");
+
             } else if (opcion.equalsIgnoreCase("cantPersonas")) {
                 Integer cantPersonas = reservaVista.modificarCantPersonas();
-                mesasReservadas.setCantPersonas(cantPersonas);
+                mesasReservadasAModificar.setCantPersonas(cantPersonas);
                 reservaRepositorio.guardarReserva();
                 reservaVista.mensaje("Cantidad de personas modificada con éxito!");
             }
@@ -103,4 +137,3 @@ public class ReservaControlador {
         reservaVista.mostrarReservaConArreglo(reservas, mesasReservadas);
     }
 }
-

@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class ReservaVista {
     private static Scanner scanner = new Scanner(System.in);
-    LocalDate hoy = LocalDate.now();
+    private static LocalDate hoy = LocalDate.now();
 
     public Reserva pedirFecha(){
         LocalDate fecha = null;
@@ -26,7 +26,6 @@ public class ReservaVista {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 fecha = LocalDate.parse(input, formatter);
                 validarFechaHoy(fecha);
-
                 break;
             } catch (DateTimeParseException | ExcepcionReservaCamposVacios | ExcepcionReservaCaracterInvalido e) {
                 System.out.println(e.getMessage());
@@ -109,22 +108,28 @@ public class ReservaVista {
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 fecha = LocalDate.parse(input, formatter);
+                validarFechaHoy(fecha);
                 break;
-            } catch (DateTimeParseException | ExcepcionReservaCamposVacios e) {
+            } catch (DateTimeParseException | ExcepcionReservaCamposVacios | ExcepcionReservaCaracterInvalido e) {
                 System.out.println(e.getMessage());
             }
         }
         return fecha;
     }
 
-    public LocalDate solicitarNuevaFecha(List<Reserva> reservas)throws DateTimeParseException {
+    public LocalDate solicitarNuevaFecha(List<Reserva> reservas) throws DateTimeParseException {
         LocalDate fecha = null;
         while (true) {
             try {
                 for (Reserva reserva : reservas) {
+                    System.out.println("Revisando reserva: " + reserva);
+
                     if (reserva.getMesasReservadas().isEmpty()) {
                         LocalDate fechaInicio = reserva.getFecha();
                         LocalDate fechaFin = fechaInicio.plusDays(15);
+
+                        System.out.println("Fecha de inicio: " + fechaInicio);
+                        System.out.println("Fecha de fin: " + fechaFin);
 
                         if (fechaInicio.isAfter(hoy) && fechaInicio.isBefore(fechaFin)) {
                             System.out.println("Reservas disponibles desde " + fechaInicio + " hasta " + fechaFin + ": " + reserva);
@@ -141,11 +146,12 @@ public class ReservaVista {
                 validarFechaHoy(fecha);
                 break;
             } catch (DateTimeParseException | ExcepcionReservaCamposVacios | ExcepcionReservaCaracterInvalido e) {
-                System.out.println(e.getMessage());
+                System.out.println("Error: " + e.getMessage());
             }
         }
         return fecha;
     }
+
 
     public void mostrarReservaConArreglo(List<Reserva> reservas, List<MesasReservadas> mesasReservadas) {
         for (Reserva reserva : reservas) {
@@ -187,7 +193,7 @@ public class ReservaVista {
         if (cantPersonas == null) {
             throw new ExcepcionReservaCamposVacios("El campo no puede estar vacío.");
         }
-        if (!esNumero(String.valueOf(cantPersonas))) {
+        if (!esNumero(String.valueOf(cantPersonas)) || cantPersonas >= 20) {
             throw new ExcepcionReservaCaracterInvalido("La entrada no es un número válido.");
         }
         if (cantPersonas <= 0) {

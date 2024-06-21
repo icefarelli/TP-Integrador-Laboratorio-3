@@ -6,6 +6,7 @@ import Cliente.ClienteControlador;
 import Cliente.ClienteRepositorio;
 import Cliente.ClienteVista;
 import MesasReservadas.MesasReservadasRepositorio;
+import Plato.Colores.Colores;
 import Reserva.ReservaControlador;
 import Reserva.ReservaRepositorio;
 import Reserva.ReservaVista;
@@ -25,32 +26,31 @@ public class MenuReservas {
     ClienteControlador clienteControlador = new ClienteControlador(clienteVista,clienteRepositorio);
     ReservaControlador reservaControlador = new ReservaControlador(reservaRepositorio,reservaVista,clienteVista,clienteRepositorio,mesasReservadasRepositorio,clienteControlador);
 
-
     public static Scanner scanner = new Scanner(System.in);
 
-
     public void menuReservas() throws ExcepcionClienteNoEncontrado, ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, IOException, ExcepcionFormatoIncorrecto {
-        int opcion = 0;
+        int op = 0;
         do {
             try {
-                System.out.println("=====================MENU RESERVAS=====================");
-                System.out.println("1. Agregar Reserva.");
-                System.out.println("2. Eliminar Reserva.");
-                System.out.println("3. Modificar Reserva.");
-                System.out.println("4. Mostrar Todas Reservas.");
-                System.out.println("5. Volver al Menu Principal.");
+                Colores.printInColor("==========MENU RESERVAS==========", Colores.BLUE);
+                System.out.println(". Elija una opción: ");
+                System.out.println("1. Agregar reserva.");
+                System.out.println("2. Eliminar reserva.");
+                System.out.println("3. Modificar reserva.");
+                System.out.println("4. Mostrar todas reservas.");
+                System.out.println("5. Volver al menu principal");
+                System.out.println("6. Salir del sistema");
+                Colores.printInColor("-------------------------------", Colores.BLUE);
+
+                op = scanner.nextInt();
 
 
-                System.out.println("Ingrese una opción");
-                opcion = scanner.nextInt();
-
-
-                switch (opcion) {
+                switch (op) {
                     case 1:
                         reservaControlador.agregarReserva();
                         break;
                     case 2:
-                        reservaControlador.eliminarReserva();
+                        reservaControlador.eliminarMesaReserva();
                         break;
                     case 3:
                         reservaControlador.modificarReserva();
@@ -72,6 +72,6 @@ public class MenuReservas {
                 System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
                 scanner.nextLine();
             }
-        }while (opcion != 5);
+        }while (op != 5 && op != 6);
     }
 }
