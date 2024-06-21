@@ -193,7 +193,7 @@ public class ReservaVista {
         if (cantPersonas == null) {
             throw new ExcepcionReservaCamposVacios("El campo no puede estar vacío.");
         }
-        if (!esNumero(String.valueOf(cantPersonas))) {
+        if (!esNumero(String.valueOf(cantPersonas)) || cantPersonas >= 20) {
             throw new ExcepcionReservaCaracterInvalido("La entrada no es un número válido.");
         }
         if (cantPersonas <= 0) {
