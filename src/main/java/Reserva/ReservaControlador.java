@@ -10,6 +10,7 @@ import MesasReservadas.MesasReservadasRepositorio;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ReservaControlador {
@@ -39,6 +40,7 @@ public class ReservaControlador {
 
         Reserva reservaExistente = reservaRepositorio.buscarReserva(fecha);
         Integer cantPersonas = reservaVista.pedirCantidadPersonas();
+        clienteControlador.viewClientes();
         Integer id = clienteVista.seleccId();
         Cliente cliente = clienteRepositorio.findCliente(id, clienteRepositorio.getClienteSet());
 
@@ -52,8 +54,10 @@ public class ReservaControlador {
             mesasReservadas.add(nuevaMesaReservada);
             Reserva nuevaReserva = new Reserva(fecha, mesasReservadas);
             reservaRepositorio.agregar(nuevaReserva);
+            reservaVista.mensaje("Reserva agregada con éxito!");
         } else {
             reservaExistente.getMesasReservadas().add(nuevaMesaReservada);
+            reservaVista.mensaje("Reserva agregada con éxito!");
         }
 
         reservaRepositorio.guardarReserva();
@@ -69,6 +73,7 @@ public class ReservaControlador {
             return;
         }
 
+        clienteControlador.viewClientes();
         Integer id = clienteVista.seleccId();
         MesasReservadas mesasReservadasAEliminar = mesasReservadasRepositorio.buscarMesasReservadas(reserva.getMesasReservadas(), id);
 
@@ -91,6 +96,7 @@ public class ReservaControlador {
             return;
         }
 
+        clienteControlador.viewClientes();
         Integer id = clienteVista.seleccId();
         MesasReservadas mesasReservadasAModificar = mesasReservadasRepositorio.buscarMesasReservadas(reserva.getMesasReservadas(), id);
         if (mesasReservadasAModificar == null) {
@@ -133,7 +139,26 @@ public class ReservaControlador {
     public void mostrarReservasConArreglo() {
         reservaRepositorio.cargarReserva();
         List<Reserva> reservas = reservaRepositorio.todasLasReservas();
+
+        // Filtrar reservas que tienen mesas reservadas
+        List<Reserva> reservasConMesas = new ArrayList<>();
+        for (Reserva reserva : reservas) {
+            if (!reserva.getMesasReservadas().isEmpty()) {
+                reservasConMesas.add(reserva);
+            }
+        }
+
+        // Ordenar reservas por fecha
+        Collections.sort(reservasConMesas, (reserva1, reserva2) -> reserva1.getFecha().compareTo(reserva2.getFecha()));
+
+        reservaVista.mostrarReservaConArreglo(reservasConMesas);
+    }
+
+
+   /* public void mostrarReservasConArreglo() {
+        reservaRepositorio.cargarReserva();
+        List<Reserva> reservas = reservaRepositorio.todasLasReservas();
         List<MesasReservadas> mesasReservadas = reservaRepositorio.todasLasMesasReservadas();
         reservaVista.mostrarReservaConArreglo(reservas, mesasReservadas);
-    }
+    }*/
 }

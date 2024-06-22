@@ -134,21 +134,15 @@ public class ReservaVista {
             try {
                 for (Reserva reserva : reservas) {
                     System.out.println("Revisando reserva: " + reserva);
-
-                    if (reserva.getMesasReservadas().isEmpty()) {
                         LocalDate fechaInicio = reserva.getFecha();
                         LocalDate fechaFin = fechaInicio.plusDays(15);
-
-                        System.out.println("Fecha de inicio: " + fechaInicio);
-                        System.out.println("Fecha de fin: " + fechaFin);
-
                         if (fechaInicio.isAfter(hoy) && fechaInicio.isBefore(fechaFin)) {
-                            System.out.println("Reservas disponibles desde " + fechaInicio + " hasta " + fechaFin + ": " + reserva);
+                            System.out.println("Reservas disponibles desde " + fechaInicio + " hasta " + fechaFin + ": " + reserva+ "\n");
                         }
-                    }
+
                 }
 
-                System.out.println("Ingrese fecha de la nueva reserva (formato dd/MM/yyyy): ");
+                System.out.println("\nIngrese fecha de la nueva reserva (formato dd/MM/yyyy): ");
                 String input = scanner.nextLine().trim();
                 validarFecha(input);
 
@@ -164,10 +158,10 @@ public class ReservaVista {
     }
 
 
-    public void mostrarReservaConArreglo(List<Reserva> reservas, List<MesasReservadas> mesasReservadas) {
+    public void mostrarReservaConArreglo(List<Reserva> reservas) {
         for (Reserva reserva : reservas) {
             System.out.println("Fecha: " + reserva.getFecha());
-            System.out.println("Todas las Reservas");
+            System.out.println("Mesas Reservadas:");
             for (MesasReservadas mesas : reserva.getMesasReservadas()) {
                 System.out.println("Cliente: " + mesas.getCliente().getNombre());
                 System.out.println("Cantidad de Personas: " + mesas.getCantPersonas());

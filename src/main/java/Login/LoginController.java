@@ -102,8 +102,9 @@ public class LoginController {
             try {
                 usuario = loginView.solicitarDatosRegistro();
                 usuarioBuscado = loginRepository.buscar(usuario.getUsername());
-                if(usuarioBuscado==null) {
+                if(usuarioBuscado==null || !usuarioBuscado.getPassword().equals(usuario.getPassword())) {
                     System.out.println("XXX NOMBRE DE USUARIO Y CONTRASENA INCORRECTOS XXX");
+                    usuarioBuscado = null;
                 }
             } catch (ExcepcionCamposVacios excepcionCamposVacios) {
                 System.out.println(excepcionCamposVacios.getMessage());
