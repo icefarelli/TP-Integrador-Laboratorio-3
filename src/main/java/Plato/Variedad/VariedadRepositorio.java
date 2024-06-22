@@ -12,9 +12,9 @@ public class VariedadRepositorio {
         if (variedad != null) return variedad;
         else{
             try {
-                throw new ExcepIngresoInvalido("No ha sido posible cargar la variedad del plato.\n Intente nuevamente.");
+                throw new ExcepIngresoInvalido("Carga Incorrecta");
             } catch (ExcepIngresoInvalido e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
         return null;

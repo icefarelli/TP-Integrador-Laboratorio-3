@@ -29,11 +29,16 @@ public class VariedadVista {
 
     // Modulo de ingreso de nombre con comprobacion para evitar ingresos de caracteres invalidos
     public String ingresarNombre() throws ExcepIngresoInvalido {
-        String nombre = scanner.nextLine();
-        nombre = primeraMayuscula(nombre);
-        if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-ZáéíóúüÁÉÍÓÚÜ ]+")) {
-            throw new ExcepIngresoInvalido("Ha ingresado Numeros o Caracteres invalidos en el nombre.\nEl nombre del plato solo debe contener letras.");
-        } else return nombre;
+        try {
+            String nombre = scanner.nextLine();
+            nombre = primeraMayuscula(nombre);
+            if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-ZáéíóúüÁÉÍÓÚÜ ]+")) {
+                throw new ExcepIngresoInvalido("Ha ingresado Numeros o Caracteres invalidos en el nombre.\nEl nombre del plato solo debe contener letras.");
+            } else return nombre;
+        }catch (IllegalArgumentException iae){
+            System.out.println(iae.getMessage());
+            return ingresarNombre();
+        }
     }
 
     //Módulo recibe el precio y realiza comprobaciones

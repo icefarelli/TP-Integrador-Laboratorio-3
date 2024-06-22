@@ -208,15 +208,15 @@ public class PlatoRepositorio implements IABM<Plato> {
         System.out.println("====================================================");
 
         for (Plato plato : platosPorTipo) {
-            // Imprimir el plato principal
+            //Imprime el plato principal
             System.out.println(plato.toString());
 
-            // Imprimir las variedades, si existen
+            //Imprime las variedades
             if (plato.getVariedades() != null && !plato.getVariedades().isEmpty()) {
                 List<Variedad> variedades = plato.getVariedades();
-                for (int j = 0; j < variedades.size(); j++) {
-                    Variedad variedad = variedades.get(j);
-                    if (j == variedades.size() - 1) {
+                for (int i = 0; i < variedades.size(); i++) {
+                    Variedad variedad = variedades.get(i);
+                    if (i == variedades.size() - 1) {
                         System.out.print("  - " + variedad.toString());
                     } else {
                         System.out.println("  - " + variedad.toString());
@@ -225,7 +225,7 @@ public class PlatoRepositorio implements IABM<Plato> {
                 System.out.println();//salto de linea
             }
         }
-        System.out.println("===================================================="); //salto de linea
+        System.out.println("====================================================");
     }
 
     //Si el plato contiene variedades imprime las variedades, caso contrario imprime los platos base con sus valores

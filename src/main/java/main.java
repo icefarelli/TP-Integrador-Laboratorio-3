@@ -14,6 +14,7 @@ import MesasReservadas.MesasReservadasRepositorio;
 import Orden.OrdenControlador;
 import Orden.OrdenRepositorio;
 import Orden.OrdenVista;
+import Plato.Plato;
 import Plato.PlatoControlador;
 import Plato.PlatoRepositorio;
 import Plato.PlatoVista;
@@ -58,6 +59,11 @@ public class main {
 
         MenuLogin menuLogin = new MenuLogin(loginControlador);
         menuLogin.menu();
+
+
+
+
+
 
     }
 }

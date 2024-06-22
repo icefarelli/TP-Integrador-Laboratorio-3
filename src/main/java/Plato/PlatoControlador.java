@@ -49,7 +49,8 @@ public class PlatoControlador {
             System.out.println();
             platoVista.printearLineasSeparadoras();
         } catch (ExcepIngresoInvalido e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
     }
 
@@ -201,7 +202,11 @@ public class PlatoControlador {
 
     //Mostrar Platos por categoria
     public void mostrarPlatosXTipo (PlatoRepositorio platoRepositorio, PlatoVista platoVista){
-        platoRepositorio.mostrarEnlistadoBonitoXtipoOld(platoVista.menuTipoComida());
+        try {
+            platoRepositorio.mostrarEnlistadoBonitoXtipoOld(platoVista.menuTipoComida());
+        }catch (NumberFormatException nfe){
+            System.out.println(nfe.getMessage());
+        }
     }
 
     //Mostrar Menu Completo

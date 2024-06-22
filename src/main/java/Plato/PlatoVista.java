@@ -257,7 +257,6 @@ public class PlatoVista {
 
     public void pausarPantalla() {
         System.out.println("Presione Enter para continuar...");
-        Scanner scanner = new Scanner(System.in);
         scanner.nextLine();
     }
     public void printearLineasSeparadoras(){
