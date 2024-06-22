@@ -71,6 +71,9 @@ public class MenuReservas {
             }catch (InputMismatchException e) {
                 System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
                 scanner.nextLine();
+            }catch (ExcepcionClienteNoEncontrado excepcionClienteNoEncontrado){
+                System.out.println(excepcionClienteNoEncontrado.getMessage());
+                scanner.nextLine();
             }
         }while (op != 5 && op != 6);
     }

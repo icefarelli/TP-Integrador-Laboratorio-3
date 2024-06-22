@@ -4,11 +4,12 @@ import Cliente.ClienteVista;
 import Empleado.EmpleadoControlador;
 import Empleado.EmpleadoRepositorio;
 import Empleado.EmpleadoVista;
-import Excepciones.ExcepcionClienteNoEncontrado;
-import Excepciones.ExcepcionDNIStringInvalido;
-import Excepciones.ExcepcionFormatoIncorrecto;
-import Excepciones.ExcepcionNombreInvalido;
+import Excepciones.*;
+import GestionMenu.MenuLogin;
 import GestionMenu.MenuPrincipal;
+import Login.LoginController;
+import Login.LoginRepository;
+import Login.LoginView;
 import MesasReservadas.MesasReservadasRepositorio;
 import Orden.OrdenControlador;
 import Orden.OrdenRepositorio;
@@ -23,7 +24,7 @@ import Reserva.ReservaVista;
 import java.io.IOException;
 
 public class main {
-    public static void main(String[] args) throws IOException, ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, ExcepcionClienteNoEncontrado, ExcepcionFormatoIncorrecto {
+    public static void main(String[] args) throws IOException, ExcepcionDNIStringInvalido, ExcepcionNombreInvalido, ExcepcionClienteNoEncontrado, ExcepcionFormatoIncorrecto, ExcepcionCamposVacios, ExcepcionReservaCamposVacios, ExcepcionReservaNoEncontrada, ExcepcionReservaCaracterInvalido, ExcepcionNombreNumerico, ExcepcionReservaValorNegativo {
         ClienteVista clienteVista = new ClienteVista();
         ClienteRepositorio clienteRepositorio = new ClienteRepositorio();
         ClienteControlador clienteControlador = new ClienteControlador(clienteVista, clienteRepositorio);
@@ -45,14 +46,18 @@ public class main {
         MesasReservadasRepositorio mesasReservadasRepositorio = new MesasReservadasRepositorio();
         ReservaControlador reservaControlador = new ReservaControlador(reservaRepositorio, reservaVista, clienteVista, clienteRepositorio, mesasReservadasRepositorio, clienteControlador);
 
+        LoginView loginVista = new LoginView();
+        LoginRepository loginRepositorio = new LoginRepository();
+        LoginController loginControlador = new LoginController(loginRepositorio, loginVista);
+
 
         clienteControlador.loadGestionCliente();
         empleadoControlador.pasarAMemoria();
         ordenRepositorio.cargarOrdenesDesdeArchivo();
         reservaRepositorio.cargarReserva();
 
-        MenuPrincipal menuPrincipal = new MenuPrincipal();
-        menuPrincipal.menuPrincipal();
+        MenuLogin menuLogin = new MenuLogin(loginControlador);
+        menuLogin.menu();
 
     }
 }

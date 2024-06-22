@@ -1,5 +1,6 @@
 package Reserva;
 
+import Excepciones.ExcepcionEntradaInvalida;
 import Excepciones.ExcepcionReservaCamposVacios;
 import Excepciones.ExcepcionReservaCaracterInvalido;
 import Excepciones.ExcepcionReservaValorNegativo;
@@ -8,6 +9,7 @@ import MesasReservadas.MesasReservadas;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -46,6 +48,9 @@ public class ReservaVista {
             } catch (NumberFormatException | ExcepcionReservaCamposVacios | ExcepcionReservaCaracterInvalido |
                      ExcepcionReservaValorNegativo e) {
                 System.out.println(e.getMessage());
+            }catch (InputMismatchException e) {
+                System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
+                scanner.nextLine();
             }
         }
         return cantPersonas;
@@ -63,6 +68,9 @@ public class ReservaVista {
             } catch (NumberFormatException | ExcepcionReservaCamposVacios | ExcepcionReservaCaracterInvalido |
                      ExcepcionReservaValorNegativo e) {
                 System.out.println(e.getMessage());
+            }catch (InputMismatchException e) {
+                System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
+                scanner.nextLine();
             }
         }
         return cantPersonas;
@@ -93,6 +101,9 @@ public class ReservaVista {
                 break;
             } catch (NumberFormatException |ExcepcionReservaCamposVacios e) {
                 System.out.println("Error: la entrada no es un número válido. Intente nuevamente.");
+            }catch (InputMismatchException e) {
+                System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
+                scanner.nextLine();
             }
         }
         return opcion;
