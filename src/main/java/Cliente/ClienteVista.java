@@ -158,6 +158,19 @@ public class ClienteVista {
         }
     }
 
+    public void verClienteVersionCorta(Cliente c){
+        System.out.println("ID: " + c.getIdCliente() + " " + "Nombre: " + c.getNombre());
+    }
+    public void verTodosClientesVersionCorta(Set<Cliente> clienteSet) {
+        System.out.println("\n");
+        System.out.println("------------Clientes cargados------------");
+        for (Cliente cliente : clienteSet) {
+            verClienteVersionCorta(cliente);
+        }
+        System.out.println("\n");
+
+    }
+
 
 
 }
