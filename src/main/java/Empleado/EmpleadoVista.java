@@ -182,6 +182,24 @@ public void mostrarListaEmpleados(Map<Integer, Empleado> mapaEmpleados){
     }
 }
 
+    public void mostrarEmpleadoVersionCorta(Empleado e){
+        System.out.println("ID: " + e.getIdEmpleado() + " " + "Nombre: " + e.getNombre());
+    }
+
+    public void mostrarListaEmpleadoVersionCorta(Map<Integer, Empleado> mapaEmpleados){
+        if (mapaEmpleados.isEmpty()){
+            System.out.println("lista de empleados vacia");
+        } else {
+            System.out.println("------------Empleados cargados------------");
+            for (Map.Entry<Integer,Empleado> entry : mapaEmpleados.entrySet()){
+                Empleado empleado = entry.getValue();
+                mostrarEmpleadoVersionCorta(empleado);
+            }
+            System.out.println("\n");
+        }
+
+    }
+
 
 
 }
