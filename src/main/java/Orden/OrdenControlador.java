@@ -77,6 +77,7 @@ public class OrdenControlador {
                 String agregar = scan.nextLine();
                 if (agregar.equalsIgnoreCase("s")) {
                     clienteControlador.agregarClientes();
+                    clienteControlador.Update();
                 }
             }
         } while (c == null);
