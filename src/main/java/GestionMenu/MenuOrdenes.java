@@ -10,10 +10,6 @@ import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionEntradaInvalida;
 import Excepciones.ExcepcionNombreInvalido;
 import Excepciones.ExcepcionOrdenNoEncontrada;
-import Excepciones.ExcepcionReservaCamposVacios;
-import Excepciones.ExcepcionReservaCaracterInvalido;
-import Excepciones.ExcepcionReservaNoEncontrada;
-import Excepciones.ExcepcionReservaValorNegativo;
 import Orden.OrdenControlador;
 import Orden.OrdenRepositorio;
 import Orden.OrdenVista;
@@ -50,10 +46,11 @@ public class MenuOrdenes {
                 System.out.println("1. Agregar orden");
                 System.out.println("2. Eliminar orden");
                 System.out.println("3. Modificar orden");
-                System.out.println("4. Listar ordenes");
-                System.out.println("5. Mostrar orden por ID");
-                System.out.println("6. Volver al menu principal");
-                System.out.println("7. Salir del sistema");
+                System.out.println("4. Listar todas las ordenes");
+                System.out.println("5. Listar ordenes pendientes");
+                System.out.println("6. Mostrar orden por ID");
+                System.out.println("7. Volver al menu principal");
+                System.out.println("8. Salir del sistema");
                 Colores.printInColor("-------------------------------", Colores.BLUE);
 
                 op = scanner.nextInt(); // Leer la entrada
@@ -71,16 +68,19 @@ public class MenuOrdenes {
                         ordenControlador.mostrarTodasLasOrdenes();
                         break;
                     case 5:
+                        ordenControlador.mostrarTodasLasOrdenesPendientes();
+                        break;
+                    case 6:
                         try {
                             ordenControlador.mostrarOrden(ordenVista.pedirIdOrden());
                         } catch (ExcepcionEntradaInvalida e) {
                             System.out.println(e.getMessage());
                         }
                         break;
-                    case 6:
+                    case 7:
                         System.out.println("Volviendo al menu principal...");
                         break;
-                    case 7:
+                    case 8:
                         System.out.println("Saliendo...");
                         System.exit(0);
                         break;
@@ -91,6 +91,6 @@ public class MenuOrdenes {
                 System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
                 scanner.nextLine();
             }
-        } while (op != 6 && op != 7);
+        } while (op != 7 && op != 8);
     }
 }

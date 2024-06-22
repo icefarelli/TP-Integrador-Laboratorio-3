@@ -65,6 +65,7 @@ public class OrdenControlador {
         Integer clienteId;
         Cliente c = null;
         do {
+            clienteVista.verTodosClientesVersionCorta(setClientes);
             clienteId = clienteVista.seleccId();
             try {
                 c = clienteRepositorio.findCliente(clienteId, setClientes);
@@ -79,6 +80,7 @@ public class OrdenControlador {
         Integer claveEmpleado;
         Empleado e;
         do {
+            empleadoVista.mostrarListaEmpleadoVersionCorta(empleadoRepositorio.getListaEmpleados());
             claveEmpleado = empleadoVista.pedirClave();
             e = empleadoRepositorio.buscarEmpleado(claveEmpleado);
             if (e == null) {
@@ -121,6 +123,7 @@ public class OrdenControlador {
         Scanner scan = new Scanner(System.in);
 
         try {
+            mostrarTodasLasOrdenesPendientes();
             Integer idOrden = ordenVista.pedirIdOrdenModificar();
             Orden orden = ordenRepositorio.obtenerOrden(idOrden);
             mostrarOrden(orden.getId());
@@ -134,7 +137,8 @@ public class OrdenControlador {
                     System.out.println("1. Agregar un plato");
                     System.out.println("2. Quitar un plato");
                     System.out.println("3. Reemplazar un plato");
-                    System.out.println("4. Finalizar modificaciones");
+                    System.out.println("4. Marcar orden como Completada");
+                    System.out.println("5. Finalizar modificaciones");
                     System.out.print("Opción: \n");
                     opcion = scan.nextInt();
                     scan.nextLine();  // capturar el salto de linea desp del nextInt
@@ -178,6 +182,10 @@ public class OrdenControlador {
                             }
                             break;
                         case 4:
+                            orden.setEstado("Completada");
+                            System.out.println("La orden se ha marcado como Completada");
+                            break;
+                        case 5:
                             // Finalizar modificaciones
                             opcion = -1;
                             break;
@@ -254,13 +262,53 @@ public class OrdenControlador {
         }
     }
 
+    public void mostrarTodasLasOrdenesPendientes() {
+        try {
+            ordenRepositorio.cargarOrdenesDesdeArchivo();
+
+            if (ordenRepositorio.obtenerMap().isEmpty()) {
+                ordenVista.mostrarMensaje("No hay órdenes disponibles.");
+                return;
+            }
+
+            for (Orden orden : ordenRepositorio.obtenerMap().values()) {
+                if(orden.getEstado().equalsIgnoreCase("Pendiente")){
+                    mostrarOrden(orden.getId());}
+            }
+
+        } catch (Exception e) {
+            ordenVista.mostrarMensaje("Ocurrió un error al cargar las órdenes.");
+            e.printStackTrace();
+        }
+    }
+
+    public void mostrarTodasLasOrdenesCompletadas() {
+        try {
+            ordenRepositorio.cargarOrdenesDesdeArchivo();
+
+            if (ordenRepositorio.obtenerMap().isEmpty()) {
+                ordenVista.mostrarMensaje("No hay órdenes disponibles.");
+                return;
+            }
+
+            for (Orden orden : ordenRepositorio.obtenerMap().values()) {
+                if(orden.getEstado().equalsIgnoreCase("Completada")){
+                    mostrarOrden(orden.getId());}
+            }
+
+        } catch (Exception e) {
+            ordenVista.mostrarMensaje("Ocurrió un error al cargar las órdenes.");
+            e.printStackTrace();
+        }
+    }
+
     public void mostrarOrden(Integer id) throws ExcepcionOrdenNoEncontrada {
         ordenRepositorio.cargarOrdenesDesdeArchivo();
         try {
             Orden orden = ordenRepositorio.obtenerOrden(id);
             ordenVista.mostrarUnaOrden(orden);
             System.out.println("------------------");
-            System.out.println("Total  $ " + ordenRepositorio.calcularTotalOrden(orden.getId()));
+            System.out.println("Total  $ " + String.format("%.2f",ordenRepositorio.calcularTotalOrden(orden.getId())));
             System.out.println("------------------");
             System.out.println("------------------------------------------------");
         } catch (ExcepcionOrdenNoEncontrada e) {

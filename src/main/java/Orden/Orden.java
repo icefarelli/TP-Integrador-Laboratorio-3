@@ -12,11 +12,13 @@ public class Orden {
     private Cliente cliente;
     private Empleado empleado;
     private List<Plato> platoList;
+    private String estado;
 
     public Orden(Cliente cliente, Empleado empleado) {
         this.id = ++secOrden;
         this.empleado = empleado;
         this.cliente = cliente;
+        this.estado = "Pendiente";
     }
 
     public static int getSecOrden() {
@@ -53,5 +55,13 @@ public class Orden {
 
     public void setPlatoList(List<Plato> platoList) {
         this.platoList = platoList;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }
