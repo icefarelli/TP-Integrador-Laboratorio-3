@@ -103,6 +103,7 @@ public class ClienteControlador {
                     Integer id = this.clienteVista.seleccId();
 
                     cliente = this.clienteRepositorio.findCliente(id, this.clienteRepositorio.getClienteSet());
+                    System.out.println(cliente.toString());
                     String phone = this.clienteVista.newPhone();
                     this.clienteRepositorio.updateCliente(cliente, phone);
                     System.out.println("--- ¡ DATOS MODIFICADOS CON EXITO ! ---");
@@ -135,8 +136,7 @@ public class ClienteControlador {
                     id = this.clienteVista.selecIdRemove();
                     cliente = this.clienteRepositorio.findCliente(id, this.clienteRepositorio.getClienteSet());
                     this.clienteRepositorio.removeCliente(cliente);
-                    System.out.println("------ NUEVA LISTA DE CLIENTES ------");
-                    this.clienteVista.verTodosClientes(this.clienteRepositorio.getClienteSet());
+                    System.out.println("Cliente eliminado exitosamente!");
                 } catch (ExcepcionClienteNoEncontrado excepcionClienteNoEncontrado) {
                     System.out.println(excepcionClienteNoEncontrado.getMessage());
                     cliente=null;
@@ -161,22 +161,27 @@ public class ClienteControlador {
     }
 
     public void consultCliente ()  {
+        Cliente cliente= null;
         if (this.clienteRepositorio.getClienteSet().isEmpty())
         {
             System.out.println("XXX NO HAY CLIENTES CARGADOS XXX");
             System.out.println("Saliendo...");
             System.exit(0);}
-            try {
-                this.clienteVista.verIdAndName(this.clienteRepositorio.getClienteSet());
-                Integer id = this.clienteVista.consultarCliente();
-                Cliente cliente = this.clienteRepositorio.findCliente(id, this.clienteRepositorio.getClienteSet());
-                System.out.println("------------------------");
-                System.out.println("Telefono: "+cliente.getTelefono());
-                System.out.println("------------------------");
-            }catch (ExcepcionClienteNoEncontrado excepcionClienteNoEncontrado)
-            {
-                System.out.println(excepcionClienteNoEncontrado.getMessage());
-            }
+            do {
+                {
+                    try {
+                        this.clienteVista.verIdAndName(this.clienteRepositorio.getClienteSet());
+                        Integer id = this.clienteVista.consultarCliente();
+                         cliente = this.clienteRepositorio.findCliente(id, this.clienteRepositorio.getClienteSet());
+                        System.out.println("------------------------");
+                        System.out.println("Telefono: "+cliente.getTelefono());
+                        System.out.println("------------------------");
+                    }catch (ExcepcionClienteNoEncontrado excepcionClienteNoEncontrado)
+                    {
+                        System.out.println(excepcionClienteNoEncontrado.getMessage());
+                    }
+                }
+            }while (cliente==null);
         }
     }
 
