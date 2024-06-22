@@ -1,11 +1,7 @@
 package GestionMenu;
 
-
-
-
 import Excepciones.*;
 import Plato.Colores.Colores;
-
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -35,6 +31,7 @@ public class MenuPrincipal {
                 System.out.println("4. Gestion de Clientes");
                 System.out.println("5. Gestion de Platos");
                 System.out.println("6. Gestion de Usuarios");
+                System.out.println("7. Volver al menu Login");
 
                 System.out.println("0. Salir");
 
@@ -59,7 +56,11 @@ public class MenuPrincipal {
                         break;
                     case 6:
                         menuUsuarios.menuUsuarios();
+                    case 7:
+                        break;
                     case 0:
+                        System.out.println("Saliendo...");
+                        System.exit(0);
                         break;
                     default:
                         System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
@@ -72,7 +73,6 @@ public class MenuPrincipal {
             } catch (ExcepcionOrdenNoEncontrada excepcionOrdenNoEncontrada) {
                 System.out.println(excepcionOrdenNoEncontrada.getMessage());;
             }
-        } while (op!=0);
-        scanner.close();
+        } while (op!=0 && op!= 7);
     }
 }

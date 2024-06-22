@@ -3,6 +3,7 @@ package GestionMenu;
 import Excepciones.*;
 import Login.LoginController;
 import Login.Usuario;
+import Plato.Colores.Colores;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -26,9 +27,9 @@ public class MenuLogin {
 
         do {
             System.out.println("\n");
-            System.out.println("---------------------------------- GESTION RESTAURANT ------------------------------");
+            Colores.printInColor("========BIENVENIDOS A ´INTERFAZ DE SABORES´========", Colores.YELLOW);
             System.out.println("1. Iniciar Sesion");
-            System.out.println("0. Salir");
+            System.out.println("0. Salir del sistema");
             try {
                 ok = scanner.nextInt();
                 scanner.nextLine();
@@ -50,8 +51,6 @@ public class MenuLogin {
                         break;
                     default:
                         System.out.println("\nNumero invalido. Vuelva a intentarlo.");
-
-
                 }
             } catch (InputMismatchException inputMismatchException) {
                 System.out.println("Entrada inválida. Debe ingresar un número entero.");
@@ -60,7 +59,6 @@ public class MenuLogin {
             } catch (ExcepcionFormatoIncorrecto e) {
                 System.out.println(e.getMessage());
                 scanner.nextLine();
-
             }
 
         } while (ok!=0);

@@ -1,6 +1,7 @@
 package GestionMenu;
 
 import Excepciones.*;
+import Plato.Colores.Colores;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -12,7 +13,7 @@ public class MenuGestionEmpleado {
         MenuReservas menuReservas = new MenuReservas();
         MenuOrdenes menuOrdenes = new MenuOrdenes();
 
-        System.out.println("--------------------BIENVENIDOS A ´INTERFAZ DE SABORES´---------------------------");
+        Colores.printInColor("========BIENVENIDOS A ´INTERFAZ DE SABORES´========", Colores.YELLOW);
         System.out.println("Que desea hacer?");
 
         Scanner scanner = new Scanner(System.in);
@@ -20,9 +21,10 @@ public class MenuGestionEmpleado {
         int op = -1;
         do {
             try{
-                System.out.println("1- RESERVAS");
-                System.out.println("2- ORDENES");
-                System.out.println("0- Salir");
+                System.out.println("1. Reservas");
+                System.out.println("2. Ordenes");
+                System.out.println("3. Volver al menu Login");
+                System.out.println("0. Salir");
 
                 System.out.println("Ingrese una opción");
                 op = scanner.nextInt(); // Leer la entrada como cadena
@@ -31,9 +33,13 @@ public class MenuGestionEmpleado {
                         menuReservas.menuReservas();
                         break;
                     case 2:
-                        //menuOrdenes.menuOrdenes();
+                        menuOrdenes.menuOrdenes();
+                        break;
+                    case 3:
                         break;
                     case 0:
+                        System.out.println("Saliendo...");
+                        System.exit(0);
                         break;
                     default:
                         System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
@@ -42,9 +48,12 @@ public class MenuGestionEmpleado {
             } catch (InputMismatchException e) {
                 System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
                 scanner.nextLine();
+            }  catch (ExcepcionEntradaInvalida e) {
+                System.out.println(e.getMessage());
+            } catch (ExcepcionOrdenNoEncontrada excepcionOrdenNoEncontrada) {
+                System.out.println(excepcionOrdenNoEncontrada.getMessage());
             }
-        } while (op!=0);
-        scanner.close();
+        } while (op!=0 && op!= 3);
     }
 
 }
