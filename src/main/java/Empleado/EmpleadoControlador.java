@@ -116,7 +116,11 @@ public class EmpleadoControlador {
         pasarAMemoria();
         Integer clave = empleadoVista.pedirClave();
         Empleado empleado = empleadoRepositorio.buscarEmpleado(clave);
-        empleadoVista.mostrarEmpleado(empleado);
+        if (empleado==null){
+            System.out.println("Empleado no cargado en el sistema");
+        } else {
+            empleadoVista.mostrarEmpleado(empleado);
+        }
         pasarAarchivo();
 
     }
