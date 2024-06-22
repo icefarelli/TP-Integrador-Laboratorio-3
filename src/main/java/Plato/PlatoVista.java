@@ -1,7 +1,6 @@
 package Plato;
 import Plato.Colores.Colores;
 import Plato.Excepciones.ExcepCargaNoRealizada;
-import Plato.Excepciones.ExcepIngresoInvalido;
 import Plato.Variedad.Variedad;
 import Plato.Variedad.VariedadController;
 import Plato.Variedad.VariedadRepositorio;
@@ -27,9 +26,6 @@ public class PlatoVista {
             if (categoria == null) {
                 throw new NumberFormatException("Saliendo...");
             } else {
-//                printearLineasSeparadoras();
-//                System.out.println("Ingrese el Nombre del Plato");
-//                nombre = variedadController.cargarNombre(varVista);
                 printearLineasSeparadoras();
                 boolean tieneVariedades = metodoConfirmacion("-¿Este plato tiene variedades?");
 
@@ -65,7 +61,8 @@ public class PlatoVista {
     //Metodo de confirmacion para concretar o validar acciones
     public boolean metodoConfirmacion (String mensaje){
         System.out.println(mensaje + "(s/n)");
-        String respuesta = scanner.nextLine().trim().toLowerCase();
+        String respuesta;
+        respuesta = scanner.nextLine().trim().toLowerCase();
         if (respuesta.equals("s")) {
             return true;
         } else if (respuesta.equals("n")) {

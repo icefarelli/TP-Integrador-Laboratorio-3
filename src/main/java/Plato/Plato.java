@@ -49,7 +49,7 @@ public class Plato {
         return variedades;
     }
 
-    // Modifique el toString para darle un mejor formato a la impresion de un plato solo utilizando StringBuilder
+    // Modifique el toString para darle un mejor formato a la impresión de un plato solo utilizando StringBuilder
     // construyendo el String dependiendo se tiene variedad o no el plato.
     @Override
     public String toString() {

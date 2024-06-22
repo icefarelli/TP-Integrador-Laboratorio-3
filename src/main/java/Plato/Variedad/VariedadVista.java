@@ -31,12 +31,12 @@ public class VariedadVista {
     public String ingresarNombre() throws ExcepIngresoInvalido {
         String nombre = scanner.nextLine();
         nombre = primeraMayuscula(nombre);
-        if (nombre == null || nombre.trim().isEmpty() || !nombre.matches("[a-zA-ZáéíóúüÁÉÍÓÚÜ ]+")) {
+        if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-ZáéíóúüÁÉÍÓÚÜ ]+")) {
             throw new ExcepIngresoInvalido("Ha ingresado Numeros o Caracteres invalidos en el nombre.\nEl nombre del plato solo debe contener letras.");
         } else return nombre;
     }
 
-    //Módulo ingreso del precio con comprobaciones
+    //Módulo recibe el precio y realiza comprobaciones
     public double ingresarPrecio() {
         boolean validarPrecio = false;
         double precioVariedad = 0.0;
@@ -97,7 +97,7 @@ public class VariedadVista {
         String[] palabras = nombre.trim().toLowerCase().split("\\s+");
         StringBuilder nombreModificado = new StringBuilder();
         for (String palabra : palabras) {
-            if (palabra.length() > 0) {
+            if (!palabra.isEmpty()) {
                 nombreModificado.append(Character.toUpperCase(palabra.charAt(0)))
                         .append(palabra.substring(1))
                         .append(" ");

@@ -10,8 +10,6 @@ import java.util.List;
 public class PlatoControlador {
     PlatoRepositorio platoRepositorio;
     PlatoVista platoVista;
-    VariedadVista varVista;
-    VariedadController varController;
 
     public PlatoControlador(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
         this.platoRepositorio = platoRepositorio;
@@ -21,7 +19,7 @@ public class PlatoControlador {
     //Agregar Plato
     public void cargarPlatoEnSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista, VariedadVista varVista,VariedadController varController) throws RuntimeException {
 //
-        Plato nuevoPlato = null;
+        Plato nuevoPlato;
         try {
             String tipo = platoVista.menuTipoComida();
             platoRepositorio.mostrarEnlistadoBonitoXtipoNew(tipo);
@@ -32,8 +30,6 @@ public class PlatoControlador {
                 nuevoPlato = platoVista.nuevoPlato(tipo,nombre);
                 platoVista.printearLineasSeparadoras();
                 if (nuevoPlato != null) {
-//                    platoRepositorio.comprobarExistenciaPlato(nuevoPlato.getNombre());
-//                    platoVista.printearLineasSeparadoras();
                     boolean confirm = platoVista.metodoConfirmacion("¿Desea confirmar la carga?");
                     if (confirm) {
                         platoRepositorio.agregar(nuevoPlato);
@@ -45,18 +41,15 @@ public class PlatoControlador {
                     }
                 }
 
-        } catch (ExcepCargaNoRealizada e) {
-            System.out.println("Error: " + e.getMessage());
+        } catch (ExcepCargaNoRealizada | NumberFormatException e) {
+            System.out.println(e.getMessage());
         } catch (ExcepPlatoExistente epe){
             System.out.println(epe.getMessage());
             platoVista.printearLineasSeparadoras();
-            //platoRepositorio.mostrarPlato(platoRepositorio.buscarPlatoXnombre(nuevoPlato.getNombre()));
             System.out.println();
             platoVista.printearLineasSeparadoras();
         } catch (ExcepIngresoInvalido e) {
             throw new RuntimeException(e);
-        }catch (NumberFormatException nfe){
-            System.out.println(nfe.getMessage());
         }
     }
 
@@ -83,7 +76,7 @@ public class PlatoControlador {
                 platoVista.mensajeEliminacionExitoFracaso(false);
             }
         }catch (ExcepIngresoInvalido eii){
-            platoVista.mensajePersonalizado("Error: " + eii.getMessage());
+            platoVista.mensajePersonalizado(eii.getMessage());
         }
     }
 
@@ -139,11 +132,10 @@ public class PlatoControlador {
 
             Plato buscado = platoRepositorio.buscarPlatoXnombre(nombre);
 
+            platoVista.printearLineasSeparadoras();
             if (buscado == null) {
-                platoVista.printearLineasSeparadoras();
                 platoVista.mensajePersonalizado("Plato no encontrado");
             } else {
-                platoVista.printearLineasSeparadoras();
                 platoRepositorio.mostrarUnPlato(buscado);
                 platoVista.printearLineasSeparadoras();
                 Plato actualizado = platoVista.actualizarPlato(tipo, nombre, buscado.getVariedades());
@@ -176,18 +168,18 @@ public class PlatoControlador {
     }
 
     //Selección de Plato para Orden que devuelve el plato seleccionado
-    public Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
+    public Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista)throws NumberFormatException {
 
-        String tipo = platoVista.menuTipoComida();
-        List<Plato> listaP;
-        if(tipo !=null){
-            listaP = platoRepositorio.enlistarXTipo(tipo);
-        }else {
-            return null;
-        }
+        try {
+            String tipo = platoVista.menuTipoComida();
+            List<Plato> listaP;
+            if (tipo != null) {
+                listaP = platoRepositorio.enlistarXTipo(tipo);
+            } else {
+                return null;
+            }
 
-        int indiceSeleccionado;
-        do {
+            int indiceSeleccionado;
             platoRepositorio.mostrarEnlistadoBonitoXtipoOld(tipo);
             indiceSeleccionado = platoVista.obtenerIndiceSeleccionado(listaP);
             if (indiceSeleccionado == -1) {
@@ -200,8 +192,11 @@ public class PlatoControlador {
                     throw new RuntimeException(e);
                 }
             }
-        }while (indiceSeleccionado > listaP.size());
-        return listaP.get(indiceSeleccionado);
+            return listaP.get(indiceSeleccionado);
+        }catch (NumberFormatException nfe) {
+            System.out.println(nfe.getMessage());
+            return seleccionPlatoParaOrden(platoRepositorio, platoVista);
+        }
     }
 
     //Mostrar Platos por categoria

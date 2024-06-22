@@ -1,7 +1,6 @@
 package Plato;
 
 import Interfaces.IABM;
-import Plato.Excepciones.ExcepIngresoInvalido;
 import Plato.Excepciones.ExcepPlatoExistente;
 import Plato.Variedad.Variedad;
 import com.google.gson.Gson;
@@ -125,7 +124,7 @@ public class PlatoRepositorio implements IABM<Plato> {
         return listaAuxiliar;
     }
 
-    //crea una lista con el tipo ingresado pero no considera las variedades de cada plato
+    //crea una lista con el tipo ingresado, pero no considera las variedades de cada plato
     public List<Plato> enlistarXTipoSinVariedad(String tipo) {
         List<Plato> listaAuxiliar = new ArrayList<>();
         for (Plato plato : platoSet) {
@@ -143,9 +142,9 @@ public class PlatoRepositorio implements IABM<Plato> {
         }
     }
 
-    // Recibe un tipo por parametro y crea dos listas, una con nombre y otra con precio. Complementa el nombre del plato que contiene variedad
-    // Luego busca el nombre mas largo y lo toma de referencia para acomodar el menu con un largo estandarizado.
-    // Utilizado en la seleccion de plato para orden y eliminacion por seleccion
+    // Recibe un tipo por parámetro y crea dos listas, una con nombre y otra con precio. Complementa el nombre del plato que contiene variedad
+    // Luego busca el nombre más largo y lo toma de referencia para acomodar el menu con un largo estandarizado.
+    // Utilizado en la selección de plato para orden y eliminación por selección
     public void mostrarEnlistadoBonitoXtipoOld(String tipo){
         List<String> nombre = new ArrayList<>();
         List<Double> precio = new ArrayList<>();
@@ -163,14 +162,14 @@ public class PlatoRepositorio implements IABM<Plato> {
                 }
             }
         }
-        // busca el plato con el nombre mas largo
+        // busca el plato con el nombre más largo
         int largoMaximoDelNombreDelPlato = 0;
         for (String plato : nombre) {
             if (plato.length() > largoMaximoDelNombreDelPlato) {
                 largoMaximoDelNombreDelPlato = plato.length();
             }
         }
-        // crea una variable de tipo int que contiene la cantidad total de indices
+        // crea una variable de tipo int que contiene la cantidad total de índices
         int totalIndices = String.valueOf(nombre.size()).length();
 
         // Imprimir el menú formateado
@@ -181,9 +180,9 @@ public class PlatoRepositorio implements IABM<Plato> {
         }
     }
 
-    //metodo para mostrar la carta completa accediendo desde el set. metodologia similar a la utilizada en el mostrarEnlistadoBonitoXtipoOld
-    // pero se modularizó las secciones del método mensionado. Se calcula por separado el nombre mas largo del total de nombres en el set
-    // y el total de indices. en diferentes metodos. Por ultimo mostrarEnlistadoBonitoXtipoNew imprime el total del Set.
+    //Método para mostrar la carta completa accediendo desde el set. metodología similar a la utilizada en el mostrarEnlistadoBonitoXtipoOld
+    // pero se modularizó las secciones del método mensionado. Se calcula por separado el nombre más largo del total de nombres en el set
+    // y el total de índices. En diferentes métodos. Por último mostrarEnlistadoBonitoXtipoNew imprime el total del Set.
 
     public void mostrarCartaDePlatosCompleta() {
         Set<String> tiposYaMostrados = new HashSet<>();
@@ -208,9 +207,7 @@ public class PlatoRepositorio implements IABM<Plato> {
         System.out.println("Menu de " + tipo);
         System.out.println("====================================================");
 
-        for (int i = 0; i < platosPorTipo.size(); i++) {
-            Plato plato = platosPorTipo.get(i);
-
+        for (Plato plato : platosPorTipo) {
             // Imprimir el plato principal
             System.out.println(plato.toString());
 
@@ -231,7 +228,7 @@ public class PlatoRepositorio implements IABM<Plato> {
         System.out.println("===================================================="); //salto de linea
     }
 
-    //Si el plato contiene variedades imprime las variedades, sino imprime los platos base con sus valores
+    //Si el plato contiene variedades imprime las variedades, caso contrario imprime los platos base con sus valores
     public void mostrarPlato(Plato plato){
         if(plato.getVariedades().isEmpty()){
             System.out.print(plato.toString());
@@ -248,7 +245,7 @@ public class PlatoRepositorio implements IABM<Plato> {
         if (aumento != 0) {
             aumento = aumento * 0.01;
             for (Plato plato : this.platoSet) {
-                if (plato.getVariedades().size() == 0) {
+                if (plato.getVariedades().isEmpty()) {
                     // Si el plato no tiene variedades, aumentar el precio del plato mismo
                     double valorAnterior = plato.getPrecio();
                     double nuevoValor = valorAnterior + (valorAnterior * aumento);
