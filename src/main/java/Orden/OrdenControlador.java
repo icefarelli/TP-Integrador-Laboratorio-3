@@ -126,82 +126,86 @@ public class OrdenControlador {
             mostrarTodasLasOrdenesPendientes();
             Integer idOrden = ordenVista.pedirIdOrdenModificar();
             Orden orden = ordenRepositorio.obtenerOrden(idOrden);
-            mostrarOrden(orden.getId());
-            List<Plato> platos = new ArrayList<>(orden.getPlatoList());
-            int opcion;
+            if (orden.getEstado().equalsIgnoreCase("Pendiente")) {
+                mostrarOrden(orden.getId());
+                List<Plato> platos = new ArrayList<>(orden.getPlatoList());
+                int opcion;
 
-            do {
-                opcion = 0;
-                try {
-                    System.out.println("Seleccione una opción: ");
-                    System.out.println("1. Agregar un plato");
-                    System.out.println("2. Quitar un plato");
-                    System.out.println("3. Reemplazar un plato");
-                    System.out.println("4. Marcar orden como Completada");
-                    System.out.println("5. Finalizar modificaciones");
-                    System.out.print("Opción: \n");
-                    opcion = scan.nextInt();
-                    scan.nextLine();  // capturar el salto de linea desp del nextInt
-                    switch (opcion) {
-                        case 1:
-                            // Agregar un plato
-                            Plato nuevoPlato = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista); // Método que selecciona y retorna un plato
-                            if (nuevoPlato != null) {
-                                platos.add(nuevoPlato);
-                            } else {
-                                System.out.println("Plato no agregado");
-                            }
-                            break;
-                        case 2:
-                            // Quitar un plato
-                            System.out.print("Ingrese el índice del plato a quitar (empezando desde 0): \n");
-                            ordenVista.mostrarPlatosDeOrden(orden);
-                            int indiceQuitar = scan.nextInt();
-                            scan.nextLine();  // capturar el salto de linea desp del nextInt
-                            if (indiceQuitar >= 0 && indiceQuitar < platos.size()) {
-                                platos.remove(indiceQuitar);
-                            } else {
-                                System.out.println("Índice inválido.");
-                            }
-                            break;
-                        case 3:
-                            // Reemplazar un plato
-                            System.out.print("Ingrese el índice del plato a reemplazar (empezando desde 0): \n");
-                            ordenVista.mostrarPlatosDeOrden(orden);
-                            int indiceReemplazar = scan.nextInt();
-                            scan.nextLine();  // capturar el salto de linea desp del nextInt
-                            if (indiceReemplazar >= 0 && indiceReemplazar < platos.size()) {
-                                Plato platoReemplazo = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista);
-                                if (platoReemplazo != null) {
-                                    platos.set(indiceReemplazar, platoReemplazo);
+                do {
+                    opcion = 0;
+                    try {
+                        System.out.println("Seleccione una opción: ");
+                        System.out.println("1. Agregar un plato");
+                        System.out.println("2. Quitar un plato");
+                        System.out.println("3. Reemplazar un plato");
+                        System.out.println("4. Marcar orden como Completada");
+                        System.out.println("5. Finalizar modificaciones");
+                        System.out.print("Opción: \n");
+                        opcion = scan.nextInt();
+                        scan.nextLine();  // capturar el salto de linea desp del nextInt
+                        switch (opcion) {
+                            case 1:
+                                // Agregar un plato
+                                Plato nuevoPlato = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista); // Método que selecciona y retorna un plato
+                                if (nuevoPlato != null) {
+                                    platos.add(nuevoPlato);
                                 } else {
                                     System.out.println("Plato no agregado");
                                 }
-                            } else {
-                                System.out.println("Índice inválido.");
-                            }
-                            break;
-                        case 4:
-                            orden.setEstado("Completada");
-                            System.out.println("La orden se ha marcado como Completada");
-                            break;
-                        case 5:
-                            // Finalizar modificaciones
-                            opcion = -1;
-                            break;
-                        default:
-                            System.out.println("Opción inválida. Intente nuevamente.");
+                                break;
+                            case 2:
+                                // Quitar un plato
+                                System.out.print("Ingrese el índice del plato a quitar (empezando desde 0): \n");
+                                ordenVista.mostrarPlatosDeOrden(orden);
+                                int indiceQuitar = scan.nextInt();
+                                scan.nextLine();  // capturar el salto de linea desp del nextInt
+                                if (indiceQuitar >= 0 && indiceQuitar < platos.size()) {
+                                    platos.remove(indiceQuitar);
+                                } else {
+                                    System.out.println("Índice inválido.");
+                                }
+                                break;
+                            case 3:
+                                // Reemplazar un plato
+                                System.out.print("Ingrese el índice del plato a reemplazar (empezando desde 0): \n");
+                                ordenVista.mostrarPlatosDeOrden(orden);
+                                int indiceReemplazar = scan.nextInt();
+                                scan.nextLine();  // capturar el salto de linea desp del nextInt
+                                if (indiceReemplazar >= 0 && indiceReemplazar < platos.size()) {
+                                    Plato platoReemplazo = platoControlador.seleccionPlatoParaOrden(platoRepositorio, platoVista);
+                                    if (platoReemplazo != null) {
+                                        platos.set(indiceReemplazar, platoReemplazo);
+                                    } else {
+                                        System.out.println("Plato no agregado");
+                                    }
+                                } else {
+                                    System.out.println("Índice inválido.");
+                                }
+                                break;
+                            case 4:
+                                orden.setEstado("Completada");
+                                System.out.println("La orden se ha marcado como Completada");
+                                break;
+                            case 5:
+                                // Finalizar modificaciones
+                                opcion = -1;
+                                break;
+                            default:
+                                System.out.println("Opción inválida. Intente nuevamente.");
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
+                        scan.nextLine();
                     }
-                } catch (InputMismatchException e) {
-                    System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
-                    scan.nextLine();
-                }
-            } while (opcion != -1);
-            // Guardar los cambios
-            orden.setPlatoList(platos);
-            ordenRepositorio.guardarOrden(orden);
-            ordenRepositorio.guardarOrdenesEnArchivo();
-            ordenVista.mostrarMensaje("Orden modificada exitosamente.");
+                } while (opcion != -1);
+                // Guardar los cambios
+                orden.setPlatoList(platos);
+                ordenRepositorio.guardarOrden(orden);
+                ordenRepositorio.guardarOrdenesEnArchivo();
+                ordenVista.mostrarMensaje("Orden modificada exitosamente.");
+            } else {
+                System.out.println("La orden ingresada ya esta completada, no se puede modificar");
+            }
         } catch (ExcepcionOrdenNoEncontrada excepcionOrdenNoEncontrada) {
             System.out.println(excepcionOrdenNoEncontrada.getMessage());
         } catch (ExcepcionEntradaInvalida excepcionEntradaInvalida) {
@@ -214,27 +218,30 @@ public class OrdenControlador {
             ordenRepositorio.cargarOrdenesDesdeArchivo();
 
             Scanner scan = new Scanner(System.in);
+            mostrarTodasLasOrdenesPendientes();
             Integer idOrdenEliminar = ordenVista.pedirIdOrdenEliminar();  // Limpiar el buffer
 
             Orden orden = ordenRepositorio.obtenerOrden(idOrdenEliminar);
-
             if (orden == null) {
                 ordenVista.mostrarMensaje("Orden no encontrada.");
                 return;
             }
+            if (orden.getEstado().equalsIgnoreCase("Pendiente")) {
+                // Confirmar la eliminación
+                System.out.println("¿Está seguro de que desea eliminar la siguiente orden?");
+                mostrarOrden(orden.getId());
+                System.out.print("Ingrese 's' para confirmar, cualquier otra tecla para cancelar: ");
+                String op = scan.nextLine();
 
-            // Confirmar la eliminación
-            System.out.println("¿Está seguro de que desea eliminar la siguiente orden?");
-            mostrarOrden(orden.getId());
-            System.out.print("Ingrese 's' para confirmar, cualquier otra tecla para cancelar: ");
-            String op = scan.nextLine();
-
-            if (op.equalsIgnoreCase("s")) {
-                ordenRepositorio.eliminarOrden(idOrdenEliminar);
-                ordenVista.mostrarMensaje("Orden eliminada exitosamente.");
-                ordenRepositorio.guardarOrdenesEnArchivo();
-            } else {
-                ordenVista.mostrarMensaje("Eliminación cancelada.");
+                if (op.equalsIgnoreCase("s")) {
+                    ordenRepositorio.eliminarOrden(idOrdenEliminar);
+                    ordenVista.mostrarMensaje("Orden eliminada exitosamente.");
+                    ordenRepositorio.guardarOrdenesEnArchivo();
+                } else {
+                    ordenVista.mostrarMensaje("Eliminación cancelada.");
+                }
+            }else {
+                System.out.println("La orden ingresada ya esta completada, no se puede eliminar");
             }
         } catch (ExcepcionOrdenNoEncontrada e) {
             System.out.println(e.getMessage());
