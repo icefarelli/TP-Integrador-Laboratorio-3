@@ -29,7 +29,7 @@ public class MenuPlato {
         do {
             try {
                 Colores.printInColor("==========MENU PLATOS==========", Colores.BLUE);
-                System.out.println(" 1. Nuevo plato\n 2. Modificar plato\n 3. Aumentar precio a los platos\n 4. Eliminar platos\n 5. Mostrar todos los platos por Categoria\n 6. Mostrar carta completa\n 7. Volver al menu principal\n 8. Salir del sistema");
+                System.out.println(" 1. Nuevo plato\n 2. Modificar plato\n 3. Aumentar precio a los platos\n 4. Reducir precio a los platos\n 5. Eliminar platos\n 6. Mostrar todos los platos por Categoria\n 7. Mostrar carta completa\n 8. Volver al menu principal\n 9. Salir del sistema");
                 Colores.printInColor("-------------------------------", Colores.BLUE);
                 opcion = scanner.nextInt();
                 scanner.nextLine();
@@ -48,21 +48,25 @@ public class MenuPlato {
                         PlatoControlador.pausarPantalla(vista);
                         break;
                     case 4:
-                        mPlato.menuEliminar(repositorio, vista, pControlador, varController, varVista);
+                        pControlador.bajarPreciosPorcentualmente(repositorio,vista);
                         PlatoControlador.pausarPantalla(vista);
                         break;
                     case 5:
-                        pControlador.mostrarPlatosXTipo(repositorio, vista);
+                        mPlato.menuEliminar(repositorio, vista, pControlador, varController, varVista);
                         PlatoControlador.pausarPantalla(vista);
                         break;
                     case 6:
-                        pControlador.mostrarMenuCompleto(repositorio);
+                        pControlador.mostrarPlatosXTipo(repositorio, vista);
                         PlatoControlador.pausarPantalla(vista);
                         break;
                     case 7:
-                        System.out.println("Volviendo al menu principal...");
+                        pControlador.mostrarMenuCompleto(repositorio);
+                        PlatoControlador.pausarPantalla(vista);
                         break;
                     case 8:
+                        System.out.println("Volviendo al menu principal...");
+                        break;
+                    case 9:
                         System.out.println("Saliendo...");
                         System.exit(0);
                     default:
@@ -76,7 +80,7 @@ public class MenuPlato {
                 scanner.nextLine();
                 e.printStackTrace();
             }
-        } while (opcion != 8 && opcion !=7);
+        } while (opcion != 9 && opcion !=8);
     }
 
 

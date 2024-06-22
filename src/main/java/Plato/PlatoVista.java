@@ -200,6 +200,37 @@ public class PlatoVista {
         return 0;
     }
 
+    // Método de ingreso de porcentaje para aumentar el valor de todos los
+    // platos del menu de manera porcentual con un tope máximo de 100
+    public double ingresePorcentajeBaja () throws NumberFormatException, InputMismatchException {
+        try {
+            System.out.println("Ingrese el porcentaje que desea bajar la totalidad de los precios.\nRecuerde que el valor a ingresar debe tener un mínimo de 1% y un tope de 100%");
+            double aumento = scanner.nextDouble();
+            scanner.nextLine();
+
+            if(aumento <= 0 || aumento >100) {
+                System.out.println("El valor ingresado se halla fuera del margen permitido.");
+                return 0;
+            }else if(aumento == 0) {
+                return 0;
+            }else {
+                boolean confirmacion = metodoConfirmacion("Se hara una reduccion de un " +(int) aumento + "% sobre los precios. ¿Confirmar? " );
+                if(confirmacion) {
+                    return aumento;
+                }else {
+                    return 0.0;
+                }
+            }
+        }catch (NumberFormatException nfe){
+            System.out.println("Ingrese solo numeros");
+        }catch (InputMismatchException ime){
+            System.out.println("Formato Invalido");
+            scanner.nextLine();
+        }
+        return 0;
+    }
+
+
 
     public double ingresePrecioDePlato() {
         System.out.println(" Ingrese Valor en pesos (Formato X.XX): $");

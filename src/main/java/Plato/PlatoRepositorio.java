@@ -265,6 +265,30 @@ public class PlatoRepositorio implements IABM<Plato> {
         }
     }
 
+    public void bajaPorcentualPrecio(double reduccion){
+        if (reduccion != 0) {
+            reduccion = reduccion * 0.01;
+            for (Plato plato : this.platoSet) {
+                if (plato.getVariedades().isEmpty()) {
+                    // Si el plato no tiene variedades, baja el precio del plato mismo
+                    double valorAnterior = plato.getPrecio();
+                    double nuevoValor = valorAnterior - (valorAnterior * reduccion);
+                    plato.setPrecio(nuevoValor);
+                } else {
+                    // Aumentar el precio de las variedades, si existen
+                    for (Variedad variedad : plato.getVariedades()) {
+                        double valorAnterior = variedad.getPrecio();
+                        double nuevoValor = valorAnterior - (valorAnterior * reduccion);
+                        variedad.setPrecio(nuevoValor);
+                    }
+                }
+            }
+            saveFilePlatos();
+        }else {
+            System.out.println("No se realizo la reduccion de precios.");
+        }
+    }
+
 
 
 

@@ -168,6 +168,11 @@ public class PlatoControlador {
         platoRepositorio.aumentoPorcentualPrecio(platoVista.ingresePorcentaje());
     }
 
+    //Bajar precio de manera porcentual
+    public void bajarPreciosPorcentualmente(PlatoRepositorio platoRepositorio, PlatoVista platoVista){
+        platoRepositorio.bajaPorcentualPrecio(platoVista.ingresePorcentajeBaja());
+    }
+
     //Selección de Plato para Orden que devuelve el plato seleccionado
     public Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista)throws NumberFormatException {
 
