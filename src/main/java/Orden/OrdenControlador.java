@@ -71,6 +71,13 @@ public class OrdenControlador {
                 c = clienteRepositorio.findCliente(clienteId, setClientes);
             } catch (ExcepcionClienteNoEncontrado excepcionClienteNoEncontrado) {
                 System.out.println(excepcionClienteNoEncontrado.getMessage());
+
+                System.out.println("Quiere agregar el cliente? s/n");
+                Scanner scan = new Scanner(System.in);
+                String agregar = scan.nextLine();
+                if (agregar.equalsIgnoreCase("s")) {
+                    clienteControlador.agregarClientes();
+                }
             }
         } while (c == null);
 
