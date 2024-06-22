@@ -161,7 +161,7 @@ public class ReservaVista {
     public void mostrarReservaConArreglo(List<Reserva> reservas) {
         for (Reserva reserva : reservas) {
             System.out.println("Fecha: " + reserva.getFecha());
-            System.out.println("Mesas Reservadas:");
+            System.out.println("------------Mesas Reservadas------------");
             for (MesasReservadas mesas : reserva.getMesasReservadas()) {
                 System.out.println("Cliente: " + mesas.getCliente().getNombre());
                 System.out.println("Cantidad de Personas: " + mesas.getCantPersonas());

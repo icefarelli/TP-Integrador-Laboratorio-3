@@ -1,6 +1,7 @@
 package MesasReservadas;
 
 import Interfaces.IABM;
+import Reserva.Reserva;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +35,17 @@ public class MesasReservadasRepositorio implements IABM<MesasReservadas> {
         mesasReservadas.add(obj);
     }
 
-    public Integer buscarIndice(Integer id){
-        Integer indice = -1;
-        for(MesasReservadas mesas : mesasReservadas){
-            if(mesas.getCliente().getIdCliente() == id){
-                indice = mesasReservadas.indexOf(mesas);
+    public boolean buscarIndice(Reserva reserva, Integer id){
+        boolean opcion = false;
+        int i;
+        List<MesasReservadas> listamesas = reserva.getMesasReservadas();
+        for(i=0;i<listamesas.size();i++){
+            if(listamesas.get(i).getCliente().getIdCliente() == id){
+                opcion = true;
+
             }
         }
-        return indice;
+        return opcion;
     }
 
     public MesasReservadas buscarMesasReservadas(List<MesasReservadas> mesasReservadas, Integer id){

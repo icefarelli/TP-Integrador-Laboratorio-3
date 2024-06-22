@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 public class ReservaControlador {
     private ReservaRepositorio reservaRepositorio;
@@ -40,13 +41,25 @@ public class ReservaControlador {
 
         Reserva reservaExistente = reservaRepositorio.buscarReserva(fecha);
         Integer cantPersonas = reservaVista.pedirCantidadPersonas();
-        clienteControlador.viewClientes();
-        Integer id = clienteVista.seleccId();
-        Cliente cliente = clienteRepositorio.findCliente(id, clienteRepositorio.getClienteSet());
 
-        if (cliente == null) {
-            throw new ExcepcionClienteNoEncontrado("Cliente no encontrado con el ID: " + id);
-        }
+        Cliente cliente = null;
+        do {
+            clienteVista.verTodosClientesVersionCorta(clienteRepositorio.getClienteSet());
+
+            Integer id = clienteVista.seleccId();
+            try {
+                cliente = clienteRepositorio.findCliente(id, clienteRepositorio.getClienteSet());
+            } catch (ExcepcionClienteNoEncontrado excepcionClienteNoEncontrado) {
+                System.out.println(excepcionClienteNoEncontrado.getMessage());
+                System.out.println("Quiere agregar el cliente? s/n");
+                Scanner scan = new Scanner(System.in);
+                String agregar = scan.nextLine();
+                if (agregar.equalsIgnoreCase("s")) {
+                    clienteControlador.agregarClientes();
+                    clienteControlador.Update();
+                }
+            }
+        }while(cliente==null);
 
         MesasReservadas nuevaMesaReservada = new MesasReservadas(cliente, cantPersonas);
         if (reservaExistente == null) {
@@ -54,13 +67,17 @@ public class ReservaControlador {
             mesasReservadas.add(nuevaMesaReservada);
             Reserva nuevaReserva = new Reserva(fecha, mesasReservadas);
             reservaRepositorio.agregar(nuevaReserva);
-            reservaVista.mensaje("Reserva agregada con éxito!");
-        } else {
+            System.out.println("Reserva agregada con éxito!");
+        } else if(mesasReservadasRepositorio.buscarIndice(reservaExistente,cliente.getIdCliente())) {
+            System.out.println("El cliente ya tiene una mesa reservada");
+            return;
+        } else{
             reservaExistente.getMesasReservadas().add(nuevaMesaReservada);
-            reservaVista.mensaje("Reserva agregada con éxito!");
+            System.out.println("Reserva agregada con éxito!");
         }
 
         reservaRepositorio.guardarReserva();
+
     }
 
     public void eliminarMesaReserva() {
