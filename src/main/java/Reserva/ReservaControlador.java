@@ -115,7 +115,7 @@ public class ReservaControlador {
             return;
         }
 
-        clienteControlador.viewClientes();
+        clienteVista.verTodosClientesVersionCorta(clienteRepositorio.getClienteSet());
         Integer id = clienteVista.seleccId();
         MesasReservadas mesasReservadasAModificar = mesasReservadasRepositorio.buscarMesasReservadas(reserva.getMesasReservadas(), id);
         if (mesasReservadasAModificar == null) {
