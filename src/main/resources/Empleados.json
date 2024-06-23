@@ -7,13 +7,13 @@
   },
   "2": {
     "idEmpleado": 2,
-    "puesto": "Cajero",
+    "puesto": "Mesero",
     "nombre": "Leonardo Rodríguez",
     "id": "31728490"
   },
   "3": {
     "idEmpleado": 3,
-    "puesto": "Anfitrión",
+    "puesto": "Mesero",
     "nombre": "Julia López",
     "id": "42739485"
   },
@@ -25,13 +25,13 @@
   },
   "5": {
     "idEmpleado": 5,
-    "puesto": "Cajero",
+    "puesto": "Mesero",
     "nombre": "Hugo Martínez",
     "id": "25039487"
   },
   "6": {
     "idEmpleado": 6,
-    "puesto": "Anfitrión",
+    "puesto": "Mesero",
     "nombre": "Camila García",
     "id": "38291754"
   },
@@ -43,13 +43,13 @@
   },
   "8": {
     "idEmpleado": 8,
-    "puesto": "Cajero",
+    "puesto": "Mesero",
     "nombre": "Verónica Álvarez",
     "id": "47290381"
   },
   "9": {
     "idEmpleado": 9,
-    "puesto": "Anfitrión",
+    "puesto": "Mesero",
     "nombre": "Esteban Fernández",
     "id": "30294857"
   },

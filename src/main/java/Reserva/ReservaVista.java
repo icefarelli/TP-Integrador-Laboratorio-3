@@ -62,7 +62,7 @@ public class ReservaVista {
         Integer cantPersonas = null;
         while (true) {
             try {
-                System.out.println("Ingrese Cantidad de personas: ");
+                System.out.println("Ingrese cantidad de personas: ");
                 cantPersonas = scanner.nextInt();
                 scanner.nextLine();
                 validarCantPersonas(cantPersonas);
