@@ -45,12 +45,12 @@ public class ClienteVista {
         return cliente;
     }
 
-    private void validarNombre(String nombre) throws ExcepcionCamposVacios, ExcepcionNombreNumerico {
+    private void validarNombre(String nombre) throws ExcepcionCamposVacios, ExcepcionNombreNumerico, ExcepcionFormatoIncorrecto {
         if (nombre == null || nombre.isEmpty()) {
-            throw new ExcepcionCamposVacios("El nombre y apellido no pueden estar vacíos.");
+            throw new ExcepcionCamposVacios("El nombre no puede estar vacío");
         }
-        if (contieneNumeros(nombre)) {
-            throw new ExcepcionNombreNumerico("El nombre no puede contener números.");
+        if (!nombre.matches("[a-zA-Z ]+")) {
+            throw new ExcepcionFormatoIncorrecto("El nombre no puede contener símbolos ni números");
         }
     }
 
