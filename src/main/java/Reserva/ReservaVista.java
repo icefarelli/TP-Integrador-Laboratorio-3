@@ -31,11 +31,30 @@ public class ReservaVista {
                 fecha = LocalDate.parse(input, formatter);
                 validarFechaHoy(fecha);
                 break;
-            } catch (DateTimeParseException | ExcepcionReservaCamposVacios | ExcepcionReservaCaracterInvalido e) {
+            } catch (DateTimeParseException e) {
+                String mensaje = traducirMensajeFechaInvalida(e.getMessage());
+                System.out.println(mensaje);
+            } catch (ExcepcionReservaCamposVacios | ExcepcionReservaCaracterInvalido e) {
                 System.out.println(e.getMessage());
             }
         }
         return new Reserva(fecha);
+    }
+
+
+    private String traducirMensajeFechaInvalida(String mensajeOriginal) {
+        if (mensajeOriginal.contains("could not be parsed")) {
+            if (mensajeOriginal.contains("Invalid value for DayOfMonth")) {
+                return "Error al analizar la fecha: valor de día del mes inválido (valores válidos 1 - 28/31).";
+            } else if (mensajeOriginal.contains("Invalid value for MonthOfYear")) {
+                return "Error al analizar la fecha: valor de mes del año inválido (valores válidos 1 - 12).";
+            } else if (mensajeOriginal.contains("Invalid value for Year")) {
+                return "Error al analizar la fecha: valor de año inválido.";
+            } else {
+                return "Error al analizar la fecha: formato inválido.";
+            }
+        }
+        return "Error al analizar la fecha.";
     }
 
     public Integer pedirCantidadPersonas() {
