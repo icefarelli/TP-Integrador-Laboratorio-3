@@ -1,6 +1,7 @@
 package Cliente;
 
 import Excepciones.ExcepcionCamposVacios;
+import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionFormatoIncorrecto;
 import Excepciones.ExcepcionNombreNumerico;
 
@@ -33,7 +34,7 @@ public class ClienteVista {
                 cliente = new Cliente(name, dni, phone);
                 System.out.println("Cliente cargado exitosamente.");
                 break;
-            } catch (ExcepcionCamposVacios | ExcepcionNombreNumerico | ExcepcionFormatoIncorrecto e) {
+            } catch (ExcepcionCamposVacios | ExcepcionNombreNumerico | ExcepcionFormatoIncorrecto | ExcepcionDNIStringInvalido e) {
                 System.out.println(e.getMessage());
                 System.out.println("Por favor, intente de nuevo.");
             }
@@ -51,12 +52,16 @@ public class ClienteVista {
         }
     }
 
-    private void validarDni(String dni) throws ExcepcionCamposVacios, ExcepcionFormatoIncorrecto {
+    private void validarDni(String dni) throws ExcepcionCamposVacios, ExcepcionFormatoIncorrecto, ExcepcionDNIStringInvalido {
         if (dni == null || dni.isEmpty()) {
             throw new ExcepcionCamposVacios("El DNI no puede estar vacío.");
         }
         if (!esNumero(dni)) {
             throw new ExcepcionFormatoIncorrecto("El DNI debe contener solo números.");
+        }
+
+        if (dni.isEmpty() || !dni.matches("\\d{7,8}")) {
+            throw new ExcepcionDNIStringInvalido("El DNI debe contener números y ser de 7 u 8 dígitos");
         }
     }
 

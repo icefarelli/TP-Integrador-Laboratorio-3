@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
-
 public class ReservaControlador {
     private ReservaRepositorio reservaRepositorio;
     private ReservaVista reservaVista;
@@ -165,17 +164,27 @@ public class ReservaControlador {
             }
         }
 
-        // Ordenar reservas por fecha
         Collections.sort(reservasConMesas, (reserva1, reserva2) -> reserva1.getFecha().compareTo(reserva2.getFecha()));
 
         reservaVista.mostrarReservaConArreglo(reservasConMesas);
     }
 
-
-   /* public void mostrarReservasConArreglo() {
+    public void mostrarReservaPorFecha() {
         reservaRepositorio.cargarReserva();
-        List<Reserva> reservas = reservaRepositorio.todasLasReservas();
-        List<MesasReservadas> mesasReservadas = reservaRepositorio.todasLasMesasReservadas();
-        reservaVista.mostrarReservaConArreglo(reservas, mesasReservadas);
-    }*/
+        LocalDate fecha = reservaVista.buscarFechaReserva();
+        List<Reserva> reservasPorFecha = new ArrayList<>();
+
+        for (Reserva reserva : reservaRepositorio.todasLasReservas()) {
+            if (reserva.getFecha().equals(fecha)) {
+                reservasPorFecha.add(reserva);
+            }
+        }
+
+        if (reservasPorFecha.isEmpty()) {
+            reservaVista.mensaje("No hay reservas para la fecha especificada.");
+        } else {
+            reservaVista.mostrarReservaConArreglo(reservasPorFecha);
+        }
+    }
+
 }

@@ -38,8 +38,9 @@ public class MenuReservas {
                 System.out.println("2. Eliminar reserva.");
                 System.out.println("3. Modificar reserva.");
                 System.out.println("4. Mostrar todas reservas.");
-                System.out.println("5. Volver al menu principal");
-                System.out.println("6. Salir del sistema");
+                System.out.println("5. Mostrar reservas por fecha.");
+                System.out.println("6. Volver al menu principal");
+                System.out.println("7. Salir del sistema");
                 Colores.printInColor("-------------------------------", Colores.BLUE);
 
                 op = scanner.nextInt();
@@ -59,9 +60,12 @@ public class MenuReservas {
                         reservaControlador.mostrarReservasConArreglo();
                         break;
                     case 5:
-                        System.out.println("Volviendo al menu principal...");
+                        reservaControlador.mostrarReservaPorFecha();
                         break;
                     case 6:
+                        System.out.println("Volviendo al menu principal...");
+                        break;
+                    case 7:
                         System.out.println("Saliendo...");
                         System.exit(0);
                         break;
@@ -75,6 +79,6 @@ public class MenuReservas {
                 System.out.println(excepcionClienteNoEncontrado.getMessage());
                 scanner.nextLine();
             }
-        }while (op != 5 && op != 6);
+        }while (op != 6 && op != 7);
     }
 }

@@ -113,7 +113,7 @@ public class ReservaVista {
         LocalDate fecha = null;
         while (true) {
             try {
-                System.out.println("Ingrese fecha de la reserva a buscar (formato dd/MM/yyyy): ");
+                System.out.println("Ingrese fecha de la reserva (formato dd/MM/yyyy): ");
                 String input = scanner.nextLine().trim();
                 validarFecha(input);
 
