@@ -1,6 +1,7 @@
 package Login;
 
 import Excepciones.*;
+import Plato.Colores.Colores;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -29,11 +30,11 @@ public class LoginView {
 
         if (username==null || username.isEmpty() || password.isEmpty() || password==null)
         {
-            throw  new ExcepcionCamposVacios("No puede haber campos vacios ni en usuario ni en contraseña.");
+            throw  new ExcepcionCamposVacios("No puede haber campos vacíos ni en usuario ni en contraseña.");
         }
         if (contieneNum(username))
         {
-            throw new ExcepcionNombreNumerico("El usario no puede contener numeros");
+            throw new ExcepcionNombreNumerico("El usuario no puede contener números");
         }
 
         return new Usuario(username, password);
@@ -45,7 +46,7 @@ public class LoginView {
         String nombre = null;
         do {
             try{
-                System.out.println("Ingrese una opcion para el cargo:");
+                System.out.println("Ingrese una opción para el cargo:");
                 System.out.println("1. Admin");
                 System.out.println("2. Empleado");
 
@@ -60,11 +61,11 @@ public class LoginView {
                         nombre ="Empleado";
                         break;
                     default:
-                        System.out.println("Opcion incorrecta, ingrese una opcion valida");
+                        Colores.printInColor("Opción incorrecta, ingrese una opción valida", Colores.RED);
 
                 }
             } catch (InputMismatchException e) {
-                System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
+                Colores.printInColor("Entrada inválida. Debe ingresar un número entero", Colores.RED);
                 scan.nextLine();
             }
         } while(op!=1 && op!=2);
@@ -80,7 +81,7 @@ public class LoginView {
             try {
                 nombre = scan.nextLine();
                 if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z ]+")) {
-                    throw new ExcepcionNombreInvalido("El nombre debe contener letras y no estar vacio");
+                    throw new ExcepcionNombreInvalido("El nombre debe contener letras y no estar vacío");
                 }
                 flag=true;
             } catch (ExcepcionNombreInvalido e){
@@ -117,8 +118,7 @@ public class LoginView {
         Boolean ok = false;
         if (usuario==null)
         {
-
-            System.out.println("XXX NOMBRE DE USUARIO Y CONTRASENA INCORRECTOS XXX");
+            Colores.printInColor("Nombre de usuario o contraseña incorrectos", Colores.RED);
         }
         else
         {
@@ -129,7 +129,7 @@ public class LoginView {
 
     public void control ()
     {
-        System.out.println("USUARIO REGISTRADO EXITOSAMENTE");
+        Colores.printInColor("Usuario registrado con éxito", Colores.GREEN);
     }
 
 }

@@ -93,19 +93,11 @@ public class MenuClientes {
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
+                        Colores.printInColor("Opción incorrecta, ingrese una opción valida", Colores.RED);
                 }
 
-                //comentario de Ivan: Este seguirOSalir() no seria necesario si ya se da la
-                //opción de salir en switch y está dentro de un bucle para que haga otra cosa
-                /*Integer seguir = seguirOSalir();
-                if (seguir == 0) {
-                    System.out.println("Saliendo...");
-                    System.exit(0);
-                }*/
-
             } catch (InputMismatchException e) {
-                System.out.println("Entrada inválida. Debe ingresar un número entero.");
+                Colores.printInColor("Entrada inválida. Debe ingresar un número entero", Colores.RED);
                 scanner.nextLine();
             }
         } while (ok != 6 && ok != 7);

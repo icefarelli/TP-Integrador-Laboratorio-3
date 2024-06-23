@@ -3,6 +3,7 @@ package Login;
 import Excepciones.ExcepcionCamposVacios;
 import Excepciones.ExcepcionCaracteresEspeciales;
 import Excepciones.ExcepcionNombreNumerico;
+import Plato.Colores.Colores;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -75,7 +76,7 @@ public class LoginController {
             while(!flag) {
                 usuario = this.loginView.solicitarDatosRegistro();
                 if (loginRepository.setUsuarios.contains(usuario)) {
-                    System.out.println("usuario ya registrado anteriormente");
+                    Colores.printInColor("Usuario ya cargado en el sistema", Colores.RED);
                 } else {
                     flag=true;
                 }
@@ -103,7 +104,7 @@ public class LoginController {
                 usuario = loginView.solicitarDatosRegistro();
                 usuarioBuscado = loginRepository.buscar(usuario.getUsername());
                 if(usuarioBuscado==null || !usuarioBuscado.getPassword().equals(usuario.getPassword())) {
-                    System.out.println("XXX NOMBRE DE USUARIO Y CONTRASENA INCORRECTOS XXX");
+                    Colores.printInColor("Nombre de usuario o contraseña incorrectos", Colores.RED);
                     usuarioBuscado = null;
                 }
             } catch (ExcepcionCamposVacios excepcionCamposVacios) {
@@ -121,7 +122,7 @@ public class LoginController {
         String nombreUser = loginView.pedirNombreUsuario();
         Usuario usuarioBuscado = loginRepository.buscar(nombreUser);
         if(usuarioBuscado==null) {
-            System.out.println("XXX NOMBRE DE USUARIO NO ENCONTRADO XXX");
+            Colores.printInColor("Nombre de usuario no encontrado", Colores.RED);
         }
         loginRepository.eliminar(usuarioBuscado);
         Update();

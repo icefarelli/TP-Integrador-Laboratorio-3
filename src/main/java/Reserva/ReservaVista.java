@@ -5,6 +5,7 @@ import Excepciones.ExcepcionReservaCamposVacios;
 import Excepciones.ExcepcionReservaCaracterInvalido;
 import Excepciones.ExcepcionReservaValorNegativo;
 import MesasReservadas.MesasReservadas;
+import Plato.Colores.Colores;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +18,7 @@ public class ReservaVista {
     private static Scanner scanner = new Scanner(System.in);
     private static LocalDate hoy = LocalDate.now();
 
-    public Reserva pedirFecha(){
+    public Reserva pedirFecha() {
         LocalDate fecha = null;
         while (true) {
             try {
@@ -36,7 +37,7 @@ public class ReservaVista {
         return new Reserva(fecha);
     }
 
-    public Integer pedirCantidadPersonas(){
+    public Integer pedirCantidadPersonas() {
         Integer cantPersonas = null;
         while (true) {
             try {
@@ -48,7 +49,7 @@ public class ReservaVista {
             } catch (NumberFormatException | ExcepcionReservaCamposVacios | ExcepcionReservaCaracterInvalido |
                      ExcepcionReservaValorNegativo e) {
                 System.out.println(e.getMessage());
-            }catch (InputMismatchException e) {
+            } catch (InputMismatchException e) {
                 System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
                 scanner.nextLine();
             }
@@ -56,7 +57,7 @@ public class ReservaVista {
         return cantPersonas;
     }
 
-    public Integer modificarCantPersonas(){
+    public Integer modificarCantPersonas() {
         Integer cantPersonas = null;
         while (true) {
             try {
@@ -68,7 +69,7 @@ public class ReservaVista {
             } catch (NumberFormatException | ExcepcionReservaCamposVacios | ExcepcionReservaCaracterInvalido |
                      ExcepcionReservaValorNegativo e) {
                 System.out.println(e.getMessage());
-            }catch (InputMismatchException e) {
+            } catch (InputMismatchException e) {
                 System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
                 scanner.nextLine();
             }
@@ -76,7 +77,7 @@ public class ReservaVista {
         return cantPersonas;
     }
 
-    public String preguntarQueModificar(){
+    public String preguntarQueModificar() {
         String opcion = null;
         while (true) {
             try {
@@ -86,7 +87,7 @@ public class ReservaVista {
                 Integer seleccion = scanner.nextInt();
                 scanner.nextLine();
 
-                if(seleccion == null){
+                if (seleccion == null) {
                     throw new ExcepcionReservaCamposVacios("El campo no puede estar vacío.");
                 }
 
@@ -95,21 +96,21 @@ public class ReservaVista {
                 } else if (seleccion == 2) {
                     opcion = "cantPersonas";
                 } else {
-                    System.out.println("Opción no válida. Intente nuevamente.");
+                    Colores.printInColor("Opción incorrecta, ingrese una opción valida", Colores.RED);
                     continue;
                 }
                 break;
-            } catch (NumberFormatException |ExcepcionReservaCamposVacios e) {
-                System.out.println("Error: la entrada no es un número válido. Intente nuevamente.");
-            }catch (InputMismatchException e) {
-                System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
+            } catch (NumberFormatException | ExcepcionReservaCamposVacios e) {
+                Colores.printInColor("Error: la entrada no es un número válido. Intente nuevamente", Colores.RED);
+            } catch (InputMismatchException e) {
+                Colores.printInColor("Entrada inválida. Debe ingresar un número entero", Colores.RED);
                 scanner.nextLine();
             }
         }
         return opcion;
     }
 
-    public LocalDate buscarFechaReserva(){
+    public LocalDate buscarFechaReserva() {
         LocalDate fecha = null;
         while (true) {
             try {
@@ -134,11 +135,11 @@ public class ReservaVista {
             try {
                 for (Reserva reserva : reservas) {
                     System.out.println("Revisando reserva: " + reserva);
-                        LocalDate fechaInicio = reserva.getFecha();
-                        LocalDate fechaFin = fechaInicio.plusDays(15);
-                        if (fechaInicio.isAfter(hoy) && fechaInicio.isBefore(fechaFin)) {
-                            System.out.println("Reservas disponibles desde " + fechaInicio + " hasta " + fechaFin + ": " + reserva+ "\n");
-                        }
+                    LocalDate fechaInicio = reserva.getFecha();
+                    LocalDate fechaFin = fechaInicio.plusDays(15);
+                    if (fechaInicio.isAfter(hoy) && fechaInicio.isBefore(fechaFin)) {
+                        System.out.println("Reservas disponibles desde " + fechaInicio + " hasta " + fechaFin + ": " + reserva + "\n");
+                    }
 
                 }
 

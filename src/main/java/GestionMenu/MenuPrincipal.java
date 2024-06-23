@@ -16,15 +16,12 @@ public class MenuPrincipal {
         MenuPlato menuPlato = new MenuPlato();
         MenuOrdenes menuOrdenes = new MenuOrdenes();
         MenuUsuarios menuUsuarios = new MenuUsuarios();
-
-        Colores.printInColor("========BIENVENIDOS A ´INTERFAZ DE SABORES´========", Colores.YELLOW);
-        System.out.println("Que desea hacer?");
-
         Scanner scanner = new Scanner(System.in);
 
         int op = -1;
         do {
             try {
+                Colores.printInColor("==========MENU PRINCIPAL==========", Colores.BLUE);
                 System.out.println("1. Reservas");
                 System.out.println("2. Ordenes");
                 System.out.println("3. Gestion de Empleados");
@@ -63,10 +60,10 @@ public class MenuPrincipal {
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
+                        Colores.printInColor("Opción incorrecta, ingrese una opción valida", Colores.RED);
                 }
             }catch (InputMismatchException e) {
-                System.out.println("Entrada inválida. Debe ingresar un número entero.");
+                Colores.printInColor("Entrada inválida. Debe ingresar un número entero", Colores.RED);
                 scanner.nextLine();
             } catch (ExcepcionEntradaInvalida e) {
                 System.out.println(e.getMessage());

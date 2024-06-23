@@ -2,16 +2,14 @@ package Empleado;
 
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionNombreInvalido;
+import Plato.Colores.Colores;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.nio.file.FileSystemLoopException;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class EmpleadoControlador {
 
@@ -25,23 +23,24 @@ public class EmpleadoControlador {
 
     Gson gson = new Gson();
 
-    private static final String PATH ="src/main/resources/Empleados.json";
+    private static final String PATH = "src/main/resources/Empleados.json";
 
     public void pasarAarchivo() throws IOException {
-        try (Writer writer = new FileWriter(PATH)){
-            gson.toJson(empleadoRepositorio.listaEmpleados,writer);
-        } catch (IOException io){
+        try (Writer writer = new FileWriter(PATH)) {
+            gson.toJson(empleadoRepositorio.listaEmpleados, writer);
+        } catch (IOException io) {
             io.printStackTrace();
         }
     }
 
     public void pasarAMemoria() throws FileNotFoundException {
-        try(Reader reader = new FileReader(PATH)) {
-          Type type = new TypeToken<TreeMap<Integer,Empleado>>(){}.getType();
-          empleadoRepositorio.listaEmpleados = gson.fromJson(reader,type);
-          if(empleadoRepositorio.listaEmpleados == null){
-              empleadoRepositorio.listaEmpleados = new TreeMap<Integer, Empleado>();
-          }
+        try (Reader reader = new FileReader(PATH)) {
+            Type type = new TypeToken<TreeMap<Integer, Empleado>>() {
+            }.getType();
+            empleadoRepositorio.listaEmpleados = gson.fromJson(reader, type);
+            if (empleadoRepositorio.listaEmpleados == null) {
+                empleadoRepositorio.listaEmpleados = new TreeMap<Integer, Empleado>();
+            }
         } catch (IOException io) {
             System.out.println(io.getMessage());
 
@@ -53,17 +52,18 @@ public class EmpleadoControlador {
         Integer clave;
         Empleado empleado = empleadoVista.pedirUnEmpleado();
         Empleado empleadoEncontrado = empleadoRepositorio.buscarEmpleadoPorDNI(empleado.getId());
-        if(empleadoEncontrado!=null){
-            System.out.println("Empleado ya cargado en el sistema");
+        if (empleadoEncontrado != null) {
+            Colores.printInColor("Empleado ya cargado en el sistema", Colores.RED);
 
-        } else if (!empleadoRepositorio.listaEmpleados.isEmpty() ) {
+        } else if (!empleadoRepositorio.listaEmpleados.isEmpty()) {
             clave = empleadoRepositorio.listaEmpleados.lastKey();
             empleado.setIdEmpleado(clave + 1);
             empleadoRepositorio.agregar(empleado);
-            System.out.println("Empleado agregado con exito");
+            Colores.printInColor("Empleado cargado con éxito", Colores.GREEN);
+
         } else {
             empleadoRepositorio.agregar(empleado);
-            System.out.println("Empleado agregado con exito");
+            Colores.printInColor("Empleado cargado con éxito", Colores.GREEN);
         }
         pasarAarchivo();
     }
@@ -72,9 +72,9 @@ public class EmpleadoControlador {
         pasarAMemoria();
         Integer clave = empleadoVista.pedirClave();
         Empleado empleado = empleadoRepositorio.buscarEmpleado(clave);
-        if(empleado!=null){
+        if (empleado != null) {
             empleadoRepositorio.eliminar(empleado);
-            System.out.println("Empleado eliminado con exito");
+            Colores.printInColor("Empleado eliminado con éxito", Colores.GREEN);
         } else {
             empleadoVista.mensajeErrorBusqueda();
         }
@@ -86,18 +86,18 @@ public class EmpleadoControlador {
         Empleado empleadoModificado;
         Integer clave = empleadoVista.pedirClave();
         Empleado empleado = empleadoRepositorio.buscarEmpleado(clave);
-        if(empleado!=null){
+        if (empleado != null) {
             String modificacion = empleadoVista.pedirModificacion();
-            if(modificacion.equalsIgnoreCase("nombre")) {
+            if (modificacion.equalsIgnoreCase("nombre")) {
                 String nombreNuevo = empleadoVista.pedirNombreParaModificar();
-                empleadoModificado = new Empleado(nombreNuevo,empleado.getId(),empleado.getIdEmpleado(),empleado.getPuesto());
+                empleadoModificado = new Empleado(nombreNuevo, empleado.getId(), empleado.getIdEmpleado(), empleado.getPuesto());
                 empleadoRepositorio.agregar(empleadoModificado);
-                System.out.println("Empleado modificado correctamente");
-            } else if(modificacion.equalsIgnoreCase("puesto")) {
+                Colores.printInColor("Empleado modificado con éxito", Colores.GREEN);
+            } else if (modificacion.equalsIgnoreCase("puesto")) {
                 String puestoNuevo = empleadoVista.elegirPuesto();
-                empleadoModificado = new Empleado(empleado.getNombre(),empleado.getId(),empleado.getIdEmpleado(),puestoNuevo);
+                empleadoModificado = new Empleado(empleado.getNombre(), empleado.getId(), empleado.getIdEmpleado(), puestoNuevo);
                 empleadoRepositorio.agregar(empleadoModificado);
-                System.out.println("Empleado modificado correctamente");
+                Colores.printInColor("Empleado modificado con éxito", Colores.GREEN);
             }
         } else {
             empleadoVista.mensajeErrorBusqueda();
@@ -116,8 +116,8 @@ public class EmpleadoControlador {
         pasarAMemoria();
         Integer clave = empleadoVista.pedirClave();
         Empleado empleado = empleadoRepositorio.buscarEmpleado(clave);
-        if (empleado==null){
-            System.out.println("Empleado no cargado en el sistema");
+        if (empleado == null) {
+            Colores.printInColor("Empleado no cargado en sistema", Colores.RED);
         } else {
             empleadoVista.mostrarEmpleado(empleado);
         }

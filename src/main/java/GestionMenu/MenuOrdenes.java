@@ -85,10 +85,10 @@ public class MenuOrdenes {
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("Opción no válida. Por favor, ingrese una opción válida.");
+                        Colores.printInColor("Opción incorrecta, ingrese una opción valida", Colores.RED);
                 }
             }catch (InputMismatchException e) {
-                System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
+                Colores.printInColor("Entrada inválida. Debe ingresar un número entero", Colores.RED);
                 scanner.nextLine();
             }
         } while (op != 7 && op != 8);

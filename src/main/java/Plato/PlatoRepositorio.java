@@ -1,6 +1,7 @@
 package Plato;
 
 import Interfaces.IABM;
+import Plato.Colores.Colores;
 import Plato.Excepciones.ExcepPlatoExistente;
 import Plato.Variedad.Variedad;
 import com.google.gson.Gson;
@@ -26,22 +27,24 @@ public class PlatoRepositorio implements IABM<Plato> {
     }
 
     //Deserializacion del archivo de Platos a la Coleccion HashSet
-    private void loadFilePlatos()  {
-        try(Reader reader = new FileReader(FILE_COMIDAS)){
-            Type setType = new TypeToken<Set<Plato>>(){}.getType();
-            platoSet = gson.fromJson(reader,setType);
-            if (platoSet ==null) platoSet = new HashSet<>();
-        }catch (FileNotFoundException fnf){
+    private void loadFilePlatos() {
+        try (Reader reader = new FileReader(FILE_COMIDAS)) {
+            Type setType = new TypeToken<Set<Plato>>() {
+            }.getType();
+            platoSet = gson.fromJson(reader, setType);
+            if (platoSet == null) platoSet = new HashSet<>();
+        } catch (FileNotFoundException fnf) {
             platoSet = new HashSet<>();
-        }catch (IOException ioe){
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
+
     //Serializacion del HashSet al archivo
-    private void saveFilePlatos(){
-        try(Writer writer = new FileWriter(FILE_COMIDAS)){
-            gson.toJson(platoSet,writer);
-        }catch (IOException ioE){
+    private void saveFilePlatos() {
+        try (Writer writer = new FileWriter(FILE_COMIDAS)) {
+            gson.toJson(platoSet, writer);
+        } catch (IOException ioE) {
             ioE.printStackTrace();
         }
     }
@@ -59,6 +62,7 @@ public class PlatoRepositorio implements IABM<Plato> {
         this.platoSet.remove(comida);
         saveFilePlatos();
     }
+
     //Modificar y actualizar plato en el archivo y HashSet
     @Override
     public void modificar(Plato comida) {
@@ -71,17 +75,18 @@ public class PlatoRepositorio implements IABM<Plato> {
         }
         saveFilePlatos();
     }
-    public void comprobarExistenciaPlato (String nombre) throws ExcepPlatoExistente {
-        for (Plato plato : platoSet){
-            if (nombre.equals(plato.getNombre())){
+
+    public void comprobarExistenciaPlato(String nombre) throws ExcepPlatoExistente {
+        for (Plato plato : platoSet) {
+            if (nombre.equals(plato.getNombre())) {
                 throw new ExcepPlatoExistente("Ya existen un plato cargado con ese nombre. Carga Cancelada");
             }
         }
-        System.out.println("El Nombre " + nombre + " esta disponible.");
+        System.out.println("El nombre " + nombre + " esta disponible.");
     }
 
     //Recibe un string con el nombre del plato a buscar. Si lo encuentra devuelve el plato, caso contrario devuelve null
-    public Plato buscarPlatoXnombre(String nombre){
+    public Plato buscarPlatoXnombre(String nombre) {
         for (Plato plato : platoSet) {
             if (plato.getNombre().equals(nombre)) {
                 return plato;
@@ -89,7 +94,8 @@ public class PlatoRepositorio implements IABM<Plato> {
         }
         return null;
     }
-    public void mostrarUnPlato(Plato plato){
+
+    public void mostrarUnPlato(Plato plato) {
         System.out.println(plato.toString());
         if (plato.getVariedades() != null && !plato.getVariedades().isEmpty()) {
             List<Variedad> variedades = plato.getVariedades();
@@ -134,10 +140,11 @@ public class PlatoRepositorio implements IABM<Plato> {
         }
         return listaAuxiliar;
     }
-    public void mostrarListaParaEliminar (List<Plato> listaPlatos){
+
+    public void mostrarListaParaEliminar(List<Plato> listaPlatos) {
         int contadorDeIndices = 1;
-        for (Plato plato : listaPlatos){
-            System.out.println(String.format("%d - %-20s",contadorDeIndices,plato.getNombre()));
+        for (Plato plato : listaPlatos) {
+            System.out.println(String.format("%d - %-20s", contadorDeIndices, plato.getNombre()));
             contadorDeIndices++;
         }
     }
@@ -145,7 +152,7 @@ public class PlatoRepositorio implements IABM<Plato> {
     // Recibe un tipo por parámetro y crea dos listas, una con nombre y otra con precio. Complementa el nombre del plato que contiene variedad
     // Luego busca el nombre más largo y lo toma de referencia para acomodar el menu con un largo estandarizado.
     // Utilizado en la selección de plato para orden y eliminación por selección
-    public void mostrarEnlistadoBonitoXtipoOld(String tipo){
+    public void mostrarEnlistadoBonitoXtipoOld(String tipo) {
         List<String> nombre = new ArrayList<>();
         List<Double> precio = new ArrayList<>();
         for (Plato plato : platoSet) {
@@ -176,7 +183,7 @@ public class PlatoRepositorio implements IABM<Plato> {
         System.out.println("Menu de " + tipo);
         System.out.println("========================================");
         for (int i = 0; i < nombre.size(); i++) {
-            System.out.printf("% " + totalIndices + "d. %-" + largoMaximoDelNombreDelPlato + "s  $%.2f%n", i+1, nombre.get(i), precio.get(i));
+            System.out.printf("% " + totalIndices + "d. %-" + largoMaximoDelNombreDelPlato + "s  $%.2f%n", i + 1, nombre.get(i), precio.get(i));
         }
     }
 
@@ -229,19 +236,19 @@ public class PlatoRepositorio implements IABM<Plato> {
     }
 
     //Si el plato contiene variedades imprime las variedades, caso contrario imprime los platos base con sus valores
-    public void mostrarPlato(Plato plato){
-        if(plato.getVariedades().isEmpty()){
+    public void mostrarPlato(Plato plato) {
+        if (plato.getVariedades().isEmpty()) {
             System.out.print(plato.toString());
-        }else {
-            System.out.println("-"+plato.getNombre());
-            for(Variedad variedad : plato.getVariedades()) {
+        } else {
+            System.out.println("-" + plato.getNombre());
+            for (Variedad variedad : plato.getVariedades()) {
                 System.out.println(variedad.toString());
             }
         }
     }
 
     // Se ingresa un valor para aumentar el precio total de los productos de manera porcentual
-    public void aumentoPorcentualPrecio(double aumento){
+    public void aumentoPorcentualPrecio(double aumento) {
         if (aumento != 0) {
             aumento = aumento * 0.01;
             for (Plato plato : this.platoSet) {
@@ -260,12 +267,12 @@ public class PlatoRepositorio implements IABM<Plato> {
                 }
             }
             saveFilePlatos();
-        }else {
-            System.out.println("No se realizo el aumento.");
+        } else {
+            Colores.printInColor("No se realizó el aumento de precios", Colores.RED);
         }
     }
 
-    public void bajaPorcentualPrecio(double reduccion){
+    public void bajaPorcentualPrecio(double reduccion) {
         if (reduccion != 0) {
             reduccion = reduccion * 0.01;
             for (Plato plato : this.platoSet) {
@@ -284,12 +291,10 @@ public class PlatoRepositorio implements IABM<Plato> {
                 }
             }
             saveFilePlatos();
-        }else {
-            System.out.println("No se realizo la reduccion de precios.");
+        } else {
+            Colores.printInColor("No se realizó la reducción de precios", Colores.RED);
         }
     }
-
-
 
 
 }

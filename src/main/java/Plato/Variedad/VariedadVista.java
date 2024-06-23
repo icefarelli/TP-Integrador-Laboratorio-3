@@ -1,4 +1,5 @@
 package Plato.Variedad;
+import Plato.Colores.Colores;
 import Plato.Excepciones.ExcepIngresoInvalido;
 
 import java.util.Scanner;
@@ -16,8 +17,7 @@ public class VariedadVista {
             lineaSeparador();
             if (precioVariedad != 0.0) return new Variedad(nombreVariedad, precioVariedad);
             else {
-
-                System.out.println("Los datos ingresados no fueron cargados.");
+                Colores.printInColor("Los datos ingresados no fueron cargados", Colores.RED);
                 lineaSeparador();
                 return null;
             }
@@ -57,7 +57,7 @@ public class VariedadVista {
                 intentos--;
             }
         }
-        if(!validarPrecio) System.out.println("Se agotaron los intentos. El Precio no fue cargado.");
+        if(!validarPrecio) System.out.println("Se agotaron los intentos. El precio no fue cargado.");
         return precioVariedad;
     }
 
@@ -71,11 +71,11 @@ public class VariedadVista {
     }
 
     public void mensajeCargaIncorrecta(){
-        System.out.println("No se realizo la carga correctamente.");
+        Colores.printInColor("No se realizó la carga", Colores.RED);
         lineaSeparador();
     }
     public void mensajeCargaCorrecta(){
-        System.out.println("Se realizo la carga correctamente.");
+        Colores.printInColor("Se realizó la carga con éxito", Colores.GREEN);
         lineaSeparador();
     }
     public boolean agregarMas(){
@@ -88,7 +88,7 @@ public class VariedadVista {
             return false;
         } else {
             lineaSeparador();
-            System.out.println("Opción inválida. Por favor, ingrese 's' para sí o 'n' para no.");
+            Colores.printInColor("Opción inválida. Por favor, ingrese 's' para sí o 'n' para no.", Colores.RED);
             return agregarMas();
         }
     }

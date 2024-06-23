@@ -1,4 +1,5 @@
 package Plato;
+
 import Plato.Colores.Colores;
 import Plato.Excepciones.ExcepCargaNoRealizada;
 import Plato.Variedad.Variedad;
@@ -44,22 +45,22 @@ public class PlatoVista {
                     }
                 }
             }
-        } catch (NumberFormatException nfe){
+        } catch (NumberFormatException nfe) {
             printearLineasSeparadoras();
             mensajePersonalizado(nfe.getMessage());
             return null;
-        }catch (NullPointerException npe){
+        } catch (NullPointerException npe) {
             printearLineasSeparadoras();
             mensajePersonalizado("Error Al Ingresar datos en el nombre.");
             return null;
-        }catch (IllegalArgumentException iae){
-        System.out.println(iae.getMessage());
-        return null;
+        } catch (IllegalArgumentException iae) {
+            System.out.println(iae.getMessage());
+            return null;
         }
     }
 
     //Metodo de confirmacion para concretar o validar acciones
-    public boolean metodoConfirmacion (String mensaje){
+    public boolean metodoConfirmacion(String mensaje) {
         System.out.println(mensaje + "(s/n)");
         String respuesta;
         respuesta = scanner.nextLine().trim().toLowerCase();
@@ -74,7 +75,7 @@ public class PlatoVista {
     }
 
     //utilizar para personalizar mensajes
-    public void mensajePersonalizado(String mensajePersonalizado){
+    public void mensajePersonalizado(String mensajePersonalizado) {
         System.out.println(mensajePersonalizado);
     }
 
@@ -97,14 +98,14 @@ public class PlatoVista {
             }
 
             boolean confirmacion2 = metodoConfirmacion("¿Desea eliminar la variedad actual y crear una nueva?");
-            if(confirmacion2) {
+            if (confirmacion2) {
                 //variedadController.limparListaVariedades();
                 listaNueva = variedadController.crearListaDeVariedades(varVista, varRepositorio);
                 return new Plato(tipo, nombre, listaNueva);
             }
 
             boolean confirmacion3 = metodoConfirmacion("¿Desea eliminar las variedades del producto?");
-            if(confirmacion3) {
+            if (confirmacion3) {
                 double price = ingresePrecioDePlato();
                 if (price != 0.0) {
                     return new Plato(tipo, nombre, price);
@@ -112,7 +113,7 @@ public class PlatoVista {
                     System.out.println("El Plato no pudo ser creado.");
                     return null;
                 }
-            }else {
+            } else {
                 return null;
             }
         } else {
@@ -120,7 +121,7 @@ public class PlatoVista {
             if (respuesta) {
                 variedadController.limparListaVariedades();
                 listaNueva = variedadController.crearListaDeVariedades(varVista, varRepositorio);
-                return new Plato(tipo, nombre,listaNueva);
+                return new Plato(tipo, nombre, listaNueva);
             } else {
                 double price = ingresePrecioDePlato();
                 if (price != 0.0) {
@@ -134,14 +135,14 @@ public class PlatoVista {
     }
 
     // Seleccion de categoria por seleccion en menu. Devuelve el nombre en String para evitar errores de carga
-    public String menuTipoComida() throws NumberFormatException{
-        Colores.printInColor("===============================",Colores.YELLOW);
-        Colores.printInColor(" Seleccione la Categoria:",Colores.GREEN);
-        Colores.printInColor("-------------------------------",Colores.YELLOW);
+    public String menuTipoComida() throws NumberFormatException {
+        Colores.printInColor("===============================", Colores.YELLOW);
+        Colores.printInColor(" Seleccione la Categoria:", Colores.GREEN);
+        Colores.printInColor("-------------------------------", Colores.YELLOW);
         System.out.println(" 1. Entradas\n 2. Carnes\n 3. Minutas");
         System.out.println(" 4. Pizzas\n 5. Pastas\n 6. Guarniciones y Ensaladas");
         System.out.println(" 7. Postres\n 8. Bebidas\n 9. Cafeteria y Pastelería\n 0. Salir");
-        Colores.printInColor("-------------------------------",Colores.YELLOW);
+        Colores.printInColor("-------------------------------", Colores.YELLOW);
         String opcionS = scanner.nextLine().trim();
         int opcion;
         try {
@@ -164,7 +165,7 @@ public class PlatoVista {
                     yield menuTipoComida();
                 }
             };
-        }catch (NumberFormatException nfe){
+        } catch (NumberFormatException nfe) {
             throw new NumberFormatException("Entrada inválida. Solo se aceptan números. Carga cancelada.");
         }
     }
@@ -172,29 +173,29 @@ public class PlatoVista {
 
     // Método de ingreso de porcentaje para aumentar el valor de todos los
     // platos del menu de manera porcentual con un tope máximo de 100
-    public double ingresePorcentaje () throws NumberFormatException, InputMismatchException {
+    public double ingresePorcentaje() throws NumberFormatException, InputMismatchException {
         try {
             System.out.println("Ingrese el porcentaje que desea aumentar en los precios totales.\nRecuerde que el valor a ingresar debe tener un mínimo de 1% y un tope de 100%");
             double aumento = scanner.nextDouble();
             scanner.nextLine();
 
-            if(aumento <= 0 || aumento >100) {
-                System.out.println("El valor ingresado se halla fuera del margen permitido.");
+            if (aumento <= 0 || aumento > 100) {
+                Colores.printInColor("El valor ingresado se encuentra fuera del margen permitido", Colores.RED);
                 return 0;
-            }else if(aumento == 0) {
+            } else if (aumento == 0) {
                 return 0;
-            }else {
-                boolean confirmacion = metodoConfirmacion("Se hara un aumento de un " +(int) aumento + "% sobre los precios. ¿Confirmar? " );
-                if(confirmacion) {
+            } else {
+                boolean confirmacion = metodoConfirmacion("Se hará un aumento de un " + (int) aumento + "% sobre los precios. ¿Confirmar? ");
+                if (confirmacion) {
                     return aumento;
-                }else {
+                } else {
                     return 0.0;
                 }
             }
-        }catch (NumberFormatException nfe){
-            System.out.println("Ingrese solo numeros");
-        }catch (InputMismatchException ime){
-            System.out.println("Formato Invalido");
+        } catch (NumberFormatException nfe) {
+            Colores.printInColor("Ingrese solo números", Colores.RED);
+        } catch (InputMismatchException ime) {
+            Colores.printInColor("Entrada inválida", Colores.RED);
             scanner.nextLine();
         }
         return 0;
@@ -202,34 +203,33 @@ public class PlatoVista {
 
     // Método de ingreso de porcentaje para aumentar el valor de todos los
     // platos del menu de manera porcentual con un tope máximo de 100
-    public double ingresePorcentajeBaja () throws NumberFormatException, InputMismatchException {
+    public double ingresePorcentajeBaja() throws NumberFormatException, InputMismatchException {
         try {
             System.out.println("Ingrese el porcentaje que desea bajar la totalidad de los precios.\nRecuerde que el valor a ingresar debe tener un mínimo de 1% y un tope de 100%");
             double aumento = scanner.nextDouble();
             scanner.nextLine();
 
-            if(aumento <= 0 || aumento >100) {
-                System.out.println("El valor ingresado se halla fuera del margen permitido.");
+            if (aumento <= 0 || aumento > 100) {
+                Colores.printInColor("El valor ingresado se encuentra fuera del margen permitido", Colores.RED);
                 return 0;
-            }else if(aumento == 0) {
+            } else if (aumento == 0) {
                 return 0;
-            }else {
-                boolean confirmacion = metodoConfirmacion("Se hara una reduccion de un " +(int) aumento + "% sobre los precios. ¿Confirmar? " );
-                if(confirmacion) {
+            } else {
+                boolean confirmacion = metodoConfirmacion("Se hará una reducción de un " + (int) aumento + "% sobre los precios. ¿Confirmar? ");
+                if (confirmacion) {
                     return aumento;
-                }else {
+                } else {
                     return 0.0;
                 }
             }
-        }catch (NumberFormatException nfe){
-            System.out.println("Ingrese solo numeros");
-        }catch (InputMismatchException ime){
-            System.out.println("Formato Invalido");
+        } catch (NumberFormatException nfe) {
+            Colores.printInColor("Ingrese solo números", Colores.RED);
+        } catch (InputMismatchException ime) {
+            Colores.printInColor("Entrada inválida", Colores.RED);
             scanner.nextLine();
         }
         return 0;
     }
-
 
 
     public double ingresePrecioDePlato() {
@@ -257,14 +257,14 @@ public class PlatoVista {
             if (indiceSeleccionado >= 0 && indiceSeleccionado < platos.size()) {
                 return indiceSeleccionado;
             } else {
-                System.out.println("Índice fuera de rango. Por favor intente nuevamente.");
+                Colores.printInColor("Índice fuera de rango. Por favor intente nuevamente", Colores.RED);
                 return obtenerIndiceSeleccionado(platos);
             }
-        }catch (InputMismatchException ime){
-            System.out.println("Entrada no válida. Por favor, ingrese un número entero.");
+        } catch (InputMismatchException ime) {
+            Colores.printInColor("Entrada no válida. Por favor, ingrese un número entero", Colores.RED);
             scanner.nextLine();
             return obtenerIndiceSeleccionado(platos);
-        }catch (IndexOutOfBoundsException io){
+        } catch (IndexOutOfBoundsException io) {
             System.out.println(io.getMessage());
             scanner.nextLine();
         } catch (Exception e) {
@@ -273,27 +273,29 @@ public class PlatoVista {
         return indiceSeleccionado;
     }
 
-    public void mensajeEliminacionPlatoInexistente(){
-        System.out.println("El plato ingresado no existe en el sistema.");
-    }
-    public void mensajeCargaExitoFracaso(boolean confirmacion){
-        if(confirmacion) System.out.println("Se completo exitosamente.");
-        else System.out.println("No se completo correctamente.");
+    public void mensajeEliminacionPlatoInexistente() {
+        Colores.printInColor("El plato ingresado no existe en el sistema.", Colores.RED);
     }
 
-    public void mensajeEliminacionExitoFracaso(boolean confirmacion){
-        if(confirmacion) System.out.println("Se elimino correctamente.");
-        else System.out.println("No se completo la eliminacion.");
+    public void mensajeCargaExitoFracaso(boolean confirmacion) {
+        if (confirmacion) Colores.printInColor("Se cargó con éxito", Colores.GREEN);
+        else Colores.printInColor("No se completó la carga", Colores.RED);
+    }
+
+    public void mensajeEliminacionExitoFracaso(boolean confirmacion) {
+        if (confirmacion) Colores.printInColor("Se eliminó con éxito", Colores.GREEN);
+        else Colores.printInColor("No se completó la eliminación", Colores.RED);
+        ;
     }
 
     public void pausarPantalla() {
         System.out.println("Presione Enter para continuar...");
         scanner.nextLine();
     }
-    public void printearLineasSeparadoras(){
-        Colores.printInColor("------------------------------------------------------",Colores.YELLOW);
-    }
 
+    public void printearLineasSeparadoras() {
+        Colores.printInColor("------------------------------------------------------", Colores.YELLOW);
+    }
 
 
 }

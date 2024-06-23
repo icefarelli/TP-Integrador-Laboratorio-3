@@ -1,18 +1,15 @@
 package Orden;
 
-import Excepciones.ExcepcionClienteNoEncontrado;
-import Excepciones.ExcepcionFormatoIncorrecto;
 import Cliente.Cliente;
+import Cliente.ClienteControlador;
 import Cliente.ClienteRepositorio;
 import Cliente.ClienteVista;
-import Cliente.ClienteControlador;
 import Empleado.Empleado;
+import Empleado.EmpleadoControlador;
 import Empleado.EmpleadoRepositorio;
 import Empleado.EmpleadoVista;
-import Empleado.EmpleadoControlador;
-import Excepciones.ExcepcionDNIStringInvalido;
-import Excepciones.ExcepcionEntradaInvalida;
-import Excepciones.ExcepcionOrdenNoEncontrada;
+import Excepciones.*;
+import Plato.Colores.Colores;
 import Plato.Plato;
 import Plato.PlatoControlador;
 import Plato.PlatoRepositorio;
@@ -105,7 +102,7 @@ public class OrdenControlador {
             if (p != null) {
                 platos.add(p);
             } else {
-                System.out.println("Plato no agregado");
+                Colores.printInColor("Plato no agregado", Colores.RED);
             }
             System.out.println("Ingrese 's' si quiere agregar otro plato: ");
             op = scan.nextLine();
@@ -118,9 +115,9 @@ public class OrdenControlador {
 
             ordenRepositorio.guardarOrden(orden);
             ordenRepositorio.guardarOrdenesEnArchivo();
-            ordenVista.mostrarMensaje("Orden creada exitosamente.");
-        }else {
-            System.out.println("Orden cancelada, no se agrego ningun plato");
+            Colores.printInColor("Orden creada con éxito", Colores.GREEN);
+        } else {
+            Colores.printInColor("Orden cancelada, no se cargó ningún plato", Colores.RED);
         }
 
     }
@@ -158,7 +155,7 @@ public class OrdenControlador {
                                 if (nuevoPlato != null) {
                                     platos.add(nuevoPlato);
                                 } else {
-                                    System.out.println("Plato no agregado");
+                                    Colores.printInColor("Plato no encontrado", Colores.RED);
                                 }
                                 break;
                             case 2:
@@ -170,7 +167,8 @@ public class OrdenControlador {
                                 if (indiceQuitar >= 0 && indiceQuitar < platos.size()) {
                                     platos.remove(indiceQuitar);
                                 } else {
-                                    System.out.println("Índice inválido.");
+                                    Colores.printInColor("Indice inválido", Colores.RED);
+
                                 }
                                 break;
                             case 3:
@@ -184,22 +182,22 @@ public class OrdenControlador {
                                     if (platoReemplazo != null) {
                                         platos.set(indiceReemplazar, platoReemplazo);
                                     } else {
-                                        System.out.println("Plato no agregado");
+                                        Colores.printInColor("Plato no encontrado", Colores.RED);
                                     }
                                 } else {
-                                    System.out.println("Índice inválido.");
+                                    Colores.printInColor("Indice inválido", Colores.RED);
                                 }
                                 break;
                             case 4:
                                 orden.setEstado("Completada");
-                                System.out.println("La orden se ha marcado como Completada");
+                                Colores.printInColor("Orden marcada como Completada con éxito", Colores.GREEN);
                                 break;
                             case 5:
                                 // Finalizar modificaciones
                                 opcion = -1;
                                 break;
                             default:
-                                System.out.println("Opción inválida. Intente nuevamente.");
+                                Colores.printInColor("Opción incorrecta, ingrese una opción valida", Colores.RED);
                         }
                     } catch (InputMismatchException e) {
                         System.out.println(new ExcepcionEntradaInvalida("Entrada inválida. Debe ingresar un número.").getMessage());
@@ -210,9 +208,9 @@ public class OrdenControlador {
                 orden.setPlatoList(platos);
                 ordenRepositorio.guardarOrden(orden);
                 ordenRepositorio.guardarOrdenesEnArchivo();
-                ordenVista.mostrarMensaje("Orden modificada exitosamente.");
+                Colores.printInColor("Orden modificada con éxito", Colores.GREEN);
             } else {
-                System.out.println("La orden ingresada ya esta completada, no se puede modificar");
+                Colores.printInColor("La orden ingresada ya esta completada, no se puede modificar", Colores.RED);
             }
         } catch (ExcepcionOrdenNoEncontrada excepcionOrdenNoEncontrada) {
             System.out.println(excepcionOrdenNoEncontrada.getMessage());
@@ -231,7 +229,7 @@ public class OrdenControlador {
 
             Orden orden = ordenRepositorio.obtenerOrden(idOrdenEliminar);
             if (orden == null) {
-                ordenVista.mostrarMensaje("Orden no encontrada.");
+                Colores.printInColor("Orden no encontrada", Colores.RED);
                 return;
             }
             if (orden.getEstado().equalsIgnoreCase("Pendiente")) {
@@ -243,13 +241,13 @@ public class OrdenControlador {
 
                 if (op.equalsIgnoreCase("s")) {
                     ordenRepositorio.eliminarOrden(idOrdenEliminar);
-                    ordenVista.mostrarMensaje("Orden eliminada exitosamente.");
+                    Colores.printInColor("Orden eliminada con éxito", Colores.GREEN);
                     ordenRepositorio.guardarOrdenesEnArchivo();
                 } else {
-                    ordenVista.mostrarMensaje("Eliminación cancelada.");
+                    Colores.printInColor("Eliminación cancelada", Colores.RED);
                 }
-            }else {
-                System.out.println("La orden ingresada ya esta completada, no se puede eliminar");
+            } else {
+                Colores.printInColor("La orden ingresada ya esta completada, no se puede eliminar", Colores.RED);
             }
         } catch (ExcepcionOrdenNoEncontrada e) {
             System.out.println(e.getMessage());
@@ -263,7 +261,7 @@ public class OrdenControlador {
             ordenRepositorio.cargarOrdenesDesdeArchivo();
 
             if (ordenRepositorio.obtenerMap().isEmpty()) {
-                ordenVista.mostrarMensaje("No hay órdenes disponibles.");
+                Colores.printInColor("No hay órdenes cargadas", Colores.RED);
                 return;
             }
 
@@ -272,7 +270,7 @@ public class OrdenControlador {
             }
 
         } catch (Exception e) {
-            ordenVista.mostrarMensaje("Ocurrió un error al cargar las órdenes.");
+            Colores.printInColor("Ocurrió un error al cargar las órdenes.", Colores.RED);
             e.printStackTrace();
         }
     }
@@ -282,17 +280,18 @@ public class OrdenControlador {
             ordenRepositorio.cargarOrdenesDesdeArchivo();
 
             if (ordenRepositorio.obtenerMap().isEmpty()) {
-                ordenVista.mostrarMensaje("No hay órdenes disponibles.");
+                Colores.printInColor("No hay órdenes cargadas", Colores.RED);
                 return;
             }
 
             for (Orden orden : ordenRepositorio.obtenerMap().values()) {
-                if(orden.getEstado().equalsIgnoreCase("Pendiente")){
-                    mostrarOrden(orden.getId());}
+                if (orden.getEstado().equalsIgnoreCase("Pendiente")) {
+                    mostrarOrden(orden.getId());
+                }
             }
 
         } catch (Exception e) {
-            ordenVista.mostrarMensaje("Ocurrió un error al cargar las órdenes.");
+            Colores.printInColor("Ocurrió un error al cargar las órdenes.", Colores.RED);
             e.printStackTrace();
         }
     }
@@ -302,17 +301,18 @@ public class OrdenControlador {
             ordenRepositorio.cargarOrdenesDesdeArchivo();
 
             if (ordenRepositorio.obtenerMap().isEmpty()) {
-                ordenVista.mostrarMensaje("No hay órdenes disponibles.");
+                Colores.printInColor("No hay órdenes cargadas", Colores.RED);
                 return;
             }
 
             for (Orden orden : ordenRepositorio.obtenerMap().values()) {
-                if(orden.getEstado().equalsIgnoreCase("Completada")){
-                    mostrarOrden(orden.getId());}
+                if (orden.getEstado().equalsIgnoreCase("Completada")) {
+                    mostrarOrden(orden.getId());
+                }
             }
 
         } catch (Exception e) {
-            ordenVista.mostrarMensaje("Ocurrió un error al cargar las órdenes.");
+            Colores.printInColor("Ocurrió un error al cargar las órdenes.", Colores.RED);
             e.printStackTrace();
         }
     }
@@ -323,7 +323,7 @@ public class OrdenControlador {
             Orden orden = ordenRepositorio.obtenerOrden(id);
             ordenVista.mostrarUnaOrden(orden);
             System.out.println("------------------");
-            System.out.println("Total  $ " + String.format("%.2f",ordenRepositorio.calcularTotalOrden(orden.getId())));
+            System.out.println("Total  $ " + String.format("%.2f", ordenRepositorio.calcularTotalOrden(orden.getId())));
             System.out.println("------------------");
             System.out.println("------------------------------------------------");
         } catch (ExcepcionOrdenNoEncontrada e) {

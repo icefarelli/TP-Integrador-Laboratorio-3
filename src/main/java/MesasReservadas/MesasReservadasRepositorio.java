@@ -35,12 +35,12 @@ public class MesasReservadasRepositorio implements IABM<MesasReservadas> {
         mesasReservadas.add(obj);
     }
 
-    public boolean buscarIndice(Reserva reserva, Integer id){
+    public boolean buscarIndice(Reserva reserva, Integer id) {
         boolean opcion = false;
         int i;
         List<MesasReservadas> listamesas = reserva.getMesasReservadas();
-        for(i=0;i<listamesas.size();i++){
-            if(listamesas.get(i).getCliente().getIdCliente() == id){
+        for (i = 0; i < listamesas.size(); i++) {
+            if (listamesas.get(i).getCliente().getIdCliente() == id) {
                 opcion = true;
 
             }
@@ -48,7 +48,7 @@ public class MesasReservadasRepositorio implements IABM<MesasReservadas> {
         return opcion;
     }
 
-    public MesasReservadas buscarMesasReservadas(List<MesasReservadas> mesasReservadas, Integer id){
+    public MesasReservadas buscarMesasReservadas(List<MesasReservadas> mesasReservadas, Integer id) {
         for (MesasReservadas mesaReservada : mesasReservadas) {
             if (mesaReservada.getCliente().getIdCliente().equals(id)) {
                 return mesaReservada;
@@ -57,15 +57,17 @@ public class MesasReservadasRepositorio implements IABM<MesasReservadas> {
         return null;
     }
 
-    public MesasReservadas buscarMesaReservadaPorIndice(Integer id){
+    public MesasReservadas buscarMesaReservadaPorIndice(Integer id) {
         MesasReservadas mesa = null;
-        for(MesasReservadas mesas : mesasReservadas){
-            if(mesas.getCliente().getIdCliente() == id){
+        for (MesasReservadas mesas : mesasReservadas) {
+            if (mesas.getCliente().getIdCliente() == id) {
                 mesa = mesas;
             }
         }
         return mesa;
     }
 
-    public List<MesasReservadas> todasLasMesasReservadas(){return mesasReservadas;}
+    public List<MesasReservadas> todasLasMesasReservadas() {
+        return mesasReservadas;
+    }
 }

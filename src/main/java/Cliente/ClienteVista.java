@@ -4,6 +4,7 @@ import Excepciones.ExcepcionCamposVacios;
 import Excepciones.ExcepcionDNIStringInvalido;
 import Excepciones.ExcepcionFormatoIncorrecto;
 import Excepciones.ExcepcionNombreNumerico;
+import Plato.Colores.Colores;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -32,9 +33,10 @@ public class ClienteVista {
                 validarTelefono(phone);
 
                 cliente = new Cliente(name, dni, phone);
-                System.out.println("Cliente cargado exitosamente.");
+                Colores.printInColor("Cliente cargado con éxito", Colores.GREEN);
                 break;
-            } catch (ExcepcionCamposVacios | ExcepcionNombreNumerico | ExcepcionFormatoIncorrecto | ExcepcionDNIStringInvalido e) {
+            } catch (ExcepcionCamposVacios | ExcepcionNombreNumerico | ExcepcionFormatoIncorrecto |
+                     ExcepcionDNIStringInvalido e) {
                 System.out.println(e.getMessage());
                 System.out.println("Por favor, intente de nuevo.");
             }
@@ -73,6 +75,7 @@ public class ClienteVista {
             throw new ExcepcionFormatoIncorrecto("El teléfono debe contener solo números.");
         }
     }
+
     public Integer seleccId() {
         Scanner scanner = new Scanner(System.in);
         Integer id = null;
@@ -84,15 +87,14 @@ public class ClienteVista {
                 id = scanner.nextInt();
                 validInput = true;
             } catch (InputMismatchException e) {
-                System.out.println("Formato de id incorrecto. Por favor, ingrese un id válido.");
+                Colores.printInColor("Formato de id incorrecto. Por favor, ingrese un id válido.", Colores.RED);
                 scanner.next(); // Limpiar el buffer del scanner
             }
         }
         return id;
     }
 
-    public String newPhone () throws ExcepcionFormatoIncorrecto
-    {
+    public String newPhone() throws ExcepcionFormatoIncorrecto {
         System.out.println("Ingrese el nuevo numero del cliente: ");
         Scanner scanner = new Scanner(System.in);
         String phone = scanner.nextLine();
@@ -100,20 +102,21 @@ public class ClienteVista {
         if (!esNumero(phone)) {
             throw new ExcepcionFormatoIncorrecto("Formato de teléfono incorrecto. Por favor, ingrese un teléfono válido.");
         }
-        return  phone;
+        return phone;
 
     }
 
 
     public Integer selecIdRemove() throws ExcepcionFormatoIncorrecto {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Ingrese el id del cliente a eliminar:");
+        System.out.println("Ingrese el id del cliente a eliminar: ");
 
         String input = scanner.nextLine();
         Integer id = parseInteger(input);
 
         if (id == null) {
             throw new ExcepcionFormatoIncorrecto("Entrada inválida. No es un número entero.");
+
         }
         return id;
     }
@@ -134,18 +137,23 @@ public class ClienteVista {
         return str.matches("\\d+");
     }
 
-    public void verTodosClientes(Set<Cliente> clienteSet) {
-        System.out.println("\n");
-        System.out.println("----------- LISTA DE CLIENTES -----------");
-        for (Cliente cliente : clienteSet) {
-            System.out.println(cliente.toString());
-        }
-        System.out.println("\n");
-
+    public void mostrarCliente(Cliente c) {
+        //System.out.println("------------------------------------");
+        System.out.println("Nombre y Apellido: " + c.getNombre());
+        System.out.println("Id Cliente: " + c.getIdCliente());
+        System.out.println("Teléfono: " + c.getTelefono());
+        System.out.println("------------------------------------");
     }
 
-    public Integer consultarCliente ()
-    {
+
+    public void verTodosClientes(Set<Cliente> clienteSet) {
+        Colores.printInColor("--------- Lista de Clientes ---------", Colores.YELLOW);
+        for (Cliente cliente : clienteSet) {
+            mostrarCliente(cliente);
+        }
+    }
+
+    public Integer consultarCliente() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese id del cliente que quiere consultar");
         Integer id = scanner.nextInt();
@@ -153,29 +161,26 @@ public class ClienteVista {
         return id;
     }
 
-    public void verIdAndName (Set<Cliente> clienteSet)
-    {
-        for (Cliente cliente: clienteSet)
-        {
-            System.out.println("ID: "+cliente.getIdCliente());
-            System.out.println("NOMBRE Y APELLIDO: "+cliente.getNombre());
-            System.out.println(" \n--------------------------------\n");
-        }
-    }
-
-    public void verClienteVersionCorta(Cliente c){
-        System.out.println("ID: " + c.getIdCliente() + " " + "Nombre: " + c.getNombre());
-    }
-    public void verTodosClientesVersionCorta(Set<Cliente> clienteSet) {
-        System.out.println("\n");
-        System.out.println("------------Clientes cargados------------");
+    public void verIdAndName(Set<Cliente> clienteSet) {
         for (Cliente cliente : clienteSet) {
-            verClienteVersionCorta(cliente);
+            System.out.println("ID: " + cliente.getIdCliente() + " - " + cliente.getNombre());
         }
-        System.out.println("\n");
-
     }
 
+    public void verClienteVersionCorta(Cliente c) {
+        System.out.println("ID: " + c.getIdCliente() + " - " + c.getNombre());
+    }
+
+    public void verTodosClientesVersionCorta(Set<Cliente> clienteSet) {
+        if (clienteSet.isEmpty()) {
+            Colores.printInColor("No hay clientes cargados", Colores.RED);
+        } else {
+            System.out.println("------------ Clientes cargados ------------");
+            for (Cliente cliente : clienteSet) {
+                verClienteVersionCorta(cliente);
+            }
+        }
+    }
 
 
 }

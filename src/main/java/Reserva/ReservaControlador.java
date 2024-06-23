@@ -1,18 +1,20 @@
 package Reserva;
 
-import Cliente.ClienteControlador;
 import Cliente.Cliente;
+import Cliente.ClienteControlador;
 import Cliente.ClienteRepositorio;
 import Cliente.ClienteVista;
-import Excepciones.*;
+import Excepciones.ExcepcionClienteNoEncontrado;
 import MesasReservadas.MesasReservadas;
 import MesasReservadas.MesasReservadasRepositorio;
+import Plato.Colores.Colores;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+
 public class ReservaControlador {
     private ReservaRepositorio reservaRepositorio;
     private ReservaVista reservaVista;
@@ -58,7 +60,7 @@ public class ReservaControlador {
                     clienteControlador.Update();
                 }
             }
-        }while(cliente==null);
+        } while (cliente == null);
 
         MesasReservadas nuevaMesaReservada = new MesasReservadas(cliente, cantPersonas);
         if (reservaExistente == null) {
@@ -66,26 +68,25 @@ public class ReservaControlador {
             mesasReservadas.add(nuevaMesaReservada);
             Reserva nuevaReserva = new Reserva(fecha, mesasReservadas);
             reservaRepositorio.agregar(nuevaReserva);
-            System.out.println("Reserva agregada con éxito!");
-        } else if(mesasReservadasRepositorio.buscarIndice(reservaExistente,cliente.getIdCliente())) {
-            System.out.println("El cliente ya tiene una mesa reservada");
+            Colores.printInColor("Reserva cargada con éxito", Colores.GREEN);
+        } else if (mesasReservadasRepositorio.buscarIndice(reservaExistente, cliente.getIdCliente())) {
+            Colores.printInColor("El cliente " + cliente.getNombre() + " ya tiene una mesa reservada en esa fecha", Colores.RED);
             return;
-        } else{
+        } else {
             reservaExistente.getMesasReservadas().add(nuevaMesaReservada);
-            System.out.println("Reserva agregada con éxito!");
+            Colores.printInColor("Reserva cargada con éxito", Colores.GREEN);
         }
-
         reservaRepositorio.guardarReserva();
 
     }
 
-    public void eliminarMesaReserva() {
+    public void eliminarMesaReserva() throws ExcepcionClienteNoEncontrado {
         reservaRepositorio.cargarReserva();
         LocalDate fecha = reservaVista.buscarFechaReserva();
         Reserva reserva = reservaRepositorio.buscarReserva(fecha);
 
         if (reserva == null) {
-            reservaVista.mensaje("No hay reservas para esa fecha.");
+            Colores.printInColor("No hay reservas cargadas para la fecha " + fecha, Colores.RED);
             return;
         }
 
@@ -94,21 +95,23 @@ public class ReservaControlador {
         MesasReservadas mesasReservadasAEliminar = mesasReservadasRepositorio.buscarMesasReservadas(reserva.getMesasReservadas(), id);
 
         if (mesasReservadasAEliminar == null) {
-            reservaVista.mensaje("Esa mesa reserva no está reservada.");
+            Colores.printInColor("El cliente " + clienteRepositorio.findCliente(id, clienteRepositorio.getClienteSet()).getNombre() + " no tiene reserva en la fecha " + fecha, Colores.RED);
+
         } else {
             reserva.getMesasReservadas().remove(mesasReservadasAEliminar);
             reservaRepositorio.guardarReserva();
-            reservaVista.mensaje("Reserva eliminada con éxito!");
+            Colores.printInColor("Reserva eliminada con éxito", Colores.GREEN);
+
         }
     }
 
-    public void modificarReserva() {
+    public void modificarReserva() throws ExcepcionClienteNoEncontrado {
         reservaRepositorio.cargarReserva();
         LocalDate fecha = reservaVista.buscarFechaReserva();
         Reserva reserva = reservaRepositorio.buscarReserva(fecha);
 
         if (reserva == null) {
-            reservaVista.mensaje("No hay reservas para esa fecha.");
+            Colores.printInColor("No hay reservas cargadas para la fecha " + fecha, Colores.RED);
             return;
         }
 
@@ -116,14 +119,14 @@ public class ReservaControlador {
         Integer id = clienteVista.seleccId();
         MesasReservadas mesasReservadasAModificar = mesasReservadasRepositorio.buscarMesasReservadas(reserva.getMesasReservadas(), id);
         if (mesasReservadasAModificar == null) {
-            reservaVista.mensaje("Esa mesa reserva no existe.");
+            Colores.printInColor("El cliente " + clienteRepositorio.findCliente(id, clienteRepositorio.getClienteSet()).getNombre() + " no tiene reserva en la fecha " + fecha, Colores.RED);
         } else {
             String opcion = reservaVista.preguntarQueModificar();
 
             if (opcion.equalsIgnoreCase("fecha")) {
                 LocalDate nuevaFecha = reservaVista.solicitarNuevaFecha(reservaRepositorio.todasLasReservas());
                 while (nuevaFecha.isEqual(fecha)) {
-                    reservaVista.mensaje("La fecha ingresada es la misma. Ingrese nuevamente.");
+                    Colores.printInColor("La fecha ingresada es la misma. Ingrese una nueva", Colores.RED);
                     nuevaFecha = reservaVista.solicitarNuevaFecha(reservaRepositorio.todasLasReservas());
                 }
 
@@ -141,13 +144,13 @@ public class ReservaControlador {
 
                 nuevaReserva.getMesasReservadas().add(mesasReservadasAModificar);
                 reservaRepositorio.guardarReserva();
-                reservaVista.mensaje("Fecha de la reserva modificada con éxito!");
+                Colores.printInColor("Fecha de reserva modificada con éxito", Colores.GREEN);
 
             } else if (opcion.equalsIgnoreCase("cantPersonas")) {
                 Integer cantPersonas = reservaVista.modificarCantPersonas();
                 mesasReservadasAModificar.setCantPersonas(cantPersonas);
                 reservaRepositorio.guardarReserva();
-                reservaVista.mensaje("Cantidad de personas modificada con éxito!");
+                Colores.printInColor("Cantidad de personas modificada con éxito", Colores.GREEN);
             }
         }
     }
@@ -181,7 +184,7 @@ public class ReservaControlador {
         }
 
         if (reservasPorFecha.isEmpty()) {
-            reservaVista.mensaje("No hay reservas para la fecha especificada.");
+            Colores.printInColor("No hay reservas cargadas para la fecha " + fecha, Colores.RED);
         } else {
             reservaVista.mostrarReservaConArreglo(reservasPorFecha);
         }

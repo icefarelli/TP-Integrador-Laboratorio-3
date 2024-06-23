@@ -1,4 +1,6 @@
 package Plato;
+
+import Plato.Colores.Colores;
 import Plato.Excepciones.ExcepCargaNoRealizada;
 import Plato.Excepciones.ExcepIngresoInvalido;
 import Plato.Excepciones.ExcepPlatoExistente;
@@ -17,7 +19,7 @@ public class PlatoControlador {
     }
 
     //Agregar Plato
-    public void cargarPlatoEnSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista, VariedadVista varVista,VariedadController varController) throws RuntimeException {
+    public void cargarPlatoEnSistema(PlatoRepositorio platoRepositorio, PlatoVista platoVista, VariedadVista varVista, VariedadController varController) throws RuntimeException {
 //
         Plato nuevoPlato;
         try {
@@ -27,23 +29,23 @@ public class PlatoControlador {
             String nombre = varController.cargarNombre(varVista);
             platoRepositorio.comprobarExistenciaPlato(nombre);
 
-                nuevoPlato = platoVista.nuevoPlato(tipo,nombre);
-                platoVista.printearLineasSeparadoras();
-                if (nuevoPlato != null) {
-                    boolean confirm = platoVista.metodoConfirmacion("¿Desea confirmar la carga?");
-                    if (confirm) {
-                        platoRepositorio.agregar(nuevoPlato);
-                        platoVista.mensajeCargaExitoFracaso(true);
-                        platoVista.printearLineasSeparadoras();
-                    } else {
-                        platoVista.mensajeCargaExitoFracaso(false);
-                        platoVista.printearLineasSeparadoras();
-                    }
+            nuevoPlato = platoVista.nuevoPlato(tipo, nombre);
+            platoVista.printearLineasSeparadoras();
+            if (nuevoPlato != null) {
+                boolean confirm = platoVista.metodoConfirmacion("¿Desea confirmar la carga?");
+                if (confirm) {
+                    platoRepositorio.agregar(nuevoPlato);
+                    platoVista.mensajeCargaExitoFracaso(true);
+                    platoVista.printearLineasSeparadoras();
+                } else {
+                    platoVista.mensajeCargaExitoFracaso(false);
+                    platoVista.printearLineasSeparadoras();
                 }
+            }
 
         } catch (ExcepCargaNoRealizada | NumberFormatException e) {
             System.out.println(e.getMessage());
-        } catch (ExcepPlatoExistente epe){
+        } catch (ExcepPlatoExistente epe) {
             System.out.println(epe.getMessage());
             platoVista.printearLineasSeparadoras();
             System.out.println();
@@ -64,7 +66,7 @@ public class PlatoControlador {
 
             buscado = platoRepositorio.buscarPlatoXnombre(nombre);
 
-            if( buscado!= null) {
+            if (buscado != null) {
                 boolean confirmEliminar = platoVista.metodoConfirmacion("¿Confirmar la eliminacion?");
                 if (confirmEliminar) {
                     platoRepositorio.eliminar(buscado);
@@ -72,11 +74,11 @@ public class PlatoControlador {
                 } else {
                     platoVista.mensajeEliminacionExitoFracaso(false);
                 }
-            }else {
+            } else {
                 platoVista.mensajeEliminacionPlatoInexistente();
                 platoVista.mensajeEliminacionExitoFracaso(false);
             }
-        }catch (ExcepIngresoInvalido eii){
+        } catch (ExcepIngresoInvalido eii) {
             platoVista.mensajePersonalizado(eii.getMessage());
         }
     }
@@ -94,14 +96,14 @@ public class PlatoControlador {
                 indiceSeleccionado = platoVista.obtenerIndiceSeleccionado(listaP);
 
                 if (indiceSeleccionado == -1) {
-                    System.out.println("Selección cancelada.");
+                    Colores.printInColor("Selección cancelada", Colores.RED);
                     return;
                 } else if (indiceSeleccionado >= 0 && indiceSeleccionado < listaP.size()) {
                     buscado = listaP.get(indiceSeleccionado);
                 } else {
-                    System.out.println("Opción inexistente. Por favor, intente nuevamente.");
+                    Colores.printInColor("Opción incorrecta, ingrese una opción valida", Colores.RED);
                 }
-            }while (indiceSeleccionado < 0 || indiceSeleccionado >= listaP.size());
+            } while (indiceSeleccionado < 0 || indiceSeleccionado >= listaP.size());
 
             if (buscado != null) {
                 boolean confirmEliminar = platoVista.metodoConfirmacion("¿Confirmar la eliminación?");
@@ -112,7 +114,7 @@ public class PlatoControlador {
                     platoVista.mensajeEliminacionExitoFracaso(false);
                 }
             }
-        } catch (NumberFormatException nfe){
+        } catch (NumberFormatException nfe) {
             platoVista.mensajePersonalizado(nfe.getMessage());
         }
 
@@ -135,7 +137,7 @@ public class PlatoControlador {
 
             platoVista.printearLineasSeparadoras();
             if (buscado == null) {
-                platoVista.mensajePersonalizado("Plato no encontrado");
+                Colores.printInColor("Plato no encontrado", Colores.RED);
             } else {
                 platoRepositorio.mostrarUnPlato(buscado);
                 platoVista.printearLineasSeparadoras();
@@ -156,7 +158,7 @@ public class PlatoControlador {
                     platoVista.mensajeCargaExitoFracaso(false);
                 }
             }
-        }catch (NumberFormatException | ExcepIngresoInvalido nfe){
+        } catch (NumberFormatException | ExcepIngresoInvalido nfe) {
             platoVista.printearLineasSeparadoras();
             platoVista.mensajePersonalizado(nfe.getMessage());
             platoVista.printearLineasSeparadoras();
@@ -164,17 +166,17 @@ public class PlatoControlador {
     }
 
     //Aumentar precio de manera porcentual
-    public void aumentoPreciosPorcentualmente(PlatoRepositorio platoRepositorio, PlatoVista platoVista){
+    public void aumentoPreciosPorcentualmente(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
         platoRepositorio.aumentoPorcentualPrecio(platoVista.ingresePorcentaje());
     }
 
     //Bajar precio de manera porcentual
-    public void bajarPreciosPorcentualmente(PlatoRepositorio platoRepositorio, PlatoVista platoVista){
+    public void bajarPreciosPorcentualmente(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
         platoRepositorio.bajaPorcentualPrecio(platoVista.ingresePorcentajeBaja());
     }
 
     //Selección de Plato para Orden que devuelve el plato seleccionado
-    public Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista)throws NumberFormatException {
+    public Plato seleccionPlatoParaOrden(PlatoRepositorio platoRepositorio, PlatoVista platoVista) throws NumberFormatException {
 
         try {
             String tipo = platoVista.menuTipoComida();
@@ -189,33 +191,33 @@ public class PlatoControlador {
             platoRepositorio.mostrarEnlistadoBonitoXtipoOld(tipo);
             indiceSeleccionado = platoVista.obtenerIndiceSeleccionado(listaP);
             if (indiceSeleccionado == -1) {
-                System.out.println("Selección cancelada.");
+                Colores.printInColor("Selección cancelada", Colores.RED);
                 return null;
             } else if (indiceSeleccionado > listaP.size()) {
                 try {
-                    throw new ExcepIngresoInvalido("Opcion Inexistente. Intente Nuevamente");
+                    throw new ExcepIngresoInvalido("Opción incorrecta, ingrese una opción valida");
                 } catch (ExcepIngresoInvalido e) {
                     throw new RuntimeException(e);
                 }
             }
             return listaP.get(indiceSeleccionado);
-        }catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             System.out.println(nfe.getMessage());
             return seleccionPlatoParaOrden(platoRepositorio, platoVista);
         }
     }
 
     //Mostrar Platos por categoria
-    public void mostrarPlatosXTipo (PlatoRepositorio platoRepositorio, PlatoVista platoVista){
+    public void mostrarPlatosXTipo(PlatoRepositorio platoRepositorio, PlatoVista platoVista) {
         try {
             platoRepositorio.mostrarEnlistadoBonitoXtipoOld(platoVista.menuTipoComida());
-        }catch (NumberFormatException nfe){
+        } catch (NumberFormatException nfe) {
             System.out.println(nfe.getMessage());
         }
     }
 
     //Mostrar Menu Completo
-    public void mostrarMenuCompleto(PlatoRepositorio platoRepositorio){
+    public void mostrarMenuCompleto(PlatoRepositorio platoRepositorio) {
         platoRepositorio.mostrarCartaDePlatosCompleta();
     }
 

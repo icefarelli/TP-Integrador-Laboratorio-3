@@ -50,10 +50,10 @@ public class MenuLogin {
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("\nNumero invalido. Vuelva a intentarlo.");
+                        Colores.printInColor("Opción incorrecta, ingrese una opción valida", Colores.RED);
                 }
             } catch (InputMismatchException inputMismatchException) {
-                System.out.println("Entrada inválida. Debe ingresar un número entero.");
+                Colores.printInColor("Entrada inválida. Debe ingresar un número entero", Colores.RED);
                 scanner.nextLine();
 
             } catch (ExcepcionFormatoIncorrecto e) {

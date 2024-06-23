@@ -70,11 +70,11 @@ public class MenuPlato {
                         System.out.println("Saliendo...");
                         System.exit(0);
                     default:
-                        vista.mensajePersonalizado("Opcion Invalida");
+                        Colores.printInColor("Opción incorrecta, ingrese una opción valida", Colores.RED);
 
                 }
             } catch (InputMismatchException inputMismatchException) {
-                System.out.println("Ingresar solo numero.");
+                Colores.printInColor("Entrada inválida. Debe ingresar un número entero", Colores.RED);
                 scanner.nextLine();
             } catch (RuntimeException e) {
                 scanner.nextLine();
