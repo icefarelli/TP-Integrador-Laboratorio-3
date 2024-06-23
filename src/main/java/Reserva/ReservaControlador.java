@@ -159,7 +159,6 @@ public class ReservaControlador {
         reservaRepositorio.cargarReserva();
         List<Reserva> reservas = reservaRepositorio.todasLasReservas();
 
-        // Filtrar reservas que tienen mesas reservadas
         List<Reserva> reservasConMesas = new ArrayList<>();
         for (Reserva reserva : reservas) {
             if (!reserva.getMesasReservadas().isEmpty()) {

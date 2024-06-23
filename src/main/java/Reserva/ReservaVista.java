@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ReservaVista {
+    private static final int totalMesas = 30;
     private static Scanner scanner = new Scanner(System.in);
     private static LocalDate hoy = LocalDate.now();
 
@@ -133,15 +134,7 @@ public class ReservaVista {
         LocalDate fecha = null;
         while (true) {
             try {
-                for (Reserva reserva : reservas) {
-                    System.out.println("Revisando reserva: " + reserva);
-                    LocalDate fechaInicio = reserva.getFecha();
-                    LocalDate fechaFin = fechaInicio.plusDays(15);
-                    if (fechaInicio.isAfter(hoy) && fechaInicio.isBefore(fechaFin)) {
-                        System.out.println("Reservas disponibles desde " + fechaInicio + " hasta " + fechaFin + ": " + reserva + "\n");
-                    }
-
-                }
+                mostrarDisponibilidad(reservas);
 
                 System.out.println("\nIngrese fecha de la nueva reserva (formato dd/MM/yyyy): ");
                 String input = scanner.nextLine().trim();
@@ -150,12 +143,46 @@ public class ReservaVista {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 fecha = LocalDate.parse(input, formatter);
                 validarFechaHoy(fecha);
+                validarFechaDentroDe15Dias(fecha);
+
+                if (fechaReservada(fecha, reservas)) {
+                    System.out.println("La fecha ingresada ya tiene una reserva completa.");
+                    continue;
+                }
+
                 break;
             } catch (DateTimeParseException | ExcepcionReservaCamposVacios | ExcepcionReservaCaracterInvalido e) {
                 System.out.println("Error: " + e.getMessage());
             }
         }
         return fecha;
+    }
+
+    public void mostrarDisponibilidad(List<Reserva> reservas) {
+        LocalDate fechaInicio = hoy;
+        LocalDate fechaFin = hoy.plusDays(15);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        for (LocalDate fechas = fechaInicio; !fechas.isAfter(fechaFin); fechas = fechas.plusDays(1)) {
+            int mesasDisponibles = totalMesas;
+            for (Reserva reserva : reservas) {
+                if (reserva.getFecha().equals(fechas)) {
+                    mesasDisponibles -= reserva.getMesasReservadas().size();
+                }
+            }
+            System.out.println(fechas.format(formatter) + " - Disponibilidad " + mesasDisponibles + " mesas");
+        }
+    }
+
+    public boolean fechaReservada(LocalDate fecha, List<Reserva> reservas) {
+        for (Reserva reserva : reservas) {
+            if (reserva.getFecha().equals(fecha)) {
+                if (reserva.getMesasReservadas().size() >= totalMesas) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -193,6 +220,12 @@ public class ReservaVista {
     public void validarFechaHoy(LocalDate fecha) throws ExcepcionReservaCaracterInvalido {
         if (fecha.isBefore(hoy)) {
             throw new ExcepcionReservaCaracterInvalido("La fecha ingresada no puede ser anterior a la fecha de hoy.");
+        }
+    }
+
+    public void validarFechaDentroDe15Dias(LocalDate fecha) throws ExcepcionReservaCaracterInvalido {
+        if (fecha.isAfter(hoy.plusDays(15))) {
+            throw new ExcepcionReservaCaracterInvalido("La fecha ingresada debe estar dentro de los próximos 15 días.");
         }
     }
 
