@@ -27,8 +27,8 @@ public class MenuLogin {
 
         do {
             System.out.println("\n");
-            Colores.printInColor("========BIENVENIDOS A ´INTERFAZ DE SABORES´========", Colores.YELLOW);
-            System.out.println("1. Iniciar Sesion");
+            Colores.printInColor("========BIENVENIDOS A ´COLECCIONES DE SABORES´========", Colores.YELLOW);
+            System.out.println("1. Iniciar Sesión");
             System.out.println("0. Salir del sistema");
             try {
                 ok = scanner.nextInt();

@@ -213,6 +213,8 @@ public class PlatoControlador {
             platoRepositorio.mostrarEnlistadoBonitoXtipoOld(platoVista.menuTipoComida());
         } catch (NumberFormatException nfe) {
             System.out.println(nfe.getMessage());
+        }catch (NullPointerException nullPointerException){
+            System.out.println("");
         }
     }
 
